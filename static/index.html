@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CS2 Coach | FACEIT performans paneli</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0e13; --panel:#141a23; --panel2:#1b2330; --line:#293342; --text:#edf2f7; --muted:#98a6b8; --accent:#b7f36b; --red:#ff8c8c; }
+    * { box-sizing:border-box; } body { margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; background:radial-gradient(ellipse at 80% 0%,#1c2b1d 0,transparent 34%),var(--bg); color:var(--text); }
+    .wrap { max-width:1120px; margin:auto; padding:34px 20px 60px; } header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:28px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.4px; font-size:20px; } .mark { display:grid; place-items:center; width:42px;height:42px;border-radius:13px;background:var(--accent);color:#12170d;font-weight:900; }
+    .pill { border:1px solid var(--line); border-radius:999px; padding:8px 12px; color:var(--muted); font-size:12px; }
+    h1 { font-size:clamp(30px,5vw,48px); line-height:1.04; margin:10px 0 12px; letter-spacing:-1.5px; } .accent { color:var(--accent); } .sub { color:var(--muted); max-width:720px; line-height:1.6; }
+    .search { margin:28px 0; display:flex; gap:10px; max-width:650px; } input { min-width:0; flex:1; border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:12px; padding:15px 16px; font-size:15px; outline:none; } input:focus { border-color:var(--accent); }
+    button { border:0; background:var(--accent); color:#10150b; font-weight:800; border-radius:12px; padding:0 20px; cursor:pointer; } button:disabled { opacity:.55; cursor:wait; } .secondary { border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:14px 16px; border-radius:12px; font-weight:700; cursor:pointer; } .search-actions { display:flex; gap:10px; flex-wrap:wrap; } .search-actions button { min-height:48px; } .demo-banner { grid-column:span 12; border:1px solid #4b6335; background:#182218; color:#cce8b2; border-radius:12px; padding:12px 15px; font-size:12px; line-height:1.5; } .bar { height:7px; background:#283241; border-radius:99px; overflow:hidden; margin-top:8px; } .bar span { display:block;height:100%;background:var(--accent);border-radius:99px; }
+    .notice { color:var(--muted); font-size:12px; line-height:1.5; } .error { color:var(--red); margin:12px 0; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; } .card { background:linear-gradient(150deg,rgba(26,34,46,.97),rgba(17,22,30,.97)); border:1px solid var(--line); border-radius:18px; padding:20px; min-width:0; } .profile { grid-column:span 12; display:flex; align-items:center; gap:16px; } .avatar { width:64px;height:64px;border-radius:16px;object-fit:cover;background:var(--panel2); } .name { font-size:22px;font-weight:800; } .muted { color:var(--muted); } .metrics { grid-column:span 12; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; } .metric { background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px; } .metric label { color:var(--muted);font-size:12px;display:block;margin-bottom:9px; } .metric strong { font-size:26px; }
+    .section { grid-column:span 6; } .section h2 { font-size:17px;margin:0 0 15px; } .match { display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px; } .match:last-child { border-bottom:0; } .recommendation { padding:14px 0;border-bottom:1px solid var(--line); } .recommendation:last-child { border-bottom:0; } .tag { display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:5px 7px;border-radius:6px;background:#293729;color:var(--accent);margin-bottom:8px; } .recommendation h3 { font-size:14px;margin:0 0 6px; } .recommendation p { color:var(--muted);font-size:13px;line-height:1.55;margin:0; }
+    .empty { grid-column:span 12; border:1px dashed #354052; border-radius:18px; padding:24px; color:var(--muted); line-height:1.6; } footer { color:#6f7d8f;font-size:11px;margin-top:22px;line-height:1.6; }
+    @media(max-width:700px){ .metrics{grid-template-columns:repeat(2,1fr)} .section{grid-column:span 12} header{align-items:flex-start;flex-direction:column} .search{flex-direction:column}.search-actions{display:grid;grid-template-columns:1fr}button{padding:15px} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="brand"><div class="mark">C2</div> CS2 COACH <span class="muted" style="font-weight:500">/ performance lab</span></div><div class="pill">MVP · FACEIT Data API</div></header>
+  <main>
+    <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:2px">PLAY SMARTER</div>
+    <h1>Grind değil, <span class="accent">gelişim.</span></h1>
+    <p class="sub">FACEIT profilini getir, maç geçmişini incele ve istatistiklerinden hareketle bir sonraki antrenman odağını belirle. Bu ilk sürüm gerçek API verisiyle çalışır.</p>
+    <form class="search" id="searchForm"><input id="nickname" placeholder="FACEIT kullanıcı adın" autocomplete="off" required minlength="2"/><div class="search-actions"><button id="submitBtn" type="submit">Profili analiz et ↗</button><button class="secondary" id="demoBtn" type="button">Örnek demoyu aç</button></div></form>
+    <div id="status" class="notice">Başlamak için FACEIT kullanıcı adını gir. Sunucu yapılandırılmamışsa hata mesajı gösterilir.</div>
+    <div id="results" class="grid" style="margin-top:22px"></div>
+    <div id="error" class="error" role="alert"></div>
+  </main>
+  <footer>CS2 Coach kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Demo izlenmeden kesin aim, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path, options={}) {
+  const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+  const data = await r.json().catch(()=>({detail:'Sunucudan okunabilir yanıt alınamadı.'}));
+  if(!r.ok) throw new Error(data.detail || `İstek başarısız (${r.status})`);
+  return data;
+}
+function fmtDate(ts){ if(!ts) return 'Tarih bilinmiyor'; const n=Number(ts); const d=new Date(n < 1e12 ? n*1000 : n); return isNaN(d)?'Tarih bilinmiyor':d.toLocaleDateString('tr-TR'); }
+function matchLabel(m){ return m.map || m.match_type || m.game_mode || 'FACEIT maçı'; }
+function showProfile(p){
+  $('results').innerHTML = `
+    <section class="card profile"><img class="avatar" src="${esc(p.avatar || '')}" onerror="this.style.visibility='hidden'" alt=""><div style="flex:1;min-width:0"><div class="name">${esc(p.nickname)}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(p.country || 'Ülke bilgisi yok')} · FACEIT Level ${esc(p.skill_level ?? '—')}</div></div><div style="text-align:right"><div class="muted" style="font-size:12px">FACEIT ELO</div><strong style="font-size:25px;color:var(--accent)">${esc(p.elo ?? '—')}</strong><div style="margin-top:6px"><a href="${esc(p.faceit_url || '#')}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:12px">FACEIT profil ↗</a></div></div></section>
+    <section class="metrics"><div class="metric"><label>FACEIT Level</label><strong>${esc(p.skill_level ?? '—')}</strong></div><div class="metric"><label>ELO</label><strong>${esc(p.elo ?? '—')}</strong></div><div class="metric"><label>Son maçlar</label><strong id="matchCount">…</strong></div><div class="metric"><label>Analiz durumu</label><strong style="font-size:17px">Hazırlanıyor</strong></div></section>
+    <section class="card section"><h2>Son maçlar</h2><div id="matches" class="muted">Maç geçmişi yükleniyor…</div></section>
+    <section class="card section"><h2>Koçluk notları</h2><div id="coach" class="muted">İstatistikler yükleniyor…</div></section>`;
+}
+async function loadProfile(nickname){
+  $('error').textContent=''; $('results').innerHTML=''; $('status').textContent='FACEIT profili aranıyor…'; $('submitBtn').disabled=true;
+  try {
+    const p=await api(`/api/player?nickname=${encodeURIComponent(nickname)}`);
+    if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
+    showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
+    const settled=await Promise.allSettled([api(`/api/player/${encodeURIComponent(p.player_id)}/matches?limit=20`),api(`/api/player/${encodeURIComponent(p.player_id)}/stats`)]);
+    const matchResult=settled[0], statsResult=settled[1];
+    if(matchResult.status==='fulfilled'){
+      const items=matchResult.value.items||[]; $('matchCount').textContent=items.length;
+      $('matches').innerHTML=items.length?items.map(m=>`<div class="match"><div><strong>${esc(matchLabel(m))}</strong><div class="muted" style="margin-top:5px">${esc(m.map ? 'Harita' : 'Maç türü')} · ${esc(fmtDate(m.finished_at))}</div></div><div style="text-align:right"><div>${esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')}</div>${m.faceit_url?`<a href="${esc(m.faceit_url)}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:11px">Maçı aç ↗</a>`:''}</div></div>`).join(''):'Maç geçmişi bulunamadı.';
+    } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
+    if(statsResult.status==='fulfilled'){
+      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value})});
+      const ms=report.metrics_detected;
+      const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
+      $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${metricBits.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
+    } else { $('coach').innerHTML=`<div class="error">İstatistikler alınamadı: ${esc(statsResult.reason.message)}. Maç geçmişi yine de görüntülenebilir.</div>`; }
+    $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.';
+  } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; }
+  finally {$('submitBtn').disabled=false;}
+}
+
+function loadDemo(){
+  $('error').textContent=''; $('status').textContent='Örnek demo modu açık. Aşağıdaki tüm veriler temsili, canlı FACEIT verisi değildir.';
+  $('nickname').value='DemoPlayer';
+  showProfile({nickname:'DemoPlayer',country:'TR',skill_level:8,elo:1842,avatar:'',faceit_url:'https://www.faceit.com/'});
+  $('results').insertAdjacentHTML('afterbegin','<div class="demo-banner"><strong>DEMO MODU</strong> · Bu panel örnek verilerle çalışıyor. Gerçek profil analizi için FACEIT API anahtarı yapılandırılmış sunucuyu kullan.</div>');
+  const matches=[
+    {map:'de_mirage',date:'Bugün',score:'13 : 9',result:'Galibiyet'},
+    {map:'de_inferno',date:'Dün',score:'10 : 13',result:'Mağlubiyet'},
+    {map:'de_ancient',date:'Dün',score:'13 : 7',result:'Galibiyet'},
+    {map:'de_anubis',date:'25 Eki',score:'11 : 13',result:'Mağlubiyet'},
+    {map:'de_mirage',date:'24 Eki',score:'13 : 6',result:'Galibiyet'}
+  ];
+  $('matchCount').textContent='20';
+  $('matches').innerHTML=matches.map(m=>`<div class="match"><div><strong>${esc(m.map)}</strong><div class="muted" style="margin-top:5px">${esc(m.date)} · ${esc(m.result)}</div></div><div style="text-align:right"><strong>${esc(m.score)}</strong><div class="muted" style="font-size:11px;margin-top:5px">Örnek maç</div></div></div>`).join('')+'<div class="notice" style="margin-top:10px">Gösterim için 5 maç listelendi; sayı tasarım örneğidir.</div>';
+  const stats=[['Win rate','52%'],['ADR','71.4'],['K/D','1.03'],['HS%','43%']];
+  const recs=[
+    {priority:'YÜKSEK',title:'İlk temas kalitesini ölç',body:'Örnek K/D 1.03 ve ADR 71.4 tek başına aim sorunu göstermez. Demo incelemesinde ilk ölüm, trade edilebilirlik ve çatışmaya giriş şeklini kontrol et.'},
+    {priority:'ORTA',title:'Mirage performansını derinleştir',body:'Örnek maç listesinde Mirage tekrar ediyor. CT/T tarafı, açılış düelloları ve round başına katkıyı ayrı incele; harita bazında karar vermek için daha fazla veri gerekir.'},
+    {priority:'RUTİN',title:'15 dakikalık ısınma planı',body:'5 dk kontrollü bot pre-aim, 5 dk counter-strafe + ilk mermi, 5 dk DM. Her seans sonunda isabet veya hissiyat yerine ölçülebilir bir hedef kaydet.'}
+  ];
+  $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${stats.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${recs.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">Örnek veriyle oluşturulmuş açıklanabilir öneriler. Gerçek analiz değildir ve gerçek maç performansını temsil etmez.</p>`;
+  $('status').textContent='Demo hazır. Canlı API çağrısı yapılmadı.';
+}
+$('demoBtn').addEventListener('click',loadDemo);
+
+$('searchForm').addEventListener('submit',e=>{e.preventDefault();const nick=$('nickname').value.trim();if(nick)loadProfile(nick)});
+</script>
+</body>
+</html>
