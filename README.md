@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance · CloneCS 1.6
+# CLONE LAB · FACEIT Performance · CloneCS 1.7
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -112,4 +112,8 @@ Maç geçmişinde ilk iki kayıt görünür; devamı ikişer maçlık bölümler
 
 
 - 1.6: Config profili video/grafik, viewmodel, HUD/radar ve launch alanlarını da ayrı gösterir; kaynakta bulunmayanlar açıkça eksik kalır. Daha geniş üçüncü taraf arşivine, 23 Mayıs 2026 snapshot tarihi belirtilerek bağlantı verilir.
+
+
+## 1.7 giriş düzeltmesi
+Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık kalıcı sonuç kapsayıcısına bağlanır; sayfa açılışındaki JavaScript hatası giriş/kayıt işleyicilerini durduramaz. Yerel uçtan uca doğrulama: kayıt, oturum, profil kaydı, çıkış ve tekrar giriş.
 

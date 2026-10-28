@@ -189,7 +189,7 @@ async function loadProfile(nickname){
   finally {}
 }
 
-$('matches').addEventListener('click',e=>{ if(e.target.id!=='showMoreMatches') return; const rows=[...$('matches').querySelectorAll('.match')]; const next=rows.findIndex(row=>row.hidden); rows.slice(next,next+2).forEach(row=>row.hidden=false); if(!rows.some(row=>row.hidden)) e.target.remove(); });
+$('results').addEventListener('click',e=>{ if(e.target.id!=='showMoreMatches') return; const rows=[...$('matches').querySelectorAll('.match')]; const next=rows.findIndex(row=>row.hidden); rows.slice(next,next+2).forEach(row=>row.hidden=false); if(!rows.some(row=>row.hidden)) e.target.remove(); });
 $('results').addEventListener('click',async e=>{
   const button=e.target.closest('[data-match-detail]');
   if(!button) return;
@@ -261,7 +261,7 @@ async function setAccountState(data,openSavedProfile=false){
   $('savedFaceitNickname').value=data.faceit_nickname||'';
   $('faceitLinkForm').hidden=Boolean(data.faceit_nickname);
   $('changeFaceitButton').hidden=!data.faceit_nickname;
-  if(data.faceit_nickname&&openSavedProfile) await loadProfile(data.faceit_nickname);
+  if(data.faceit_nickname&&openSavedProfile) await loadProfile(data.faceit_nickname); else if(!data.faceit_nickname) $( 'status' ).textContent='Hesabın hazır. FACEIT profilini kaydedip analizini başlatabilirsin.';
 }
 function accountMessage(text,type=''){
   const el=$('authMessage');el.textContent=text;el.className='account-message'+(type?' '+type:'');
@@ -304,6 +304,8 @@ restoreAccount();
 </script>
 </body>
 </html>
+
+
 
 
 
