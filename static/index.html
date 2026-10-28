@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CS2 Coach | FACEIT performans paneli</title>
+  <title>CLONE LAB | FACEIT Performance</title>
   <style>
     :root { color-scheme: dark; --bg:#0b0e13; --panel:#141a23; --panel2:#1b2330; --line:#293342; --text:#edf2f7; --muted:#98a6b8; --accent:#b7f36b; --red:#ff8c8c; }
     * { box-sizing:border-box; } body { margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; background:radial-gradient(ellipse at 80% 0%,#1c2b1d 0,transparent 34%),var(--bg); color:var(--text); }
@@ -21,38 +21,45 @@
       .charts{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.chart-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}.chart-head{display:flex;justify-content:space-between;gap:10px;font-size:12px}.chart-head span,.chart-foot{color:var(--muted);font-size:10px}.chart-card svg{display:block;width:100%;height:auto;max-height:210px;margin:8px 0}.chart-card svg line{stroke:#ffffff18;stroke-dasharray:3 5}.chart-line{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-card circle{fill:#ff6b3b;stroke:#1b2330;stroke-width:2}.chart-card circle:hover{fill:#ffd166;stroke:#ffffff;stroke-width:2}.chart-empty{display:flex;flex-direction:column;gap:6px;border:1px dashed #354052;border-radius:12px;padding:14px;color:var(--muted);font-size:11px}.chart-empty b{color:var(--text)}
     .dashboard{grid-column:span 12;overflow:hidden;padding:0}.season-head{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px;background:linear-gradient(115deg,#332015 0%,#1b1716 44%,#15191f 100%);border-bottom:1px solid var(--line)}.season-head .eyebrow{font-size:10px;font-weight:800;letter-spacing:1.5px;color:#ff966c}.season-title{font-size:25px;font-weight:900;margin-top:8px}.season-title span{font-size:17px;color:var(--accent);margin-left:8px}.season-summary{display:flex;gap:22px;flex-wrap:wrap}.season-summary div{display:flex;flex-direction:column;gap:4px;min-width:76px}.season-summary b{font-size:18px}.season-summary span{font-size:10px;color:var(--muted)}.positive{color:#70ef6e}.negative{color:#ff7373}.performance-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 20px 8px}.performance-head b{font-size:15px}.performance-head span{color:var(--muted);font-size:11px}.dashboard-chart{padding:0 16px}.dashboard-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 20px 12px}.dashboard-metrics .metric strong{font-size:21px}.elo-note{padding:0 20px}.radar-card{margin:10px 20px 20px}.radar-card svg{width:100%;height:auto;max-height:370px}.radar-card svg polygon{fill:none;stroke:#ffffff22;stroke-width:1}.radar-card svg line{stroke:#ffffff25;stroke-dasharray:none}.radar-card svg .radar-count{fill:#ffffff09;stroke:#e4eaf1;stroke-width:2}.radar-card svg .radar-win{fill:#12e81620;stroke:#20f020;stroke-width:2}.radar-name{fill:#cad3dc;font-size:11px;letter-spacing:1px}.radar-meta{fill:#f4f6f8;font-size:10px}.radar-legend{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:10px}.radar-legend span{display:flex;align-items:center;gap:7px}.radar-legend i{display:inline-block;width:11px;height:3px}.legend-count{background:#e4eaf1}.legend-win{background:#20f020}@media(max-width:700px){.season-head{align-items:flex-start;flex-direction:column}.season-summary{display:grid;grid-template-columns:repeat(2,1fr);width:100%;gap:14px}.dashboard-metrics{grid-template-columns:repeat(2,1fr);padding:8px 12px}.performance-head{align-items:flex-start;flex-direction:column}.radar-card{margin:8px 10px 12px}.radar-card svg{max-height:290px}.radar-name{font-size:9px}.radar-meta{font-size:8px}}
     .account-panel{max-width:760px;margin:16px 0;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.account-title{font-size:14px;font-weight:800}.account-copy{color:var(--muted);font-size:11px;line-height:1.5;margin:7px 0 12px}.auth-forms{display:grid;grid-template-columns:1fr 1fr;gap:12px}.auth-form{display:grid;gap:8px;padding:12px;border:1px solid var(--line);border-radius:10px}.auth-form strong{font-size:12px}.auth-form input,.faceit-link-form input{padding:10px 11px;font-size:12px;border-radius:8px}.auth-form button,.faceit-link-form button{min-height:40px;border-radius:8px;font-size:12px}.account-header{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}.account-header button{padding:8px 12px}.faceit-link-form{display:grid;gap:8px;margin-top:14px}.faceit-link-form label{color:var(--muted);font-size:11px}.faceit-link-form>div{display:flex;gap:8px}.faceit-link-form input{flex:1}.faceit-link-form button{padding:0 14px}.account-message{min-height:16px;color:var(--muted);font-size:11px;margin-top:8px}.account-message.error{color:var(--red)}.account-message.success{color:var(--accent)}
+    :root{color-scheme:dark;--bg:#050a0c;--panel:#0b1518;--panel2:#101f23;--line:#1c4146;--text:#e4f7f7;--muted:#87a5a8;--accent:#31dfcc;--red:#ff7884}
+    body{background:radial-gradient(ellipse at 78% 0%,#0c2828 0,transparent 36%),linear-gradient(145deg,#05090b,#071114 68%,#05090b);letter-spacing:.01em}
+    .wrap{max-width:1180px;padding-top:26px}.brand{color:var(--text);text-decoration:none;gap:13px;letter-spacing:2px}.brand-emblem{width:46px;height:46px;filter:drop-shadow(0 0 12px #31dfcc35)}.brand-word{font-size:19px;font-weight:900}.brand-word b{color:var(--accent);font-weight:900}.pill{border-radius:2px;border-color:#1c5556;color:#93cbc7;background:#0a171a;font:10px 'DM Mono',monospace;letter-spacing:1.2px}
+    h1{font-size:clamp(34px,5.7vw,60px);letter-spacing:-1.7px;line-height:1.02}.accent{color:var(--accent)}.eyebrow{font:10px 'DM Mono',monospace;letter-spacing:2px;color:var(--accent);margin:18px 0}.eyebrow span{color:#66898d}.guest-welcome{max-width:800px;margin:32px 0 26px}.sub{color:#9bb5b8;max-width:680px}.account-panel,.card,.metric,.auth-form,.chart-card,.chart-empty,.match-detail,.empty{border-radius:3px!important}.metric,.card{background:linear-gradient(145deg,#0d1a1d,#091114);border-color:#17383d}.account-panel{max-width:900px;background:#091215;border-color:#1a3d42}.auth-form{background:#0a1417;border-color:#1a3d42}.auth-form input,.faceit-link-form input,input{background:#081114;color:var(--text);border-color:#20454a;border-radius:2px!important}.auth-form input:focus,.faceit-link-form input:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 1px #31dfcc30}.auth-form button,button:not(.secondary),.faceit-link-form button{background:var(--accent);color:#041012;border-radius:2px!important;letter-spacing:.04em}.secondary,.account-header button{border-radius:2px!important;border-color:#265358;background:#0b1a1d;color:#b6d6d6}.account-header{padding-bottom:10px;border-bottom:1px solid var(--line)}.account-actions{display:flex;gap:8px;flex-wrap:wrap}.account-title,.auth-form strong{color:var(--text);letter-spacing:.03em}.account-copy,.notice,.muted{color:var(--muted)}.account-message.success{color:var(--accent)}.profile,.avatar,.brand-emblem{border-radius:2px}.chart-line{stroke:#31dfcc}.chart-card circle{fill:#ff8a63;stroke:#061012;stroke-width:2.5}.chart-card circle:hover{fill:#fff0de;stroke:#ff8a63;stroke-width:2}.chart-card{background:#081316;border-color:#173b40}.season-head{background:linear-gradient(110deg,#0b2527,#0b1518 62%,#0b1215);border-color:#1a4649}.season-head .eyebrow{color:var(--accent)}.positive{color:#39e5ce}.negative{color:#ff8791}.radar-card svg .radar-win{fill:#31dfcc1c;stroke:#31dfcc}.radar-card svg .radar-count{fill:#ff8a6310;stroke:#ff9c79}.radar-legend .legend-win{background:#31dfcc}.radar-legend .legend-count{background:#ff9c79}.tag{background:#0e2a2c;color:var(--accent);border-radius:2px}.recommendation,.match{border-color:#17383d}.demo-banner{border-radius:2px}
+    .auth-forms{grid-template-columns:repeat(2,minmax(0,1fr))}.auth-form button{min-height:42px}.faceit-link-form>div{align-items:stretch}.faceit-link-form input{min-width:0}.dashboard{border-color:#1b4548}.season-title span{color:var(--accent)}.chart-foot{color:#6f9396}
+    @media(max-width:700px){.wrap{padding:18px 14px 40px}.brand-emblem{width:40px;height:40px}.guest-welcome{margin:24px 0 20px}.auth-forms{grid-template-columns:1fr}.account-header{align-items:flex-start}.account-actions{justify-content:flex-end}.faceit-link-form>div{flex-direction:column}.season-title{font-size:22px}}
   </style>
 </head>
 <body>
 <div class="wrap">
-  <header><div class="brand"><div class="mark">C2</div> CS2 COACH <span class="muted" style="font-weight:500">/ performance lab</span></div><div class="pill">MVP · FACEIT Data API</div></header>
+  <header><a class="brand" href="/" aria-label="Clone Lab ana sayfa"><img class="brand-emblem" src="/static/clone-mark.svg" alt=""><span class="brand-word">CLONE <b>LAB</b></span></a><div class="pill">FACEIT · PERFORMANCE SYSTEM</div></header>
   <main>
-    <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:2px">PLAY SMARTER</div>
-    <h1>Grind değil, <span class="accent">gelişim.</span></h1>
-    <p class="sub">FACEIT profilini getir, maç geçmişini incele ve istatistiklerinden hareketle bir sonraki antrenman odağını belirle. Bu ilk sürüm gerçek API verisiyle çalışır.</p>
-    <form class="search" id="searchForm"><input id="nickname" placeholder="FACEIT kullanıcı adın" autocomplete="off" required minlength="2"/><div class="search-actions"><button id="submitBtn" type="submit">Profili analiz et ↗</button><button class="secondary" id="demoBtn" type="button">Örnek demoyu aç</button></div></form>
+    <section id="guestWelcome" class="guest-welcome">
+      <div class="eyebrow">CLONE LAB <span>// PLAYER INTELLIGENCE</span></div>
+      <h1>FACEIT verini gör.<br><span class="accent">Gelişimini yönlendir.</span></h1>
+      <p class="sub">Gerçek maç istatistiklerini incele, performansındaki değişimi gör ve sonraki adımına daha net karar ver.</p>
+    </section>
     <section class="account-panel" id="accountPanel">
       <div id="authLoggedOut">
         <div class="account-title">Hesabınla devam et</div>
-        <p class="account-copy">Bir kez giriş yap; kaydettiğin FACEIT profili sonraki ziyaretinde otomatik açılsın.</p>
+        <p class="account-copy">Önce Clone Lab hesabını oluştur. Hesabına giriş yaptıktan sonra kaydettiğin FACEIT profili otomatik açılır.</p>
         <div class="auth-forms">
-          <form id="loginForm" class="auth-form"><strong>Giriş yap</strong><input name="username" placeholder="Kullanıcı adı" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola" minlength="8" maxlength="128" autocomplete="current-password" required><button type="submit">Giriş yap</button></form>
-          <form id="registerForm" class="auth-form"><strong>Hesap oluştur</strong><input name="username" placeholder="Kullanıcı adı (3-32 karakter)" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola (en az 8 karakter)" minlength="8" maxlength="128" autocomplete="new-password" required><button type="submit">Hesap oluştur</button></form>
+          <form id="loginForm" class="auth-form"><strong>Hesabına giriş yap</strong><input name="username" placeholder="Kullanıcı adı" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola" minlength="8" maxlength="128" autocomplete="current-password" required><button type="submit">Hesabına giriş yap</button></form>
+          <form id="registerForm" class="auth-form"><strong>Yeni hesap oluştur</strong><input name="username" placeholder="Kullanıcı adı (3-32 karakter)" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola (en az 8 karakter)" minlength="8" maxlength="128" autocomplete="new-password" required><button type="submit">Yeni hesap oluştur</button></form>
         </div>
       </div>
       <div id="authLoggedIn" hidden>
-        <div class="account-header"><div>Giriş yapıldı · <strong id="accountUsername"></strong></div><button type="button" class="secondary" id="logoutButton">Çıkış yap</button></div>
-        <form id="faceitLinkForm" class="faceit-link-form"><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet ve aç</button></div></form>
-        <p class="account-copy">Bu işlem FACEIT’e giriş yapmaz ve profil sahipliğini doğrulamaz; yalnızca herkese açık FACEIT profilini bu CS2 Coach hesabına kaydeder.</p>
+        <div class="account-header"><div>Oturum açık · <strong id="accountUsername"></strong></div><div class="account-actions"><button type="button" class="secondary" id="changeFaceitButton" hidden>FACEIT profilini değiştir</button><button type="button" class="secondary" id="logoutButton">Çıkış yap</button></div></div>
+        <form id="faceitLinkForm" class="faceit-link-form" hidden><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet ve aç</button></div></form>
+        <p class="account-copy">Bu işlem FACEIT’e giriş yapmaz ve profil sahipliğini doğrulamaz; yalnızca herkese açık FACEIT profilini Clone Lab hesabına kaydeder.</p>
       </div>
       <p id="accountPersistenceNote" class="account-copy">Hesap kalıcılık durumu kontrol ediliyor…</p>
       <div id="authMessage" class="account-message" role="status" aria-live="polite"></div>
     </section>
-    <div id="status" class="notice">Başlamak için FACEIT kullanıcı adını gir. Sunucu yapılandırılmamışsa hata mesajı gösterilir.</div>
+    <div id="status" class="notice">Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.</div>
     <div id="results" class="grid" style="margin-top:22px"></div>
     <div id="error" class="error" role="alert"></div>
   </main>
-  <footer>CS2 Coach kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Demo izlenmeden kesin aim, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
+  <footer>CLONE LAB kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Maç demosu incelenmeden kesin nişan, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
 </div>
 <script>
 const $ = (id) => document.getElementById(id);
@@ -126,7 +133,7 @@ function showProfile(p){
     <section class="card section"><h2>Koçluk notları</h2><div id="coach" class="muted">İstatistikler yükleniyor…</div></section>`;
 }
 async function loadProfile(nickname){
-  $('error').textContent=''; $('results').innerHTML=''; $('status').textContent='FACEIT profili aranıyor…'; $('submitBtn').disabled=true;
+  $('error').textContent=''; $('results').innerHTML=''; $('status').textContent='FACEIT profili aranıyor…';
   try {
     const p=await api(`/api/player?nickname=${encodeURIComponent(nickname)}`);
     if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
@@ -166,32 +173,9 @@ async function loadProfile(nickname){
     $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
     $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')) $('analysisState').textContent='Tamamlandı';
   } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')) $('analysisState').textContent='Hata'; }
-  finally {$('submitBtn').disabled=false;}
+  finally {}
 }
 
-function loadDemo(){
-  $('error').textContent=''; $('status').textContent='Örnek demo modu açık. Aşağıdaki tüm veriler temsili, canlı FACEIT verisi değildir.';
-  $('nickname').value='DemoPlayer';
-  showProfile({nickname:'DemoPlayer',country:'TR',skill_level:8,elo:1842,avatar:'',faceit_url:'https://www.faceit.com/'});
-  $('results').insertAdjacentHTML('afterbegin','<div class="demo-banner"><strong>DEMO MODU</strong> · Bu panel örnek verilerle çalışıyor. Gerçek profil analizi için FACEIT API anahtarı yapılandırılmış sunucuyu kullan.</div>');
-  const matches=[
-    {map:'de_mirage',date:'Bugün',score:'13 : 9',result:'Galibiyet'},
-    {map:'de_inferno',date:'Dün',score:'10 : 13',result:'Mağlubiyet'},
-    {map:'de_ancient',date:'Dün',score:'13 : 7',result:'Galibiyet'},
-    {map:'de_anubis',date:'25 Eki',score:'11 : 13',result:'Mağlubiyet'},
-    {map:'de_mirage',date:'24 Eki',score:'13 : 6',result:'Galibiyet'}
-  ];
-  $('matchCount').textContent='5';
-  $('matches').innerHTML=matches.map(m=>`<div class="match"><div><strong>${esc(m.map)}</strong><div class="muted" style="margin-top:5px">${esc(m.date)} · ${esc(m.result)}</div></div><div style="text-align:right"><strong>${esc(m.score)}</strong><div class="muted" style="font-size:11px;margin-top:5px">Örnek maç</div></div></div>`).join('')+'<div class="notice" style="margin-top:10px">Bu demo örneğinde 5 maç gösteriliyor.</div>';
-  const stats=[['Win rate','52%'],['ADR','71.4'],['K/D','1.03'],['HS%','43%']];
-  const recs=[
-    {priority:'YÜKSEK',title:'İlk temas kalitesini ölç',body:'Örnek K/D 1.03 ve ADR 71.4 tek başına aim sorunu göstermez. Demo incelemesinde ilk ölüm, trade edilebilirlik ve çatışmaya giriş şeklini kontrol et.'},
-    {priority:'ORTA',title:'Mirage performansını derinleştir',body:'Örnek maç listesinde Mirage tekrar ediyor. CT/T tarafı, açılış düelloları ve round başına katkıyı ayrı incele; harita bazında karar vermek için daha fazla veri gerekir.'},
-    {priority:'RUTİN',title:'15 dakikalık ısınma planı',body:'5 dk kontrollü bot pre-aim, 5 dk counter-strafe + ilk mermi, 5 dk DM. Her seans sonunda isabet veya hissiyat yerine ölçülebilir bir hedef kaydet.'}
-  ];
-  $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${stats.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${recs.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">Örnek veriyle oluşturulmuş açıklanabilir öneriler. Gerçek analiz değildir ve gerçek maç performansını temsil etmez.</p>`;
-  $('status').textContent='Demo hazır. Canlı API çağrısı yapılmadı.';
-}
 $('results').addEventListener('click',async e=>{
   const button=e.target.closest('[data-match-detail]');
   if(!button) return;
@@ -226,18 +210,19 @@ $('results').addEventListener('click',async e=>{
   }catch(err){panel.innerHTML='<span class="error">'+esc(err.message||'Maç detayları alınamadı.')+'</span>';}
   finally{button.disabled=false;}
 });
-$('demoBtn').addEventListener('click',loadDemo);
 
-$('searchForm').addEventListener('submit',e=>{e.preventDefault();const nick=$('nickname').value.trim();if(nick)loadProfile(nick)});
 async function setAccountState(data,openSavedProfile=false){
   const loggedIn=Boolean(data?.authenticated);
+  $('guestWelcome').hidden=loggedIn;
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
   $('authLoggedOut').hidden=loggedIn;
   $('authLoggedIn').hidden=!loggedIn;
-  if(!loggedIn)return;
+  if(!loggedIn){ $('results').innerHTML=''; $('error').textContent=''; $('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.'; activePlayerId=null; return; }
   $('accountUsername').textContent=data.username||'';
   $('savedFaceitNickname').value=data.faceit_nickname||'';
+  $('faceitLinkForm').hidden=Boolean(data.faceit_nickname);
+  $('changeFaceitButton').hidden=!data.faceit_nickname;
   if(data.faceit_nickname&&openSavedProfile) await loadProfile(data.faceit_nickname);
 }
 function accountMessage(text,type=''){
@@ -252,7 +237,7 @@ async function submitAuth(form,path){
   try{
     const body=Object.fromEntries(new FormData(form).entries());
     const data=await api(path,{method:'POST',body:JSON.stringify(body)});
-    accountMessage(path.endsWith('/register')?'Hesap oluşturuldu.':'Giriş başarılı.','success');
+    accountMessage(path.endsWith('/register')?'Yeni hesap oluşturuldu.':'Giriş başarılı.','success');
     const passwordField=form.querySelector('[name="password"]');if(passwordField)passwordField.value='';
     await setAccountState(data,true);
   }catch(e){accountMessage(e.message,'error');}
@@ -265,13 +250,15 @@ $('faceitLinkForm').addEventListener('submit',async e=>{
   try{
     const nickname=$('savedFaceitNickname').value.trim();
     const data=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});
-    $('savedFaceitNickname').value=data.faceit_nickname;
+    await setAccountState({authenticated:true,username:$('accountUsername').textContent,faceit_nickname:data.faceit_nickname,persistent_storage:data.persistent_storage},false);
     accountMessage('FACEIT profili bulundu ve bu hesaba kaydedildi.','success');
     await loadProfile(data.faceit_nickname);
   }catch(err){accountMessage(err.message,'error');}
   finally{button.disabled=false;}
 });
-$('logoutButton').addEventListener('click',async()=>{
+$('changeFaceitButton').addEventListener('click',()=>{
+  $('faceitLinkForm').hidden=!$('faceitLinkForm').hidden;
+});$('logoutButton').addEventListener('click',async()=>{
   try{await api('/api/account/logout',{method:'POST'});await setAccountState({authenticated:false});accountMessage('Oturum kapatıldı.');}
   catch(e){accountMessage(e.message,'error');}
 });
@@ -279,3 +266,9 @@ restoreAccount();
 </script>
 </body>
 </html>
+
+
+
+
+
+

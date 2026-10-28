@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Clone Lab emblem</title><desc id="desc">Turquoise angular sci-fi clone helmet on black</desc>
+  <path fill="#071013" stroke="#33e6d3" stroke-width="4" stroke-linejoin="round" d="M48 4 82 18 92 42 85 67 70 85 48 93 26 85 11 67 4 42 14 18Z"/>
+  <path fill="#33e6d3" d="m23 25 25-10 25 10 8 17-9 30-24 13-24-13-9-30Zm8 7-8 10 4 9 16-4 2-9Zm34 0-14 6 2 9 16 4 4-9ZM41 58l-9 9 4 8 12 5 12-5 4-8-9-9-7 4Z"/>
+  <path fill="#071013" d="m34 35 10 1-1 6-11 3Zm28 0-10 1 1 6 11 3ZM42 64l6 2 6-2-2 7-4 2-4-2Z"/>
+  <path fill="none" stroke="#071013" stroke-width="3" stroke-linecap="square" d="m16 47 11 3m53-3-11 3M27 63l7 6m35-6-7 6"/>
+</svg>
