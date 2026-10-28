@@ -85,16 +85,20 @@ async def matches(player_id: str, limit: int = Query(default=20, ge=1, le=50)):
     normalized = []
     for item in items:
         teams = item.get("teams") or {}
+        results = item.get("results") or {}
+        winner = results.get("winner")
+        my_team = next((team for team in teams.values() if any(player.get("player_id") == player_id for player in team.get("players", []))), None)
+        won = (my_team.get("team_id") == winner) if my_team and winner else None
         normalized.append({
             "match_id": item.get("match_id"),
             "finished_at": item.get("finished_at"),
             "game_mode": item.get("game_mode"),
-            # Match history often exposes queue type rather than the actual map.
-            # Do not label match_type/game_mode as a map unless the API explicitly provides one.
+            # The history endpoint may expose queue type rather than an actual map.
             "map": item.get("map_name") or item.get("map") or None,
             "match_type": item.get("match_type"),
             "competition_name": item.get("competition_name"),
-            "results": item.get("results") or {},
+            "results": results,
+            "won": won,
             "teams": teams,
             "faceit_url": item.get("faceit_url"),
         })
@@ -136,6 +140,30 @@ async def coach_report(payload: dict[str, Any]):
     segments = stats_data.get("segments") or []
     report: list[dict[str, str]] = []
 
+    matches = payload.get("matches") or []
+    known_matches = [match for match in matches if match.get("won") is not None]
+    recent_wins = sum(match.get("won") is True for match in known_matches)
+    if known_matches:
+        recent_rate = recent_wins / len(known_matches) * 100
+        if len(known_matches) >= 5 and recent_rate < 45:
+            report.append({"priority": "Orta", "title": "Yakın dönem sonuçlarını gözden geçir", "body": f"FACEIT geçmişinde sonucu bilinen {len(known_matches)} maçın {recent_wins} tanesini kazandın (%{recent_rate:.0f}). Bu sonuç tek başına kişisel hatayı göstermez. İki yakın mağlubiyette round kararlarını ve takım skorunu incele."})
+        elif len(known_matches) >= 5 and recent_rate >= 55:
+            report.append({"priority": "Bilgi", "title": "İşe yarayan koşulları koru", "body": f"Sonucu bilinen {len(known_matches)} maçta {recent_wins} galibiyet var (%{recent_rate:.0f}). Yakın mağlubiyetleri inceleyip tekrar edilebilir iyi alışkanlıkları belirle."})
+        elif len(known_matches) < 5:
+            report.append({"priority": "Bilgi", "title": "Sonuç verisi henüz sınırlı", "body": f"Yalnızca {len(known_matches)} maçın sonucu alınabildi. Güvenilir yakın dönem eğilimi çıkarmak için bu örneklem küçük; daha fazla maç verisi bekle."})
+        else:
+            report.append({"priority": "Bilgi", "title": "Yakın dönem performansını takip et", "body": f"Sonucu bilinen {len(known_matches)} maçta galibiyet oranı %{recent_rate:.0f}. Bu sınırlı dönem için dengeli bir sonuç; aynı örneklemi büyütüp tekrar kontrol et."})
+
+    map_records: dict[str, list[bool]] = {}
+    for match in known_matches:
+        map_name = match.get("map")
+        if map_name:
+            map_records.setdefault(str(map_name), []).append(match["won"] is True)
+    for map_name, outcomes in map_records.items():
+        if len(outcomes) >= 3:
+            rate = sum(outcomes) / len(outcomes) * 100
+            report.append({"priority": "Bilgi", "title": f"Harita verisi: {map_name}", "body": f"FACEIT yanıtında bu haritada {len(outcomes)} sonuç ve %{rate:.0f} galibiyet oranı var. Bu en az üç maçlık küçük bir örneklemdir."})
+
     win_rate = numeric(lifetime, "Win Rate %", "Win Rate", "win_rate")
     adr = numeric(lifetime, "Average Damage per Round", "ADR", "Average Damage")
     kd = numeric(lifetime, "K/D Ratio", "K/D", "KD Ratio")
@@ -164,9 +192,10 @@ async def coach_report(payload: dict[str, Any]):
         report.append({"priority": "Başlangıç", "title": "Veri kapsamı sınırlı", "body": "API yanıtında tanınan lifetime metrikleri bulunamadı. Ham veriyi kontrol edin veya maç istatistikleri uç noktasını kullanın. Bu aşamada kişisel hata teşhisi yapılmıyor."})
 
     return {
-        "source": "FACEIT Data API lifetime stats",
+        "source": "FACEIT Data API player stats and recent match history",
         "confidence_note": "Bunlar istatistiklerden türetilen başlangıç önerileridir; demo izlenmeden kesin mekanik veya taktik hata teşhisi yapılmaz.",
         "metrics_detected": {"win_rate": win_rate, "adr": adr, "kd": kd, "headshot_pct": hs},
+        "recent_results": {"wins": recent_wins, "losses": len(known_matches) - recent_wins, "matches_with_result": len(known_matches), "win_rate": round(recent_wins / len(known_matches) * 100, 1) if known_matches else None},
         "recommendations": report,
         "segments_count": len(segments),
     }

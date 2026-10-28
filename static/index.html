@@ -60,12 +60,16 @@ async function loadProfile(nickname){
     showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
     const settled=await Promise.allSettled([api(`/api/player/${encodeURIComponent(p.player_id)}/matches?limit=20`),api(`/api/player/${encodeURIComponent(p.player_id)}/stats`)]);
     const matchResult=settled[0], statsResult=settled[1];
+    let recentMatches=[];
     if(matchResult.status==='fulfilled'){
       const items=matchResult.value.items||[]; $('matchCount').textContent=items.length;
-      $('matches').innerHTML=items.length?items.map(m=>`<div class="match"><div><strong>${esc(matchLabel(m))}</strong><div class="muted" style="margin-top:5px">${esc(m.map ? 'Harita' : 'Maç türü')} · ${esc(fmtDate(m.finished_at))}</div></div><div style="text-align:right"><div>${esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')}</div>${m.faceit_url?`<a href="${esc(m.faceit_url)}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:11px">Maçı aç ↗</a>`:''}</div></div>`).join(''):'Maç geçmişi bulunamadı.';
+      recentMatches=items;
+      const known=items.filter(m=>m.won===true||m.won===false); const wins=known.filter(m=>m.won===true).length;
+      const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan bilgisi yok; galibiyet oranı hesaplanmadı.</p>';
+      $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:11px">Maçı aç ↗</a>':'')+'</div></div>').join(''):'Maç geçmişi bulunamadı.')+summary;
     } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
     if(statsResult.status==='fulfilled'){
-      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value})});
+      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches})});
       const ms=report.metrics_detected;
       const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
       $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${metricBits.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
@@ -87,8 +91,8 @@ function loadDemo(){
     {map:'de_anubis',date:'25 Eki',score:'11 : 13',result:'Mağlubiyet'},
     {map:'de_mirage',date:'24 Eki',score:'13 : 6',result:'Galibiyet'}
   ];
-  $('matchCount').textContent='20';
-  $('matches').innerHTML=matches.map(m=>`<div class="match"><div><strong>${esc(m.map)}</strong><div class="muted" style="margin-top:5px">${esc(m.date)} · ${esc(m.result)}</div></div><div style="text-align:right"><strong>${esc(m.score)}</strong><div class="muted" style="font-size:11px;margin-top:5px">Örnek maç</div></div></div>`).join('')+'<div class="notice" style="margin-top:10px">Gösterim için 5 maç listelendi; sayı tasarım örneğidir.</div>';
+  $('matchCount').textContent='5';
+  $('matches').innerHTML=matches.map(m=>`<div class="match"><div><strong>${esc(m.map)}</strong><div class="muted" style="margin-top:5px">${esc(m.date)} · ${esc(m.result)}</div></div><div style="text-align:right"><strong>${esc(m.score)}</strong><div class="muted" style="font-size:11px;margin-top:5px">Örnek maç</div></div></div>`).join('')+'<div class="notice" style="margin-top:10px">Bu demo örneğinde 5 maç gösteriliyor.</div>';
   const stats=[['Win rate','52%'],['ADR','71.4'],['K/D','1.03'],['HS%','43%']];
   const recs=[
     {priority:'YÜKSEK',title:'İlk temas kalitesini ölç',body:'Örnek K/D 1.03 ve ADR 71.4 tek başına aim sorunu göstermez. Demo incelemesinde ilk ölüm, trade edilebilirlik ve çatışmaya giriş şeklini kontrol et.'},
