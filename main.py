@@ -192,6 +192,19 @@ async def player_match_stats(player_id: str, limit: int = Query(default=20, ge=1
         finished_at = next((row[key] for key in ("Match Finished At", "Finished At", "finished_at") if row.get(key)), None)
         normalized_items.append({"match_id": match_id, "finished_at": finished_at, "stats": row})
 
+    series = {"kd": [], "hs_pct": [], "adr": []}
+    for item in normalized_items:
+        row = item["stats"]
+        kd_value = numeric(row, "K/D Ratio", "K/D", "KD Ratio")
+        hs_value = numeric(row, "Headshots %", "Headshot %", "HS %", "Headshot Percentage")
+        row_kills = numeric(row, "Kills", "kills", "Total Kills")
+        row_headshots = numeric(row, "Headshots", "Headshot Kills", "HS Kills")
+        if hs_value is None and row_kills and row_headshots is not None:
+            hs_value = row_headshots / row_kills * 100
+        adr_value = numeric(row, "ADR", "Average Damage per Round")
+        for key, value in (("kd", kd_value), ("hs_pct", hs_value), ("adr", adr_value)):
+            if value is not None:
+                series[key].append({"match_id": item["match_id"], "finished_at": item["finished_at"], "value": round(value, 2)})
     return {
         "source": "FACEIT Data API per-match player stats",
         "requested_limit": limit,
@@ -212,6 +225,7 @@ async def player_match_stats(player_id: str, limit: int = Query(default=20, ge=1
             "mvp_per_match": mean(values("MVPs", "MVP")),
         },
         "items": normalized_items,
+        "series": series,
     }
 
 @app.post("/api/coach-report")

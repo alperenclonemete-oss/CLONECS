@@ -33,6 +33,7 @@ Tarayıcıda http://127.0.0.1:8000 adresini aç.
 - `GET /api/player/{player_id}/matches?limit=20` — son maçlar
 - `GET /api/player/{player_id}/stats` — FACEIT lifetime istatistikleri
 - `GET /api/match/{match_id}/stats` — belirli maçın istatistikleri
+- `GET /api/player/{player_id}/match-stats?limit=100` — son maçların ham FACEIT alanları, özetleri ve grafik serileri
 - `POST /api/coach-report` — istatistikleri basit, açıklanabilir önerilere dönüştürme
 
 ## Önemli kapsam notları
@@ -64,3 +65,11 @@ Render'ın ücretsiz planı zaman zaman uykuya geçebilir ve ilk açılış yava
 - FACEIT Data API yalnızca sağladığı alanları gösterir. Maç geçmişi endpoint'i her zaman harita adını veya ayrıntılı round olaylarını sağlamaz.
 - Koçluk önerileri şeffaf, temel istatistik eşiklerine dayanır; demo analizinin yerine geçmez.
 - FACEIT'in resmî API dokümantasyonu: https://docs.faceit.com/api/data/
+
+## Son güncelleme
+
+- İstatistik paneli FACEIT’in maç başı K/D, HS% ve ADR değerlerini hem özet hem trend grafiği olarak gösterir. Bir metrik API’den dönmezse ilgili grafik boş veri durumunu açıkça belirtir.
+- HS% FACEIT alanından alınır; alan yoksa yalnızca aynı maçta Headshots ve Kills ikisi de varsa oran türetilir.
+- Maç detayları isteğe bağlı yüklenir ve takım kadrosu ile API’nin yayınladığı oyuncu maç istatistiklerini gösterir.
+- FACEIT’in Data API bu sorgu için tarihsel ELO serisi sunmadığından ELO grafiği eklenmedi. Güncel ELO gösterilir; geçmiş ELO noktaları uydurulmaz.
+- Değişiklikleri yayınlamak için güncel dosyaları bağlı GitHub deposuna gönderip Render servisini redeploy et. `FACEIT_API_KEY` sunucudaki secret olarak kalmalı.
