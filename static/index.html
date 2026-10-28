@@ -1,22 +1,281 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#0b1118"><title>CS2 Coach — FACEIT match review</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CS2 Coach | FACEIT performans paneli</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b0e13; --panel:#141a23; --panel2:#1b2330; --line:#293342; --text:#edf2f7; --muted:#98a6b8; --accent:#b7f36b; --red:#ff8c8c; }
+    * { box-sizing:border-box; } body { margin:0; font-family:Inter,Segoe UI,Arial,sans-serif; background:radial-gradient(ellipse at 80% 0%,#1c2b1d 0,transparent 34%),var(--bg); color:var(--text); }
+    .wrap { max-width:1120px; margin:auto; padding:34px 20px 60px; } header { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:28px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.4px; font-size:20px; } .mark { display:grid; place-items:center; width:42px;height:42px;border-radius:13px;background:var(--accent);color:#12170d;font-weight:900; }
+    .pill { border:1px solid var(--line); border-radius:999px; padding:8px 12px; color:var(--muted); font-size:12px; }
+    h1 { font-size:clamp(30px,5vw,48px); line-height:1.04; margin:10px 0 12px; letter-spacing:-1.5px; } .accent { color:var(--accent); } .sub { color:var(--muted); max-width:720px; line-height:1.6; }
+    .search { margin:28px 0; display:flex; gap:10px; max-width:650px; } input { min-width:0; flex:1; border:1px solid var(--line); background:var(--panel); color:var(--text); border-radius:12px; padding:15px 16px; font-size:15px; outline:none; } input:focus { border-color:var(--accent); }
+    button { border:0; background:var(--accent); color:#10150b; font-weight:800; border-radius:12px; padding:0 20px; cursor:pointer; } button:disabled { opacity:.55; cursor:wait; } .secondary { border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:14px 16px; border-radius:12px; font-weight:700; cursor:pointer; } .search-actions { display:flex; gap:10px; flex-wrap:wrap; } .search-actions button { min-height:48px; } .demo-banner { grid-column:span 12; border:1px solid #4b6335; background:#182218; color:#cce8b2; border-radius:12px; padding:12px 15px; font-size:12px; line-height:1.5; } .bar { height:7px; background:#283241; border-radius:99px; overflow:hidden; margin-top:8px; } .bar span { display:block;height:100%;background:var(--accent);border-radius:99px; }
+    .notice { color:var(--muted); font-size:12px; line-height:1.5; } .error { color:var(--red); margin:12px 0; }
+    .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; } .card { background:linear-gradient(150deg,rgba(26,34,46,.97),rgba(17,22,30,.97)); border:1px solid var(--line); border-radius:18px; padding:20px; min-width:0; } .profile { grid-column:span 12; display:flex; align-items:center; gap:16px; } .avatar { width:64px;height:64px;border-radius:16px;object-fit:cover;background:var(--panel2); } .name { font-size:22px;font-weight:800; } .muted { color:var(--muted); } .metrics { grid-column:span 12; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; } .metric { background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px; } .metric label { color:var(--muted);font-size:12px;display:block;margin-bottom:9px; } .metric strong { font-size:26px; }
+    .section { grid-column:span 6; } .section h2 { font-size:17px;margin:0 0 15px; } .match { display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px; } .match:last-child { border-bottom:0; } .recommendation { padding:14px 0;border-bottom:1px solid var(--line); } .recommendation:last-child { border-bottom:0; } .tag { display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:5px 7px;border-radius:6px;background:#293729;color:var(--accent);margin-bottom:8px; } .recommendation h3 { font-size:14px;margin:0 0 6px; } .recommendation p { color:var(--muted);font-size:13px;line-height:1.55;margin:0; }
+    .empty { grid-column:span 12; border:1px dashed #354052; border-radius:18px; padding:24px; color:var(--muted); line-height:1.6; } footer { color:#6f7d8f;font-size:11px;margin-top:22px;line-height:1.6; }
+    @media(max-width:700px){ .metrics{grid-template-columns:repeat(2,1fr)} .section{grid-column:span 12} header{align-items:flex-start;flex-direction:column} .search{flex-direction:column}.search-actions{display:grid;grid-template-columns:1fr}button{padding:15px} }
+      .charts{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0}.chart-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 15px}.chart-head{display:flex;justify-content:space-between;gap:10px;font-size:12px}.chart-head span,.chart-foot{color:var(--muted);font-size:10px}.chart-card svg{display:block;width:100%;height:auto;max-height:210px;margin:8px 0}.chart-card svg line{stroke:#ffffff18;stroke-dasharray:3 5}.chart-line{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-card circle{fill:#ff6b3b;stroke:#1b2330;stroke-width:2}.chart-card circle:hover{fill:#ffd166;stroke:#ffffff;stroke-width:2}.chart-empty{display:flex;flex-direction:column;gap:6px;border:1px dashed #354052;border-radius:12px;padding:14px;color:var(--muted);font-size:11px}.chart-empty b{color:var(--text)}
+    .dashboard{grid-column:span 12;overflow:hidden;padding:0}.season-head{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px;background:linear-gradient(115deg,#332015 0%,#1b1716 44%,#15191f 100%);border-bottom:1px solid var(--line)}.season-head .eyebrow{font-size:10px;font-weight:800;letter-spacing:1.5px;color:#ff966c}.season-title{font-size:25px;font-weight:900;margin-top:8px}.season-title span{font-size:17px;color:var(--accent);margin-left:8px}.season-summary{display:flex;gap:22px;flex-wrap:wrap}.season-summary div{display:flex;flex-direction:column;gap:4px;min-width:76px}.season-summary b{font-size:18px}.season-summary span{font-size:10px;color:var(--muted)}.positive{color:#70ef6e}.negative{color:#ff7373}.performance-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 20px 8px}.performance-head b{font-size:15px}.performance-head span{color:var(--muted);font-size:11px}.dashboard-chart{padding:0 16px}.dashboard-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 20px 12px}.dashboard-metrics .metric strong{font-size:21px}.elo-note{padding:0 20px}.radar-card{margin:10px 20px 20px}.radar-card svg{width:100%;height:auto;max-height:370px}.radar-card svg polygon{fill:none;stroke:#ffffff22;stroke-width:1}.radar-card svg line{stroke:#ffffff25;stroke-dasharray:none}.radar-card svg .radar-count{fill:#ffffff09;stroke:#e4eaf1;stroke-width:2}.radar-card svg .radar-win{fill:#12e81620;stroke:#20f020;stroke-width:2}.radar-name{fill:#cad3dc;font-size:11px;letter-spacing:1px}.radar-meta{fill:#f4f6f8;font-size:10px}.radar-legend{display:flex;justify-content:center;gap:22px;flex-wrap:wrap;color:var(--muted);font-size:10px}.radar-legend span{display:flex;align-items:center;gap:7px}.radar-legend i{display:inline-block;width:11px;height:3px}.legend-count{background:#e4eaf1}.legend-win{background:#20f020}@media(max-width:700px){.season-head{align-items:flex-start;flex-direction:column}.season-summary{display:grid;grid-template-columns:repeat(2,1fr);width:100%;gap:14px}.dashboard-metrics{grid-template-columns:repeat(2,1fr);padding:8px 12px}.performance-head{align-items:flex-start;flex-direction:column}.radar-card{margin:8px 10px 12px}.radar-card svg{max-height:290px}.radar-name{font-size:9px}.radar-meta{font-size:8px}}
+    .account-panel{max-width:760px;margin:16px 0;padding:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px}.account-title{font-size:14px;font-weight:800}.account-copy{color:var(--muted);font-size:11px;line-height:1.5;margin:7px 0 12px}.auth-forms{display:grid;grid-template-columns:1fr 1fr;gap:12px}.auth-form{display:grid;gap:8px;padding:12px;border:1px solid var(--line);border-radius:10px}.auth-form strong{font-size:12px}.auth-form input,.faceit-link-form input{padding:10px 11px;font-size:12px;border-radius:8px}.auth-form button,.faceit-link-form button{min-height:40px;border-radius:8px;font-size:12px}.account-header{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}.account-header button{padding:8px 12px}.faceit-link-form{display:grid;gap:8px;margin-top:14px}.faceit-link-form label{color:var(--muted);font-size:11px}.faceit-link-form>div{display:flex;gap:8px}.faceit-link-form input{flex:1}.faceit-link-form button{padding:0 14px}.account-message{min-height:16px;color:var(--muted);font-size:11px;margin-top:8px}.account-message.error{color:var(--red)}.account-message.success{color:var(--accent)}
+  </style>
 </head>
 <body>
-  <main class="shell">
-    <header class="top"><a class="brand" href="/" aria-label="CS2 Coach home"><span class="brand-mark">C</span><span>CS2 <b>COACH</b></span></a><span class="top-note"><i></i> FACEIT DATA API</span></header>
-    <section class="hero">
-      <p class="eyebrow">YOUR MATCHES. YOUR NEXT STEP.</p><h1>Play with a plan.</h1>
-      <p class="intro">Look up a FACEIT player to review recent results, available stats, and practical coaching suggestions grounded in their data.</p>
-      <form id="search-form" class="search"><label class="sr-only" for="nickname">FACEIT nickname</label><span class="search-icon">⌕</span><input id="nickname" name="nickname" maxlength="50" placeholder="Enter FACEIT nickname" autocomplete="off" required><button type="submit">Analyze player <span>↗</span></button></form>
-      <div id="status" class="status" role="status" aria-live="polite">Your search is sent to the server, which retrieves public FACEIT profile and match data.</div>
+<div class="wrap">
+  <header><div class="brand"><div class="mark">C2</div> CS2 COACH <span class="muted" style="font-weight:500">/ performance lab</span></div><div class="pill">MVP · FACEIT Data API</div></header>
+  <main>
+    <div class="muted" style="font-size:12px;font-weight:800;letter-spacing:2px">PLAY SMARTER</div>
+    <h1>Grind değil, <span class="accent">gelişim.</span></h1>
+    <p class="sub">FACEIT profilini getir, maç geçmişini incele ve istatistiklerinden hareketle bir sonraki antrenman odağını belirle. Bu ilk sürüm gerçek API verisiyle çalışır.</p>
+    <form class="search" id="searchForm"><input id="nickname" placeholder="FACEIT kullanıcı adın" autocomplete="off" required minlength="2"/><div class="search-actions"><button id="submitBtn" type="submit">Profili analiz et ↗</button><button class="secondary" id="demoBtn" type="button">Örnek demoyu aç</button></div></form>
+    <section class="account-panel" id="accountPanel">
+      <div id="authLoggedOut">
+        <div class="account-title">Hesabınla devam et</div>
+        <p class="account-copy">Bir kez giriş yap; kaydettiğin FACEIT profili sonraki ziyaretinde otomatik açılsın.</p>
+        <div class="auth-forms">
+          <form id="loginForm" class="auth-form"><strong>Giriş yap</strong><input name="username" placeholder="Kullanıcı adı" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola" minlength="8" maxlength="128" autocomplete="current-password" required><button type="submit">Giriş yap</button></form>
+          <form id="registerForm" class="auth-form"><strong>Hesap oluştur</strong><input name="username" placeholder="Kullanıcı adı (3-32 karakter)" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola (en az 8 karakter)" minlength="8" maxlength="128" autocomplete="new-password" required><button type="submit">Hesap oluştur</button></form>
+        </div>
+      </div>
+      <div id="authLoggedIn" hidden>
+        <div class="account-header"><div>Giriş yapıldı · <strong id="accountUsername"></strong></div><button type="button" class="secondary" id="logoutButton">Çıkış yap</button></div>
+        <form id="faceitLinkForm" class="faceit-link-form"><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet ve aç</button></div></form>
+        <p class="account-copy">Bu işlem FACEIT’e giriş yapmaz ve profil sahipliğini doğrulamaz; yalnızca herkese açık FACEIT profilini bu CS2 Coach hesabına kaydeder.</p>
+      </div>
+      <p id="accountPersistenceNote" class="account-copy">Hesap kalıcılık durumu kontrol ediliyor…</p>
+      <div id="authMessage" class="account-message" role="status" aria-live="polite"></div>
     </section>
-    <section id="results" class="results" hidden></section>
-    <footer><span>CS2 COACH <span class="muted">· independent community project</span></span><span>Recommendations are indicators, not a demo review.</span></footer>
+    <div id="status" class="notice">Başlamak için FACEIT kullanıcı adını gir. Sunucu yapılandırılmamışsa hata mesajı gösterilir.</div>
+    <div id="results" class="grid" style="margin-top:22px"></div>
+    <div id="error" class="error" role="alert"></div>
   </main>
-  <script src="/static/app.js" defer></script>
+  <footer>CS2 Coach kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Demo izlenmeden kesin aim, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+let activePlayerId=null;
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+async function api(path, options={}) {
+  const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
+  const data = await r.json().catch(()=>({detail:'Sunucudan okunabilir yanıt alınamadı.'}));
+  if(!r.ok) throw new Error(data.detail || `İstek başarısız (${r.status})`);
+  return data;
+}
+function fmtDate(ts){ if(!ts) return 'Tarih bilinmiyor'; const n=Number(ts); const d=new Date(n < 1e12 ? n*1000 : n); return isNaN(d)?'Tarih bilinmiyor':d.toLocaleDateString('tr-TR'); }
+function matchLabel(m){ return m.map || m.match_type || m.game_mode || 'FACEIT maçı'; }
+function renderStatChart(points,label,suffix=''){
+  const data=(points||[]).filter(p=>Number.isFinite(Number(p.value))).map(p=>({...p,value:Number(p.value)}));
+  if(data.length<2)return `<div class="chart-empty"><b>${esc(label)}</b><span>Grafik için en az iki geçerli FACEIT maç verisi gerekli (${data.length} mevcut).</span></div>`;
+  const w=680,h=190,pad=28,min=Math.min(...data.map(p=>p.value)),max=Math.max(...data.map(p=>p.value)),span=max-min||1;
+  const coords=data.map((p,i)=>[pad+i*(w-pad*2)/(data.length-1),h-pad-(p.value-min)*(h-pad*2)/span]);
+  const path=coords.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+  const dots=coords.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.4"><title>${esc(data[i].finished_at?fmtDate(data[i].finished_at):`FACEIT kaydı ${i+1}`)}: ${data[i].value}${suffix}</title></circle>`).join('');
+  return `<div class="chart-card"><div class="chart-head"><b>${esc(label)}</b><span>${min}${suffix} – ${max}${suffix} · ${data.length} maç</span></div><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)} maç grafiği"><line x1="${pad}" y1="${pad}" x2="${w-pad}" y2="${pad}"/><line x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}"/><line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}"/><path class="chart-line" d="${path}"/>${dots}</svg><div class="chart-foot">Noktalar FACEIT’in döndürdüğü sıradadır. Üzerine gelerek değeri gör.</div></div>`;
+}
+function readStat(row,...keys){
+  const values=new Map(Object.entries(row||{}).map(([k,v])=>[k.toLowerCase().trim(),v]));
+  for(const key of keys){const value=values.get(key.toLowerCase());if(value!==undefined&&value!==null&&value!==''){const n=Number(String(value).replace('%','').replace(',','.'));if(Number.isFinite(n))return n;}}
+  return null;
+}
+function makeWinTrend(matches){
+  const ordered=(matches||[]).filter(m=>(m.won===true||m.won===false)&&m.finished_at).slice().sort((a,b)=>Number(a.finished_at)-Number(b.finished_at));
+  return ordered.map((m,i)=>{const window=ordered.slice(Math.max(0,i-4),i+1);return {value:Math.round(window.filter(x=>x.won).length/window.length*100),finished_at:m.finished_at};});
+}
+function renderWinTrend(points){
+  if(points.length<2)return '<div class="chart-empty"><b>Son maç sonuç grafiği</b><span>Grafik için FACEIT tarafından sonucu bilinen en az iki maç gerekli.</span></div>';
+  const w=680,h=180,pad=28,coords=points.map((p,i)=>[pad+i*(w-pad*2)/(points.length-1),h-pad-p.value/100*(h-pad*2)]);
+  const path=coords.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
+  const dots=coords.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.2"><title>${esc(fmtDate(points[i].finished_at))}: ${points[i].value}% hareketli galibiyet oranı</title></circle>`).join('');
+  return `<div class="chart-card"><div class="chart-head"><b>Son maçların hareketli kazanma oranı</b><span>5 maçlık pencere · ${points.length} bilinen sonuç</span></div><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Son maçların kazanma oranı grafiği"><line x1="${pad}" y1="${pad}" x2="${w-pad}" y2="${pad}"/><line x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}"/><line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}"/><path class="chart-line" d="${path}"/>${dots}</svg><div class="chart-foot">En eski maç solda, en yeni sağda. Bu grafik gerçek galibiyet oranını gösterir, ELO değişimini değil.</div></div>`;
+}
+function renderMapRadar(maps){
+  if(maps.length<3)return `<div class="chart-empty"><b>Harita istatistikleri</b><span>Radar grafik için sonuç ve harita adı bilinen en az 3 farklı harita gerekli. Şu an ${maps.length} harita bulundu.</span></div>`;
+  const w=680,h=370,cx=w/2,cy=185,r=118,n=maps.length,angle=i=>-Math.PI/2+i*2*Math.PI/n;
+  const grid=[.25,.5,.75,1].map(scale=>`<polygon points="${maps.map((_,i)=>`${(cx+Math.cos(angle(i))*r*scale).toFixed(1)},${(cy+Math.sin(angle(i))*r*scale).toFixed(1)}`).join(' ')}"/>`).join('');
+  const axes=maps.map((_,i)=>`<line x1="${cx}" y1="${cy}" x2="${(cx+Math.cos(angle(i))*r).toFixed(1)}" y2="${(cy+Math.sin(angle(i))*r).toFixed(1)}"/>`).join('');
+  const winPoly=maps.map((m,i)=>`${(cx+Math.cos(angle(i))*r*m.rate/100).toFixed(1)},${(cy+Math.sin(angle(i))*r*m.rate/100).toFixed(1)}`).join(' ');
+  const countMax=Math.max(...maps.map(m=>m.count));
+  const countPoly=maps.map((m,i)=>`${(cx+Math.cos(angle(i))*r*m.count/countMax).toFixed(1)},${(cy+Math.sin(angle(i))*r*m.count/countMax).toFixed(1)}`).join(' ');
+  const labels=maps.map((m,i)=>{const a=angle(i),x=cx+Math.cos(a)*(r+35),y=cy+Math.sin(a)*(r+24);return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${Math.cos(a)>.25?'start':Math.cos(a)<-.25?'end':'middle'}"><tspan class="radar-name" x="${x.toFixed(1)}">${esc(m.name.toUpperCase())}</tspan><tspan class="radar-meta" x="${x.toFixed(1)}" dy="15">${m.count} maç · %${m.rate.toFixed(1)}</tspan></text>`;}).join('');
+  return `<div class="chart-card radar-card"><div class="chart-head"><b>Harita istatistikleri · son maçlar</b><span>${maps.reduce((a,m)=>a+m.count,0)} eşleşen maç</span></div><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Harita maç sayısı ve galibiyet oranı radar grafiği">${grid}${axes}<polygon class="radar-count" points="${countPoly}"/><polygon class="radar-win" points="${winPoly}"/>${labels}</svg><div class="radar-legend"><span><i class="legend-count"></i>Oynanan maç sayısı (ölçekli)</span><span><i class="legend-win"></i>Galibiyet oranı</span></div></div>`;
+}
+function buildDashboard(p,matches,recentStats){
+  const recent=(matches||[]).slice(0,30),known=recent.filter(m=>m.won===true||m.won===false),wins=known.filter(m=>m.won===true).length,losses=known.length-wins,rate=known.length?wins/known.length*100:null;
+  const sourceRows=(recentStats?.items||[]).slice(0,30).map(x=>x.stats||{});
+  const mean=(...keys)=>{const vals=sourceRows.map(r=>readStat(r,...keys)).filter(v=>v!==null);return vals.length?vals.reduce((a,v)=>a+v,0)/vals.length:null;};
+  const avg=(v,d=1)=>v===null?'—':Number(v).toFixed(d);
+  const kills=mean('Kills','Total Kills'),deaths=mean('Deaths','Total Deaths'),assists=mean('Assists','Total Assists');
+  const kd=mean('K/D Ratio','K/D','KD Ratio'),kr=mean('K/R Ratio','K/R','Kills per Round'),adr=mean('ADR','Average Damage per Round');
+  const hsValues=sourceRows.map(row=>{const direct=readStat(row,'Headshots %','Headshot %','HS %','Headshot Percentage');if(direct!==null)return direct;const k=readStat(row,'Kills','Total Kills'),h=readStat(row,'Headshots','Headshot Kills','HS Kills');return k&&h!==null?h/k*100:null;}).filter(v=>v!==null);
+  const hs=hsValues.length?hsValues.reduce((a,v)=>a+v,0)/hsValues.length:null;
+  const kda=[kills,deaths,assists].every(v=>v!==null)?`${avg(kills,0)} / ${avg(deaths,0)} / ${avg(assists,0)}`:'—';
+  const statMaps=new Map((recentStats?.items||[]).filter(x=>x.match_id&&x.map).map(x=>[String(x.match_id),x.map]));
+  const mapBuckets=new Map();for(const m of (matches||[])){const name=String(m.map||statMaps.get(String(m.match_id))||'').trim();if(!name||(m.won!==true&&m.won!==false))continue;const key=name.toLowerCase();if(!mapBuckets.has(key))mapBuckets.set(key,{name,count:0,wins:0});const b=mapBuckets.get(key);b.count++;if(m.won)b.wins++;}  const mapData=[...mapBuckets.values()].sort((a,b)=>b.count-a.count).slice(0,8).map(m=>({...m,rate:m.wins/m.count*100}));
+  const cards=[['K/D/A',kda],['K/D',avg(kd,2)],['K/R',avg(kr,2)],['HS%',hs===null?'—':`${avg(hs,1)}%`],['ADR',avg(adr,1)],['Kazanma oranı',rate===null?'—':`%${rate.toFixed(1)}`]];
+  const trend=renderWinTrend(makeWinTrend(recent));
+  return `<section class="card dashboard"><div class="season-head"><div><div class="eyebrow">FACEIT · CS2 · SON PERFORMANS</div><div class="season-title">Level ${esc(p.skill_level??'—')} <span>${esc(p.elo??'—')} ELO</span></div></div><div class="season-summary"><div><b>${known.length}</b><span>Sonucu bilinen maç</span></div><div><b class="positive">${wins}G</b><span>Galibiyet</span></div><div><b class="negative">${losses}M</b><span>Mağlubiyet</span></div><div><b>${rate===null?'—':`%${rate.toFixed(1)}`}</b><span>Kazanma oranı</span></div></div></div><div class="performance-head"><b>Son 30 maç performansı</b><span>İstatistik alınan ${sourceRows.length} maç · ${known.length} sonucu eşleşen maç</span></div><div class="dashboard-chart">${trend}</div><div class="dashboard-metrics">${cards.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong>${esc(x[1])}</strong></div>`).join('')}</div><p class="notice elo-note">Tarihsel ELO değişimi FACEIT Data API yanıtında bulunmadığı için burada güncel ELO ve gerçek maç sonuçlarından hesaplanan hareketli galibiyet oranı gösterilir.</p>${renderMapRadar(mapData)}</section>`;
+}
+function showProfile(p){
+  $('results').innerHTML = `
+    <section class="card profile"><img class="avatar" src="${esc(p.avatar || '')}" onerror="this.style.visibility='hidden'" alt=""><div style="flex:1;min-width:0"><div class="name">${esc(p.nickname)}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(p.country || 'Ülke bilgisi yok')} · FACEIT Level ${esc(p.skill_level ?? '—')}</div></div><div style="text-align:right"><div class="muted" style="font-size:12px">FACEIT ELO</div><strong style="font-size:25px;color:var(--accent)">${esc(p.elo ?? '—')}</strong><div style="margin-top:6px"><a href="${esc(p.faceit_url || '#')}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:12px">FACEIT profil ↗</a></div></div></section>
+    <section class="metrics"><div class="metric"><label>FACEIT Level</label><strong>${esc(p.skill_level ?? '—')}</strong></div><div class="metric"><label>ELO</label><strong>${esc(p.elo ?? '—')}</strong></div><div class="metric"><label>Son maçlar</label><strong id="matchCount">…</strong></div><div class="metric"><label>Analiz durumu</label><strong id="analysisState" style="font-size:17px">Hazırlanıyor</strong></div></section>
+    <section class="card section"><h2>Son maçlar</h2><div id="matches" class="muted">Maç geçmişi yükleniyor…</div></section>
+    <section class="card section"><h2>Koçluk notları</h2><div id="coach" class="muted">İstatistikler yükleniyor…</div></section>`;
+}
+async function loadProfile(nickname){
+  $('error').textContent=''; $('results').innerHTML=''; $('status').textContent='FACEIT profili aranıyor…'; $('submitBtn').disabled=true;
+  try {
+    const p=await api(`/api/player?nickname=${encodeURIComponent(nickname)}`);
+    if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
+    activePlayerId=p.player_id;
+    showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
+    const settled=await Promise.allSettled([api('/api/player/'+encodeURIComponent(p.player_id)+'/matches?limit=30'),api('/api/player/'+encodeURIComponent(p.player_id)+'/stats'),api('/api/player/'+encodeURIComponent(p.player_id)+'/match-stats?limit=100')]);
+    const matchResult=settled[0], statsResult=settled[1], recentStatsResult=settled[2];
+    let recentMatches=[]; let recentStats=null;
+    if(recentStatsResult.status==='fulfilled') recentStats=recentStatsResult.value;
+    if(matchResult.status==='fulfilled'){
+      const items=matchResult.value.items||[]; $('matchCount').textContent=items.length;
+      recentMatches=items;
+      const known=items.filter(m=>m.won===true||m.won===false); const wins=known.filter(m=>m.won===true).length;
+      const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan takım güvenle eşleştirilemedi; galibiyet oranı hesaplanmadı.</p>';
+      $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:11px">FACEIT maç sayfası ↗</a>':'')+'<div style="margin-top:8px"><button type="button" class="secondary" data-match-detail="'+esc(m.match_id)+'" style="padding:7px 9px;font-size:11px">Detayları yükle</button></div></div><div class="match-detail" hidden style="flex:0 0 100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px"></div></div>').join(''):'Maç geçmişi bulunamadı.')+summary;    } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
+    if(statsResult.status==='fulfilled'){
+      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches,recent_stats:recentStats})});
+      const ms=report.metrics_detected;
+      const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
+      $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${metricBits.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
+    } else { $('coach').innerHTML=`<div class="error">İstatistikler alınamadı: ${esc(statsResult.reason.message)}. Maç geçmişi yine de görüntülenebilir.</div>`; }
+    if(recentStats){
+      const specs=[['Kills / maç','kills_per_match'],['Deaths / maç','deaths_per_match'],['Assists / maç','assists_per_match'],['Headshots / maç','headshots_per_match'],['K/D','kd'],['K/R','kr'],['ADR','adr'],['HS%','headshot_pct'],['MVP / maç','mvp_per_match']];
+      const cards=specs.filter(x=>recentStats.metrics&&recentStats.metrics[x[1]]!==null&&recentStats.metrics[x[1]]!==undefined).map(x=>'<div class="metric"><label>'+esc(x[0])+'</label><strong>'+esc(x[1]==='headshot_pct'?String(recentStats.metrics[x[1]])+'%':recentStats.metrics[x[1]])+'</strong></div>').join('');
+      const coverage=recentStats.field_coverage||{};
+      const fieldSummary=recentStats.field_summary||{};
+      const fields=(recentStats.fields||[]).map(f=>{const item=fieldSummary[f];return '<li>'+esc(f)+' · '+esc(coverage[f]||0)+'/'+esc(recentStats.count)+(item?' · ort. '+esc(item.average)+' · min '+esc(item.min)+' · max '+esc(item.max):'')+'</li>';}).join('');
+      const lifetime=statsResult.status==='fulfilled'?(statsResult.value.lifetime||{}):{};
+      const lifetimeFields=Object.entries(lifetime).map(entry=>'<li>'+esc(entry[0])+': '+esc(entry[1])+'</li>').join('');
+      const source=recentStats.metric_sources?.headshot_pct||'FACEIT yanıtında bulunamadı';
+      const chartsHtml='<div class="charts">'+renderStatChart(recentStats.series?.kd,'K/D trendi')+renderStatChart(recentStats.series?.hs_pct,'HS% trendi','%')+renderStatChart(recentStats.series?.adr,'ADR trendi')+'</div>';
+      const panel='<section class="card" style="grid-column:span 12;margin-bottom:14px"><div class="muted" style="font-size:11px;font-weight:800;letter-spacing:1px">SON '+esc(recentStats.count)+' MAÇ · FACEIT MAÇ İSTATİSTİKLERİ</div><div class="metrics" style="margin-top:12px">'+(cards||'<p class="notice">Bu yanıtla sayısal istatistik alınamadı.</p>')+'</div>'+chartsHtml+'<p class="notice" style="margin-top:12px">HS% kaynağı: '+esc(source)+'. Bu özet yalnızca FACEIT’in döndürdüğü maç kayıtlarını kapsar.</p><p class="notice">Tarihsel ELO puanları FACEIT Data API yanıtında bulunmadığında ELO grafiği çizilmez; yalnızca güncel ELO gösterilir.</p><details><summary>Maç başına FACEIT alanları ('+(recentStats.fields||[]).length+')</summary><ul style="columns:2;padding-left:20px;font-size:11px;color:var(--muted)">'+(fields||'<li>Alan adı dönmedi</li>')+'</ul></details><details style="margin-top:8px"><summary>Yaşam boyu FACEIT istatistikleri ('+Object.keys(lifetime).length+')</summary><ul style="columns:2;padding-left:20px;font-size:11px;color:var(--muted)">'+(lifetimeFields||'<li>Yaşam boyu alan dönmedi</li>')+'</ul></details></section>';
+      $('results').insertAdjacentHTML('beforeend',panel);
+    }else{
+      $('coach').insertAdjacentHTML('afterbegin','<p class="error">Son maç istatistikleri FACEIT’ten alınamadı. Yaşam boyu istatistikler ve maç geçmişi ayrı olarak görüntüleniyor.</p>');
+    }
+    $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
+    $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')) $('analysisState').textContent='Tamamlandı';
+  } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')) $('analysisState').textContent='Hata'; }
+  finally {$('submitBtn').disabled=false;}
+}
+
+function loadDemo(){
+  $('error').textContent=''; $('status').textContent='Örnek demo modu açık. Aşağıdaki tüm veriler temsili, canlı FACEIT verisi değildir.';
+  $('nickname').value='DemoPlayer';
+  showProfile({nickname:'DemoPlayer',country:'TR',skill_level:8,elo:1842,avatar:'',faceit_url:'https://www.faceit.com/'});
+  $('results').insertAdjacentHTML('afterbegin','<div class="demo-banner"><strong>DEMO MODU</strong> · Bu panel örnek verilerle çalışıyor. Gerçek profil analizi için FACEIT API anahtarı yapılandırılmış sunucuyu kullan.</div>');
+  const matches=[
+    {map:'de_mirage',date:'Bugün',score:'13 : 9',result:'Galibiyet'},
+    {map:'de_inferno',date:'Dün',score:'10 : 13',result:'Mağlubiyet'},
+    {map:'de_ancient',date:'Dün',score:'13 : 7',result:'Galibiyet'},
+    {map:'de_anubis',date:'25 Eki',score:'11 : 13',result:'Mağlubiyet'},
+    {map:'de_mirage',date:'24 Eki',score:'13 : 6',result:'Galibiyet'}
+  ];
+  $('matchCount').textContent='5';
+  $('matches').innerHTML=matches.map(m=>`<div class="match"><div><strong>${esc(m.map)}</strong><div class="muted" style="margin-top:5px">${esc(m.date)} · ${esc(m.result)}</div></div><div style="text-align:right"><strong>${esc(m.score)}</strong><div class="muted" style="font-size:11px;margin-top:5px">Örnek maç</div></div></div>`).join('')+'<div class="notice" style="margin-top:10px">Bu demo örneğinde 5 maç gösteriliyor.</div>';
+  const stats=[['Win rate','52%'],['ADR','71.4'],['K/D','1.03'],['HS%','43%']];
+  const recs=[
+    {priority:'YÜKSEK',title:'İlk temas kalitesini ölç',body:'Örnek K/D 1.03 ve ADR 71.4 tek başına aim sorunu göstermez. Demo incelemesinde ilk ölüm, trade edilebilirlik ve çatışmaya giriş şeklini kontrol et.'},
+    {priority:'ORTA',title:'Mirage performansını derinleştir',body:'Örnek maç listesinde Mirage tekrar ediyor. CT/T tarafı, açılış düelloları ve round başına katkıyı ayrı incele; harita bazında karar vermek için daha fazla veri gerekir.'},
+    {priority:'RUTİN',title:'15 dakikalık ısınma planı',body:'5 dk kontrollü bot pre-aim, 5 dk counter-strafe + ilk mermi, 5 dk DM. Her seans sonunda isabet veya hissiyat yerine ölçülebilir bir hedef kaydet.'}
+  ];
+  $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${stats.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${recs.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">Örnek veriyle oluşturulmuş açıklanabilir öneriler. Gerçek analiz değildir ve gerçek maç performansını temsil etmez.</p>`;
+  $('status').textContent='Demo hazır. Canlı API çağrısı yapılmadı.';
+}
+$('results').addEventListener('click',async e=>{
+  const button=e.target.closest('[data-match-detail]');
+  if(!button) return;
+  const panel=button.closest('.match').querySelector('.match-detail');
+  const matchId=button.getAttribute('data-match-detail');
+  if(panel.dataset.loaded==='true'){panel.hidden=!panel.hidden;return;}
+  panel.hidden=false; panel.innerHTML='<span class="muted">FACEIT maç detayları ve oyuncu istatistikleri yükleniyor…</span>'; button.disabled=true;
+  try{
+    const results=await Promise.allSettled([api('/api/match/'+encodeURIComponent(matchId)),api('/api/match/'+encodeURIComponent(matchId)+'/stats')]);
+    const detail=results[0].status==='fulfilled'?results[0].value:null;
+    const statsData=results[1].status==='fulfilled'?results[1].value:null;
+    if(!detail) throw new Error(results[0].reason.message);
+    const score=detail.results?.score||{};
+    const scoreText=Object.keys(score).length?Object.entries(score).map(x=>esc(x[0])+': '+esc(x[1])).join(' · '):'Skor bilgisi yok';
+    const teams=Object.entries(detail.teams||{}).map(([key,team])=>{
+      const roster=team.roster||team.roster_v1||team.players||[];
+      const names=roster.map(player=>player.nickname||player.game_player_name).filter(Boolean).map(esc).join(', ');
+      const isWinner=detail.results?.winner===key||detail.results?.winner===team.team_id;
+      return '<div style="margin-top:8px"><strong>'+esc(team.name||team.nickname||key)+'</strong>'+(isWinner?' · Kazanan':'')+'<div class="muted" style="font-size:11px;margin-top:3px">'+(names||'Oyuncu listesi sunulmadı')+'</div></div>';
+    }).join('');
+    const playerRoundStats=[];
+    for(const round of (statsData?.rounds||[])) for(const team of (round.teams||[])) for(const player of (team.players||[])) if(player.player_id===activePlayerId) playerRoundStats.push({round:round.match_round,stats:player.player_stats||{}});
+    const fields=[['Kills','Kills'],['Deaths','Deaths'],['Assists','Assists'],['K/D','K/D Ratio'],['HS%','Headshots %'],['Headshots','Headshots'],['ADR','ADR']];
+    const statHtml=playerRoundStats.map((entry,index)=>{
+      const lines=fields.filter(x=>entry.stats[x[1]]!==undefined&&entry.stats[x[1]]!==null).map(x=>'<span style="margin-right:12px"><b>'+esc(x[0])+'</b> '+esc(entry.stats[x[1]])+'</span>').join('');
+      return lines?'<div style="margin-top:7px"><strong>'+(entry.round?'Harita/maç '+esc(entry.round):'Bölüm '+(index+1))+'</strong><div class="muted" style="margin-top:4px">'+lines+'</div></div>':'';
+    }).join('');
+    const statsHtml=statHtml?'<div style="margin-top:10px"><strong>FACEIT maç istatistikleri</strong>'+statHtml+'</div>':'<p class="notice" style="margin:8px 0 0">'+(results[1].status==='rejected'?'Maç istatistikleri FACEIT tarafından alınamadı.':'FACEIT bu yanıtta tanınan oyuncu istatistiklerini döndürmedi.')+'</p>';
+    const mapName=detail.voting?.map?.pick?.[0]?.name||detail.voting?.map?.name||detail.map||null;
+    panel.innerHTML='<div><strong>'+(mapName?esc(mapName):'Harita bilgisi FACEIT yanıtında yok')+'</strong> · '+scoreText+'</div><div class="muted" style="font-size:11px;margin-top:5px">'+esc(detail.competition_name||detail.competition_type||'FACEIT maçı')+' · '+esc(detail.status||'Durum yok')+'</div>'+teams+statsHtml;
+    panel.dataset.loaded='true';
+  }catch(err){panel.innerHTML='<span class="error">'+esc(err.message||'Maç detayları alınamadı.')+'</span>';}
+  finally{button.disabled=false;}
+});
+$('demoBtn').addEventListener('click',loadDemo);
+
+$('searchForm').addEventListener('submit',e=>{e.preventDefault();const nick=$('nickname').value.trim();if(nick)loadProfile(nick)});
+async function setAccountState(data,openSavedProfile=false){
+  const loggedIn=Boolean(data?.authenticated);
+  const persistenceNote=$('accountPersistenceNote');
+  persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
+  $('authLoggedOut').hidden=loggedIn;
+  $('authLoggedIn').hidden=!loggedIn;
+  if(!loggedIn)return;
+  $('accountUsername').textContent=data.username||'';
+  $('savedFaceitNickname').value=data.faceit_nickname||'';
+  if(data.faceit_nickname&&openSavedProfile) await loadProfile(data.faceit_nickname);
+}
+function accountMessage(text,type=''){
+  const el=$('authMessage');el.textContent=text;el.className='account-message'+(type?' '+type:'');
+}
+async function restoreAccount(){
+  try{const data=await api('/api/account');await setAccountState(data,true);}
+  catch(e){accountMessage('Hesap bilgisi alınamadı: '+e.message,'error');}
+}
+async function submitAuth(form,path){
+  const button=form.querySelector('button[type="submit"]');button.disabled=true;accountMessage('Hesabın kontrol ediliyor…');
+  try{
+    const body=Object.fromEntries(new FormData(form).entries());
+    const data=await api(path,{method:'POST',body:JSON.stringify(body)});
+    accountMessage(path.endsWith('/register')?'Hesap oluşturuldu.':'Giriş başarılı.','success');
+    const passwordField=form.querySelector('[name="password"]');if(passwordField)passwordField.value='';
+    await setAccountState(data,true);
+  }catch(e){accountMessage(e.message,'error');}
+  finally{button.disabled=false;}
+}
+$('loginForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/login');});
+$('registerForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/register');});
+$('faceitLinkForm').addEventListener('submit',async e=>{
+  e.preventDefault();const button=e.currentTarget.querySelector('button[type="submit"]');button.disabled=true;accountMessage('FACEIT profili aranıyor…');
+  try{
+    const nickname=$('savedFaceitNickname').value.trim();
+    const data=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});
+    $('savedFaceitNickname').value=data.faceit_nickname;
+    accountMessage('FACEIT profili bulundu ve bu hesaba kaydedildi.','success');
+    await loadProfile(data.faceit_nickname);
+  }catch(err){accountMessage(err.message,'error');}
+  finally{button.disabled=false;}
+});
+$('logoutButton').addEventListener('click',async()=>{
+  try{await api('/api/account/logout',{method:'POST'});await setAccountState({authenticated:false});accountMessage('Oturum kapatıldı.');}
+  catch(e){accountMessage(e.message,'error');}
+});
+restoreAccount();
+</script>
 </body>
 </html>
