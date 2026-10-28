@@ -63,15 +63,7 @@ async def player(nickname: str = Query(min_length=2, max_length=40)):
     nickname = nickname.strip()
     if not re.fullmatch(r"[\w .-]+", nickname, flags=re.UNICODE):
         raise HTTPException(status_code=400, detail="Kullanıcı adında desteklenmeyen karakterler var.")
-    search = await faceit_get("/search/players", {"nickname": nickname, "game": FACEIT_GAME_ID, "limit": 20})
-    candidates = search.get("items") or []
-    result_stub = next((candidate for candidate in candidates if str(candidate.get("nickname", "")).casefold() == nickname.casefold()), None)
-    if not result_stub:
-        raise HTTPException(status_code=404, detail="Bu FACEIT kullanıcı adı için tam eşleşen CS2 profili bulunamadı.")
-    player_id = result_stub.get("player_id")
-    if not player_id:
-        raise HTTPException(status_code=502, detail="FACEIT oyuncu araması bir player_id döndürmedi.")
-    result = await faceit_get(f"/players/{player_id}")
+    result = await faceit_get("/players", {"nickname": nickname, "game": FACEIT_GAME_ID})
     games = result.get("games") or {}
     game = games.get(FACEIT_GAME_ID) or games.get("csgo") or {}
     return {
@@ -79,7 +71,7 @@ async def player(nickname: str = Query(min_length=2, max_length=40)):
         "nickname": result.get("nickname"),
         "avatar": result.get("avatar"),
         "country": result.get("country"),
-        "faceit_url": result.get("faceit_url"),
+        "faceit_url": (result.get("faceit_url") or "").replace("{lang}", "en").replace("{player_id}", str(result.get("player_id") or "")),
         "skill_level": game.get("skill_level"),
         "elo": game.get("faceit_elo"),
         "game_id_used": FACEIT_GAME_ID,
@@ -147,6 +139,81 @@ def numeric(stats: dict[str, Any], *keys: str) -> float | None:
     return None
 
 
+@app.get("/api/player/{player_id}/match-stats")
+async def player_match_stats(player_id: str, limit: int = Query(default=20, ge=1, le=100)):
+    """Return FACEIT's per-match stats without discarding provider fields."""
+    response = await faceit_get(
+        f"/players/{player_id}/games/{FACEIT_GAME_ID}/stats",
+        {"offset": 0, "limit": limit},
+    )
+    items = response.get("items") or []
+    rows = [item.get("stats") or {} for item in items]
+    fields = sorted({str(key) for row in rows for key in row})
+    field_coverage = {field: sum(field in row and row.get(field) not in (None, "") for row in rows) for field in fields}
+
+    def values(*aliases: str) -> list[float]:
+        return [value for row in rows if (value := numeric(row, *aliases)) is not None]
+
+    def mean(values_to_average: list[float]) -> float | None:
+        return round(sum(values_to_average) / len(values_to_average), 2) if values_to_average else None
+
+    kills = values("Kills", "kills", "Total Kills")
+    deaths = values("Deaths", "deaths", "Total Deaths")
+    headshots = values("Headshots", "Headshot Kills", "HS Kills")
+    direct_hs = values("Headshots %", "Headshot %", "HS %", "Headshot Percentage")
+    total_kills = sum(kills) if kills else None
+    total_deaths = sum(deaths) if deaths else None
+    kd_values = values("K/D Ratio", "K/D", "KD Ratio")
+    kd = round(total_kills / total_deaths, 2) if total_kills is not None and total_deaths else mean(kd_values)
+    hs_source = next((key for key in ("Headshots %", "Headshot %", "HS %", "Headshot Percentage") if any(key in row and row.get(key) not in (None, "") for row in rows)), None)
+    if headshots and kills and len(headshots) == len(rows) and len(kills) == len(rows) and total_kills:
+        hs_pct = round(sum(headshots) / total_kills * 100, 2)
+        hs_source = "derived: Headshots / Kills"
+    else:
+        hs_pct = mean(direct_hs)
+
+    field_summary = {}
+    for field in fields:
+        lowered = field.casefold()
+        if re.search(r"(^|[^a-z])(id|time|date)([^a-z]|$)", lowered) or "finished at" in lowered:
+            continue
+        field_values = [value for row in rows if (value := numeric(row, field)) is not None]
+        if field_values:
+            field_summary[field] = {
+                "average": mean(field_values),
+                "min": min(field_values),
+                "max": max(field_values),
+                "count": len(field_values),
+            }
+
+    normalized_items = []
+    for item, row in zip(items, rows):
+        match_id = next((row[key] for key in ("Match Id", "Match ID", "match_id", "Match") if row.get(key)), None)
+        finished_at = next((row[key] for key in ("Match Finished At", "Finished At", "finished_at") if row.get(key)), None)
+        normalized_items.append({"match_id": match_id, "finished_at": finished_at, "stats": row})
+
+    return {
+        "source": "FACEIT Data API per-match player stats",
+        "requested_limit": limit,
+        "count": len(rows),
+        "fields": fields,
+        "field_coverage": field_coverage,
+        "field_summary": field_summary,
+        "metric_sources": {"headshot_pct": hs_source or "not returned by FACEIT"},
+        "metrics": {
+            "kills_per_match": mean(kills),
+            "deaths_per_match": mean(deaths),
+            "assists_per_match": mean(values("Assists", "assists")),
+            "headshots_per_match": mean(headshots),
+            "headshot_pct": hs_pct,
+            "kd": kd,
+            "kr": mean(values("K/R Ratio", "K/R", "Kills per Round")),
+            "adr": mean(values("ADR", "Average Damage per Round")),
+            "mvp_per_match": mean(values("MVPs", "MVP")),
+        },
+        "items": normalized_items,
+    }
+
 @app.post("/api/coach-report")
 async def coach_report(payload: dict[str, Any]):
     """Explain available FACEIT stats with transparent, simple heuristics; no invented demo insights."""
@@ -180,9 +247,17 @@ async def coach_report(payload: dict[str, Any]):
             report.append({"priority": "Bilgi", "title": f"Harita verisi: {map_name}", "body": f"FACEIT yanıtında bu haritada {len(outcomes)} sonuç ve %{rate:.0f} galibiyet oranı var. Bu en az üç maçlık küçük bir örneklemdir."})
 
     win_rate = numeric(lifetime, "Win Rate %", "Win Rate", "win_rate")
-    adr = numeric(lifetime, "Average Damage per Round", "ADR", "Average Damage")
-    kd = numeric(lifetime, "K/D Ratio", "K/D", "KD Ratio")
-    hs = numeric(lifetime, "Headshots %", "Headshot %", "HS %")
+    recent_stats = payload.get("recent_stats") or {}
+    recent_metrics = recent_stats.get("metrics") or {}
+    adr = recent_metrics.get("adr")
+    if adr is None:
+        adr = numeric(lifetime, "Average Damage per Round", "ADR", "Average Damage")
+    kd = recent_metrics.get("kd")
+    if kd is None:
+        kd = numeric(lifetime, "K/D Ratio", "K/D", "KD Ratio")
+    hs = recent_metrics.get("headshot_pct")
+    if hs is None:
+        hs = numeric(lifetime, "Headshots %", "Headshot %", "HS %")
 
     if win_rate is not None:
         if win_rate < 48:
@@ -207,7 +282,7 @@ async def coach_report(payload: dict[str, Any]):
         report.append({"priority": "Başlangıç", "title": "Veri kapsamı sınırlı", "body": "API yanıtında tanınan lifetime metrikleri bulunamadı. Ham veriyi kontrol edin veya maç istatistikleri uç noktasını kullanın. Bu aşamada kişisel hata teşhisi yapılmıyor."})
 
     return {
-        "source": "FACEIT Data API player stats and recent match history",
+        "source": "FACEIT Data API lifetime stats, per-match stats, and match history",
         "confidence_note": "Bunlar istatistiklerden türetilen başlangıç önerileridir; demo izlenmeden kesin mekanik veya taktik hata teşhisi yapılmaz.",
         "metrics_detected": {"win_rate": win_rate, "adr": adr, "kd": kd, "headshot_pct": hs},
         "recent_results": {"wins": recent_wins, "losses": len(known_matches) - recent_wins, "matches_with_result": len(known_matches), "win_rate": round(recent_wins / len(known_matches) * 100, 1) if known_matches else None},

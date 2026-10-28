@@ -60,9 +60,10 @@ async function loadProfile(nickname){
     if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
     activePlayerId=p.player_id;
     showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
-    const settled=await Promise.allSettled([api(`/api/player/${encodeURIComponent(p.player_id)}/matches?limit=20`),api(`/api/player/${encodeURIComponent(p.player_id)}/stats`)]);
-    const matchResult=settled[0], statsResult=settled[1];
-    let recentMatches=[];
+    const settled=await Promise.allSettled([api('/api/player/'+encodeURIComponent(p.player_id)+'/matches?limit=20'),api('/api/player/'+encodeURIComponent(p.player_id)+'/stats'),api('/api/player/'+encodeURIComponent(p.player_id)+'/match-stats?limit=100')]);
+    const matchResult=settled[0], statsResult=settled[1], recentStatsResult=settled[2];
+    let recentMatches=[]; let recentStats=null;
+    if(recentStatsResult.status==='fulfilled') recentStats=recentStatsResult.value;
     if(matchResult.status==='fulfilled'){
       const items=matchResult.value.items||[]; $('matchCount').textContent=items.length;
       recentMatches=items;
@@ -70,11 +71,25 @@ async function loadProfile(nickname){
       const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan takım güvenle eşleştirilemedi; galibiyet oranı hesaplanmadı.</p>';
       $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:11px">FACEIT maç sayfası ↗</a>':'')+'<div style="margin-top:8px"><button type="button" class="secondary" data-match-detail="'+esc(m.match_id)+'" style="padding:7px 9px;font-size:11px">Detayları yükle</button></div></div><div class="match-detail" hidden style="flex:0 0 100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px"></div></div>').join(''):'Maç geçmişi bulunamadı.')+summary;    } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
     if(statsResult.status==='fulfilled'){
-      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches})});
+      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches,recent_stats:recentStats})});
       const ms=report.metrics_detected;
       const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
       $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${metricBits.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
     } else { $('coach').innerHTML=`<div class="error">İstatistikler alınamadı: ${esc(statsResult.reason.message)}. Maç geçmişi yine de görüntülenebilir.</div>`; }
+    if(recentStats){
+      const specs=[['Kills / maç','kills_per_match'],['Deaths / maç','deaths_per_match'],['Assists / maç','assists_per_match'],['Headshots / maç','headshots_per_match'],['K/D','kd'],['K/R','kr'],['ADR','adr'],['HS%','headshot_pct'],['MVP / maç','mvp_per_match']];
+      const cards=specs.filter(x=>recentStats.metrics&&recentStats.metrics[x[1]]!==null&&recentStats.metrics[x[1]]!==undefined).map(x=>'<div class="metric"><label>'+esc(x[0])+'</label><strong>'+esc(x[1]==='headshot_pct'?String(recentStats.metrics[x[1]])+'%':recentStats.metrics[x[1]])+'</strong></div>').join('');
+      const coverage=recentStats.field_coverage||{};
+      const fieldSummary=recentStats.field_summary||{};
+      const fields=(recentStats.fields||[]).map(f=>{const item=fieldSummary[f];return '<li>'+esc(f)+' · '+esc(coverage[f]||0)+'/'+esc(recentStats.count)+(item?' · ort. '+esc(item.average)+' · min '+esc(item.min)+' · max '+esc(item.max):'')+'</li>';}).join('');
+      const lifetime=statsResult.status==='fulfilled'?(statsResult.value.lifetime||{}):{};
+      const lifetimeFields=Object.entries(lifetime).map(entry=>'<li>'+esc(entry[0])+': '+esc(entry[1])+'</li>').join('');
+      const source=recentStats.metric_sources?.headshot_pct||'FACEIT yanıtında bulunamadı';
+      const panel='<section class="card" style="grid-column:span 12;margin-bottom:14px"><div class="muted" style="font-size:11px;font-weight:800;letter-spacing:1px">SON '+esc(recentStats.count)+' MAÇ · FACEIT MAÇ İSTATİSTİKLERİ</div><div class="metrics" style="margin-top:12px">'+(cards||'<p class="notice">Bu yanıtla sayısal istatistik alınamadı.</p>')+'</div><p class="notice" style="margin-top:12px">HS% kaynağı: '+esc(source)+'. Bu özet yalnızca FACEIT’in döndürdüğü maç kayıtlarını kapsar.</p><details><summary>Maç başına FACEIT alanları ('+(recentStats.fields||[]).length+')</summary><ul style="columns:2;padding-left:20px;font-size:11px;color:var(--muted)">'+(fields||'<li>Alan adı dönmedi</li>')+'</ul></details><details style="margin-top:8px"><summary>Yaşam boyu FACEIT istatistikleri ('+Object.keys(lifetime).length+')</summary><ul style="columns:2;padding-left:20px;font-size:11px;color:var(--muted)">'+(lifetimeFields||'<li>Yaşam boyu alan dönmedi</li>')+'</ul></details></section>';
+      $('results').insertAdjacentHTML('beforeend',panel);
+    }else{
+      $('coach').insertAdjacentHTML('afterbegin','<p class="error">Son maç istatistikleri FACEIT’ten alınamadı. Yaşam boyu istatistikler ve maç geçmişi ayrı olarak görüntüleniyor.</p>');
+    }
     $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')) $('analysisState').textContent='Tamamlandı';
   } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')) $('analysisState').textContent='Hata'; }
   finally {$('submitBtn').disabled=false;}
