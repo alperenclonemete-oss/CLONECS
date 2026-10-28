@@ -20,7 +20,7 @@ FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
 FACEIT_GAME_ID = os.getenv("FACEIT_GAME_ID", "cs2").strip() or "cs2"
 FACEIT_BASE_URL = "https://open.faceit.com/data/v4"
 
-app = FastAPI(title="CS2 Coach MVP", version="0.1.0")
+app = FastAPI(title="CLONE LAB", version="1.5.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
@@ -59,6 +59,32 @@ async def faceit_get(path: str, params: dict[str, Any] | None = None) -> dict[st
         raise HTTPException(status_code=502, detail="FACEIT API geçerli JSON döndürmedi.") from exc
 
 
+
+PRO_CONFIGS_URL = "https://raw.githubusercontent.com/Guewenn/cs2-pro-sensitivity-database/main/data/cs2-pro-players.json"
+_pro_configs_cache: list[dict[str, Any]] = []
+_pro_configs_cached_at = 0.0
+
+@app.get("/api/pro-configs")
+async def pro_configs():
+    """Fetch the upstream MIT-licensed public player settings catalogue."""
+    global _pro_configs_cache, _pro_configs_cached_at
+    import time
+    if _pro_configs_cache and time.time() - _pro_configs_cached_at < 3600:
+        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": True}
+    try:
+        async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
+            response = await client.get(PRO_CONFIGS_URL, headers={"Accept": "application/json"})
+            response.raise_for_status()
+            data = response.json()
+        if not isinstance(data, list):
+            raise ValueError("Config kaynağı beklenen liste biçiminde değil.")
+        _pro_configs_cache = [item for item in data if isinstance(item, dict) and item.get("name") and item.get("team")]
+        _pro_configs_cached_at = time.time()
+        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": False}
+    except (httpx.HTTPError, ValueError) as exc:
+        if _pro_configs_cache:
+            return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": True}
+        raise HTTPException(status_code=502, detail=f"Pro config verisi alınamadı: {exc}") from exc
 @app.get("/api/health")
 async def health():
     return {"ok": True, "faceit_key_configured": bool(FACEIT_API_KEY), "game_id": FACEIT_GAME_ID}
@@ -379,3 +405,5 @@ async def coach_report(payload: dict[str, Any]):
         "recommendations": report,
         "segments_count": len(segments),
     }
+
+

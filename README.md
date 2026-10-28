@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance
+# CLONE LAB · FACEIT Performance · CloneCS 1.6
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -29,6 +29,7 @@ Tarayıcıda http://127.0.0.1:8000 adresini aç.
 
 ## Uç noktalar
 - `GET /api/health` — sunucu durumu ve anahtarın yapılandırılmış olup olmadığı
+- `GET /api/pro-configs` — upstream MIT lisanslı açık CS2 oyuncu ayarları kataloğu
 - `GET /api/player?nickname=...` — oyuncu arama
 - `GET /api/player/{player_id}/matches?limit=20` — son maçlar
 - `GET /api/player/{player_id}/stats` — FACEIT lifetime istatistikleri
@@ -93,4 +94,22 @@ Hesap uç noktaları: `GET /api/account`, `POST /api/account/register`, `POST /a
 Bu sürümde koyu turkuaz/siyah renk paleti, keskin köşeli bileşenler ve özgün CLONE LAB kask amblemi kullanılır. Analiz ekranı oturum açılmadan gösterilmez. Örnek demo kaldırılmıştır. Her hesap bir herkese açık FACEIT kullanıcı adını kaydedebilir; FACEIT hesabına giriş yapılmaz ve sahiplik doğrulanmaz.
 
 
+
+
+
+## Sürüm 1.4
+Maç geçmişinde ilk iki kayıt görünür; devamı ikişer maçlık bölümlerle açılır.
+
+
+
+## Pro Config sekmesi (1.6)
+- Oturum açtıktan sonra FACEIT Analiz ve Pro Config sekmeleri görünür.
+- Takım ve oyuncu seçimi, sunucunun 1 saat önbelleğe aldığı açık kaynak kataloğundan oluşturulur.
+- DPI, oyun içi hassasiyet, eDPI, zoom, polling rate, mouse, çözünürlük, en-boy oranı ve crosshair kodu kaynağın döndürdüğü ölçüde gösterilir.
+- Kaynakta yayımlanmayan grafik/video ve viewmodel ayarları açıkça eksik gösterilir; değer uydurulmaz.
+- Kaynak ve lisans atfı uygulamanın Config sekmesinde bulunur: https://github.com/Guewenn/cs2-pro-sensitivity-database (MIT).
+
+
+
+- 1.6: Config profili video/grafik, viewmodel, HUD/radar ve launch alanlarını da ayrı gösterir; kaynakta bulunmayanlar açıkça eksik kalır. Daha geniş üçüncü taraf arşivine, 23 Mayıs 2026 snapshot tarihi belirtilerek bağlantı verilir.
 
