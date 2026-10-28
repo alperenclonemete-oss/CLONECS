@@ -63,7 +63,15 @@ async def player(nickname: str = Query(min_length=2, max_length=40)):
     nickname = nickname.strip()
     if not re.fullmatch(r"[\w .-]+", nickname, flags=re.UNICODE):
         raise HTTPException(status_code=400, detail="Kullanıcı adında desteklenmeyen karakterler var.")
-    result = await faceit_get("/players", {"nickname": nickname, "game": FACEIT_GAME_ID})
+    search = await faceit_get("/search/players", {"nickname": nickname, "game": FACEIT_GAME_ID, "limit": 20})
+    candidates = search.get("items") or []
+    result_stub = next((candidate for candidate in candidates if str(candidate.get("nickname", "")).casefold() == nickname.casefold()), None)
+    if not result_stub:
+        raise HTTPException(status_code=404, detail="Bu FACEIT kullanıcı adı için tam eşleşen CS2 profili bulunamadı.")
+    player_id = result_stub.get("player_id")
+    if not player_id:
+        raise HTTPException(status_code=502, detail="FACEIT oyuncu araması bir player_id döndürmedi.")
+    result = await faceit_get(f"/players/{player_id}")
     games = result.get("games") or {}
     game = games.get(FACEIT_GAME_ID) or games.get("csgo") or {}
     return {
@@ -86,11 +94,18 @@ async def matches(player_id: str, limit: int = Query(default=20, ge=1, le=50)):
     for item in items:
         teams = item.get("teams") or {}
         results = item.get("results") or {}
-        winner = results.get("winner")
-        my_team = next((team for team in teams.values() if any(player.get("player_id") == player_id for player in team.get("players", []))), None)
-        won = (my_team.get("team_id") == winner) if my_team and winner else None
+        winner = str(results.get("winner") or "")
+        my_team_key = next((key for key, team in teams.items() if any(player.get("player_id") == player_id for player in team.get("players", []))), None)
+        winning_team_key = winner if winner in teams else next((key for key, team in teams.items() if team.get("team_id") == winner), None)
+        won = (my_team_key == winning_team_key) if my_team_key is not None and winning_team_key is not None else None
+        match_id = item.get("match_id")
+        faceit_url = item.get("faceit_url") or ""
+        if faceit_url:
+            faceit_url = faceit_url.replace("{lang}", "en").replace("{match_id}", str(match_id or ""))
+        elif match_id:
+            faceit_url = f"https://www.faceit.com/en/cs2/room/{match_id}"
         normalized.append({
-            "match_id": item.get("match_id"),
+            "match_id": match_id,
             "finished_at": item.get("finished_at"),
             "game_mode": item.get("game_mode"),
             # The history endpoint may expose queue type rather than an actual map.
@@ -100,7 +115,7 @@ async def matches(player_id: str, limit: int = Query(default=20, ge=1, le=50)):
             "results": results,
             "won": won,
             "teams": teams,
-            "faceit_url": item.get("faceit_url"),
+            "faceit_url": faceit_url or None,
         })
     return {"items": normalized, "count": len(normalized)}
 

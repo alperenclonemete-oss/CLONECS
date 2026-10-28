@@ -15,7 +15,7 @@
     button { border:0; background:var(--accent); color:#10150b; font-weight:800; border-radius:12px; padding:0 20px; cursor:pointer; } button:disabled { opacity:.55; cursor:wait; } .secondary { border:1px solid var(--line); background:var(--panel2); color:var(--text); padding:14px 16px; border-radius:12px; font-weight:700; cursor:pointer; } .search-actions { display:flex; gap:10px; flex-wrap:wrap; } .search-actions button { min-height:48px; } .demo-banner { grid-column:span 12; border:1px solid #4b6335; background:#182218; color:#cce8b2; border-radius:12px; padding:12px 15px; font-size:12px; line-height:1.5; } .bar { height:7px; background:#283241; border-radius:99px; overflow:hidden; margin-top:8px; } .bar span { display:block;height:100%;background:var(--accent);border-radius:99px; }
     .notice { color:var(--muted); font-size:12px; line-height:1.5; } .error { color:var(--red); margin:12px 0; }
     .grid { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; } .card { background:linear-gradient(150deg,rgba(26,34,46,.97),rgba(17,22,30,.97)); border:1px solid var(--line); border-radius:18px; padding:20px; min-width:0; } .profile { grid-column:span 12; display:flex; align-items:center; gap:16px; } .avatar { width:64px;height:64px;border-radius:16px;object-fit:cover;background:var(--panel2); } .name { font-size:22px;font-weight:800; } .muted { color:var(--muted); } .metrics { grid-column:span 12; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; } .metric { background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:17px; } .metric label { color:var(--muted);font-size:12px;display:block;margin-bottom:9px; } .metric strong { font-size:26px; }
-    .section { grid-column:span 6; } .section h2 { font-size:17px;margin:0 0 15px; } .match { display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px; } .match:last-child { border-bottom:0; } .recommendation { padding:14px 0;border-bottom:1px solid var(--line); } .recommendation:last-child { border-bottom:0; } .tag { display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:5px 7px;border-radius:6px;background:#293729;color:var(--accent);margin-bottom:8px; } .recommendation h3 { font-size:14px;margin:0 0 6px; } .recommendation p { color:var(--muted);font-size:13px;line-height:1.55;margin:0; }
+    .section { grid-column:span 6; } .section h2 { font-size:17px;margin:0 0 15px; } .match { display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:13px; } .match:last-child { border-bottom:0; } .recommendation { padding:14px 0;border-bottom:1px solid var(--line); } .recommendation:last-child { border-bottom:0; } .tag { display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:5px 7px;border-radius:6px;background:#293729;color:var(--accent);margin-bottom:8px; } .recommendation h3 { font-size:14px;margin:0 0 6px; } .recommendation p { color:var(--muted);font-size:13px;line-height:1.55;margin:0; }
     .empty { grid-column:span 12; border:1px dashed #354052; border-radius:18px; padding:24px; color:var(--muted); line-height:1.6; } footer { color:#6f7d8f;font-size:11px;margin-top:22px;line-height:1.6; }
     @media(max-width:700px){ .metrics{grid-template-columns:repeat(2,1fr)} .section{grid-column:span 12} header{align-items:flex-start;flex-direction:column} .search{flex-direction:column}.search-actions{display:grid;grid-template-columns:1fr}button{padding:15px} }
   </style>
@@ -36,6 +36,7 @@
 </div>
 <script>
 const $ = (id) => document.getElementById(id);
+let activePlayerId=null;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path, options={}) {
   const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
@@ -48,7 +49,7 @@ function matchLabel(m){ return m.map || m.match_type || m.game_mode || 'FACEIT m
 function showProfile(p){
   $('results').innerHTML = `
     <section class="card profile"><img class="avatar" src="${esc(p.avatar || '')}" onerror="this.style.visibility='hidden'" alt=""><div style="flex:1;min-width:0"><div class="name">${esc(p.nickname)}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(p.country || 'Ülke bilgisi yok')} · FACEIT Level ${esc(p.skill_level ?? '—')}</div></div><div style="text-align:right"><div class="muted" style="font-size:12px">FACEIT ELO</div><strong style="font-size:25px;color:var(--accent)">${esc(p.elo ?? '—')}</strong><div style="margin-top:6px"><a href="${esc(p.faceit_url || '#')}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:12px">FACEIT profil ↗</a></div></div></section>
-    <section class="metrics"><div class="metric"><label>FACEIT Level</label><strong>${esc(p.skill_level ?? '—')}</strong></div><div class="metric"><label>ELO</label><strong>${esc(p.elo ?? '—')}</strong></div><div class="metric"><label>Son maçlar</label><strong id="matchCount">…</strong></div><div class="metric"><label>Analiz durumu</label><strong style="font-size:17px">Hazırlanıyor</strong></div></section>
+    <section class="metrics"><div class="metric"><label>FACEIT Level</label><strong>${esc(p.skill_level ?? '—')}</strong></div><div class="metric"><label>ELO</label><strong>${esc(p.elo ?? '—')}</strong></div><div class="metric"><label>Son maçlar</label><strong id="matchCount">…</strong></div><div class="metric"><label>Analiz durumu</label><strong id="analysisState" style="font-size:17px">Hazırlanıyor</strong></div></section>
     <section class="card section"><h2>Son maçlar</h2><div id="matches" class="muted">Maç geçmişi yükleniyor…</div></section>
     <section class="card section"><h2>Koçluk notları</h2><div id="coach" class="muted">İstatistikler yükleniyor…</div></section>`;
 }
@@ -57,6 +58,7 @@ async function loadProfile(nickname){
   try {
     const p=await api(`/api/player?nickname=${encodeURIComponent(nickname)}`);
     if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
+    activePlayerId=p.player_id;
     showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
     const settled=await Promise.allSettled([api(`/api/player/${encodeURIComponent(p.player_id)}/matches?limit=20`),api(`/api/player/${encodeURIComponent(p.player_id)}/stats`)]);
     const matchResult=settled[0], statsResult=settled[1];
@@ -65,17 +67,16 @@ async function loadProfile(nickname){
       const items=matchResult.value.items||[]; $('matchCount').textContent=items.length;
       recentMatches=items;
       const known=items.filter(m=>m.won===true||m.won===false); const wins=known.filter(m=>m.won===true).length;
-      const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan bilgisi yok; galibiyet oranı hesaplanmadı.</p>';
-      $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:11px">Maçı aç ↗</a>':'')+'</div></div>').join(''):'Maç geçmişi bulunamadı.')+summary;
-    } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
+      const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan takım güvenle eşleştirilemedi; galibiyet oranı hesaplanmadı.</p>';
+      $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:11px">FACEIT maç sayfası ↗</a>':'')+'<div style="margin-top:8px"><button type="button" class="secondary" data-match-detail="'+esc(m.match_id)+'" style="padding:7px 9px;font-size:11px">Detayları yükle</button></div></div><div class="match-detail" hidden style="flex:0 0 100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px"></div></div>').join(''):'Maç geçmişi bulunamadı.')+summary;    } else { $('matchCount').textContent='—'; $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
     if(statsResult.status==='fulfilled'){
       const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches})});
       const ms=report.metrics_detected;
       const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
       $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${metricBits.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
     } else { $('coach').innerHTML=`<div class="error">İstatistikler alınamadı: ${esc(statsResult.reason.message)}. Maç geçmişi yine de görüntülenebilir.</div>`; }
-    $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.';
-  } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; }
+    $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')) $('analysisState').textContent='Tamamlandı';
+  } catch(e){ $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')) $('analysisState').textContent='Hata'; }
   finally {$('submitBtn').disabled=false;}
 }
 
@@ -102,6 +103,40 @@ function loadDemo(){
   $('coach').innerHTML=`<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px">${stats.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong style="font-size:20px">${esc(x[1])}</strong></div>`).join('')}</div>${recs.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">Örnek veriyle oluşturulmuş açıklanabilir öneriler. Gerçek analiz değildir ve gerçek maç performansını temsil etmez.</p>`;
   $('status').textContent='Demo hazır. Canlı API çağrısı yapılmadı.';
 }
+$('results').addEventListener('click',async e=>{
+  const button=e.target.closest('[data-match-detail]');
+  if(!button) return;
+  const panel=button.closest('.match').querySelector('.match-detail');
+  const matchId=button.getAttribute('data-match-detail');
+  if(panel.dataset.loaded==='true'){panel.hidden=!panel.hidden;return;}
+  panel.hidden=false; panel.innerHTML='<span class="muted">FACEIT maç detayları ve oyuncu istatistikleri yükleniyor…</span>'; button.disabled=true;
+  try{
+    const results=await Promise.allSettled([api('/api/match/'+encodeURIComponent(matchId)),api('/api/match/'+encodeURIComponent(matchId)+'/stats')]);
+    const detail=results[0].status==='fulfilled'?results[0].value:null;
+    const statsData=results[1].status==='fulfilled'?results[1].value:null;
+    if(!detail) throw new Error(results[0].reason.message);
+    const score=detail.results?.score||{};
+    const scoreText=Object.keys(score).length?Object.entries(score).map(x=>esc(x[0])+': '+esc(x[1])).join(' · '):'Skor bilgisi yok';
+    const teams=Object.entries(detail.teams||{}).map(([key,team])=>{
+      const roster=team.roster||team.roster_v1||team.players||[];
+      const names=roster.map(player=>player.nickname||player.game_player_name).filter(Boolean).map(esc).join(', ');
+      const isWinner=detail.results?.winner===key||detail.results?.winner===team.team_id;
+      return '<div style="margin-top:8px"><strong>'+esc(team.name||team.nickname||key)+'</strong>'+(isWinner?' · Kazanan':'')+'<div class="muted" style="font-size:11px;margin-top:3px">'+(names||'Oyuncu listesi sunulmadı')+'</div></div>';
+    }).join('');
+    const playerRoundStats=[];
+    for(const round of (statsData?.rounds||[])) for(const team of (round.teams||[])) for(const player of (team.players||[])) if(player.player_id===activePlayerId) playerRoundStats.push({round:round.match_round,stats:player.player_stats||{}});
+    const fields=[['Kills','Kills'],['Deaths','Deaths'],['Assists','Assists'],['K/D','K/D Ratio'],['HS%','Headshots %'],['Headshots','Headshots'],['ADR','ADR']];
+    const statHtml=playerRoundStats.map((entry,index)=>{
+      const lines=fields.filter(x=>entry.stats[x[1]]!==undefined&&entry.stats[x[1]]!==null).map(x=>'<span style="margin-right:12px"><b>'+esc(x[0])+'</b> '+esc(entry.stats[x[1]])+'</span>').join('');
+      return lines?'<div style="margin-top:7px"><strong>'+(entry.round?'Harita/maç '+esc(entry.round):'Bölüm '+(index+1))+'</strong><div class="muted" style="margin-top:4px">'+lines+'</div></div>':'';
+    }).join('');
+    const statsHtml=statHtml?'<div style="margin-top:10px"><strong>FACEIT maç istatistikleri</strong>'+statHtml+'</div>':'<p class="notice" style="margin:8px 0 0">'+(results[1].status==='rejected'?'Maç istatistikleri FACEIT tarafından alınamadı.':'FACEIT bu yanıtta tanınan oyuncu istatistiklerini döndürmedi.')+'</p>';
+    const mapName=detail.voting?.map?.pick?.[0]?.name||detail.voting?.map?.name||detail.map||null;
+    panel.innerHTML='<div><strong>'+(mapName?esc(mapName):'Harita bilgisi FACEIT yanıtında yok')+'</strong> · '+scoreText+'</div><div class="muted" style="font-size:11px;margin-top:5px">'+esc(detail.competition_name||detail.competition_type||'FACEIT maçı')+' · '+esc(detail.status||'Durum yok')+'</div>'+teams+statsHtml;
+    panel.dataset.loaded='true';
+  }catch(err){panel.innerHTML='<span class="error">'+esc(err.message||'Maç detayları alınamadı.')+'</span>';}
+  finally{button.disabled=false;}
+});
 $('demoBtn').addEventListener('click',loadDemo);
 
 $('searchForm').addEventListener('submit',e=>{e.preventDefault();const nick=$('nickname').value.trim();if(nick)loadProfile(nick)});
