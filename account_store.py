@@ -105,6 +105,13 @@ def init_database() -> None:
                 expires_at BIGINT NOT NULL
             )""")
             cur.execute("CREATE INDEX IF NOT EXISTS steam_login_states_expiry ON steam_login_states(expires_at)")
+            cur.execute('''CREATE TABLE IF NOT EXISTS coach_favorites (
+                user_id TEXT NOT NULL REFERENCES coach_users(user_id) ON DELETE CASCADE,
+                player_name TEXT NOT NULL,
+                team_name TEXT NOT NULL,
+                created_at BIGINT NOT NULL,
+                PRIMARY KEY(user_id, player_name, team_name)
+            )''')
 
 def hash_password(password: str) -> str:
     salt = secrets.token_bytes(16)
@@ -237,3 +244,19 @@ def save_faceit_nickname(user_id: str, nickname: str) -> None:
     with connection() as conn:
         with db_cursor(conn) as cur:
             cur.execute("UPDATE coach_users SET faceit_nickname=%s WHERE user_id=%s" if DATABASE_URL else "UPDATE coach_users SET faceit_nickname=? WHERE user_id=?", (nickname, user_id))
+
+def list_favorites(user_id: str) -> list[dict[str, str]]:
+    with connection() as conn:
+        with db_cursor(conn) as cur:
+            cur.execute("SELECT player_name, team_name FROM coach_favorites WHERE user_id=%s ORDER BY created_at DESC" if DATABASE_URL else "SELECT player_name, team_name FROM coach_favorites WHERE user_id=? ORDER BY created_at DESC", (user_id,))
+            rows = cur.fetchall()
+    return [{"name": row["player_name"], "team": row["team_name"]} for row in rows]
+
+
+def set_favorite(user_id: str, name: str, team: str, saved: bool) -> None:
+    with connection() as conn:
+        with db_cursor(conn) as cur:
+            if saved:
+                cur.execute("INSERT INTO coach_favorites(user_id, player_name, team_name, created_at) VALUES (%s, %s, %s, %s) ON CONFLICT(user_id, player_name, team_name) DO NOTHING" if DATABASE_URL else "INSERT INTO coach_favorites(user_id, player_name, team_name, created_at) VALUES (?, ?, ?, ?) ON CONFLICT(user_id, player_name, team_name) DO NOTHING", (user_id, name, team, int(time.time())))
+            else:
+                cur.execute("DELETE FROM coach_favorites WHERE user_id=%s AND player_name=%s AND team_name=%s" if DATABASE_URL else "DELETE FROM coach_favorites WHERE user_id=? AND player_name=? AND team_name=?", (user_id, name, team))

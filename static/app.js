@@ -160,12 +160,17 @@ let hltvTeams=[];
 let hltvRankingMeta={};
 let playerConfigFiles=[];
 let playerPhotoFiles=[];
+let favoriteConfigs=[];let favoriteOwner='';
 function favoritesStorageKey(){const name=$('profileMenuAccount').textContent||'guest';return `clone_lab_favorites_${configKey(name)}`}
-function getFavoriteConfigs(){try{const items=JSON.parse(localStorage.getItem(favoritesStorageKey())||'[]');return Array.isArray(items)?items:[]}catch{return []}}
-function isFavoriteConfig(name,team){return getFavoriteConfigs().some(item=>configKey(item.name)===configKey(name)&&configKey(item.team)===configKey(team))}
+function readLocalFavorites(){try{const items=JSON.parse(localStorage.getItem(favoritesStorageKey())||'[]');return Array.isArray(items)?items.filter(item=>item&&item.name&&item.team):[]}catch{return []}}
+function getFavoriteConfigs(){return favoriteConfigs}
+function isFavoriteConfig(name,team){return favoriteConfigs.some(item=>configKey(item.name)===configKey(name)&&configKey(item.team)===configKey(team))}
 function favoriteButton(name,team){const saved=isFavoriteConfig(name,team);return `<button type="button" class="favorite-toggle${saved?' is-saved':''}" data-toggle-favorite data-favorite-name="${esc(name)}" data-favorite-team="${esc(team)}" aria-pressed="${saved}">${saved?'🔖 Favorilerde':'☆ Favorilere ekle'}</button>`}
-function toggleFavoriteConfig(name,team){const items=getFavoriteConfigs();const index=items.findIndex(item=>configKey(item.name)===configKey(name)&&configKey(item.team)===configKey(team));if(index>=0)items.splice(index,1);else items.push({name,team});try{localStorage.setItem(favoritesStorageKey(),JSON.stringify(items));return index<0}catch{return false}}
-function renderFavoriteConfigs(){const items=getFavoriteConfigs();$('configFavoritesGrid').innerHTML=items.map(item=>`<button type="button" class="config-player-card" data-favorite-config="${esc(item.name)}" data-favorite-team="${esc(item.team)}"><span class="config-player-photo"><span>${esc(String(item.name||'?').slice(0,2).toUpperCase())}</span></span><b>${esc(item.name)}</b><small>${esc(item.team)}</small></button>`).join('');$('configFavoritesEmpty').hidden=items.length>0}
+function writeLocalFavorites(items){favoriteConfigs=items;try{localStorage.setItem(favoritesStorageKey(),JSON.stringify(items))}catch{}}
+async function syncAccountFavorites(){const owner=activeAccountData.username||$('profileMenuAccount').textContent||'';if(!owner||!activeAccountData.authenticated||favoriteOwner===owner)return;const local=readLocalFavorites();const remote=await api('/api/account/favorites');let items=Array.isArray(remote.items)?remote.items:[];for(const item of local){if(!items.some(saved=>configKey(saved.name)===configKey(item.name)&&configKey(saved.team)===configKey(item.team))){const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({name:item.name,team:item.team,saved:true})});items=Array.isArray(result.items)?result.items:items.concat(item)}}writeLocalFavorites(items);renderFavoriteConfigs();favoriteOwner=owner}
+async function toggleFavoriteConfig(name,team){const saved=!isFavoriteConfig(name,team);const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({name,team,saved})});writeLocalFavorites(Array.isArray(result.items)?result.items:[]);renderFavoriteConfigs();return saved}
+function updateFavoriteButton(button,saved){button.classList.toggle('is-saved',saved);button.setAttribute('aria-pressed',String(saved));button.textContent=saved?'🔖 Favorilerde':'☆ Favorilere ekle'}
+function renderFavoriteConfigs(){const items=favoriteConfigs;$('configFavoritesGrid').innerHTML=items.map(item=>`<button type="button" class="config-player-card" data-favorite-config="${esc(item.name)}" data-favorite-team="${esc(item.team)}"><span class="config-player-photo"><span>${esc(String(item.name||'?').slice(0,2).toUpperCase())}</span></span><b>${esc(item.name)}</b><small>${esc(item.team)}</small></button>`).join('');$('configFavoritesEmpty').hidden=items.length>0}
 function configValue(value){if(value===undefined||value===null)return '';const clean=String(value).trim();return !clean||/^(null|undefined|n\/a|na|unknown|not available|not set)$/i.test(clean)?'':clean}
 function configMetric(label,value){const clean=configValue(value);return clean?`<div class="config-metric"><span>${esc(label)}</span><b>${esc(clean)}</b></div>`:''}
 function configSection(title,content){return content?`<h3 class="config-section-title">${esc(title)}</h3>${content}`:''}
@@ -226,14 +231,14 @@ async function selectMainTab(target){
 }function closeProfileMenu(){const menu=$('profileDropdown');menu.classList.remove('is-open');$('profileMenuButton').setAttribute('aria-expanded','false');setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},150)}
 $('profileMenuButton').addEventListener('click',()=>{const menu=$('profileDropdown'),open=menu.hidden;menu.hidden=!open;$('profileMenuButton').setAttribute('aria-expanded',String(open));requestAnimationFrame(()=>menu.classList.toggle('is-open',open));});
 $('profileDropdown').addEventListener('click',async event=>{
-  const favorite=event.target.closest('[data-toggle-favorite]');if(favorite){const saved=toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);favorite.classList.toggle('is-saved',saved);favorite.setAttribute('aria-pressed',String(saved));favorite.textContent=saved?'🔖 Favorilerde':'☆ Favorilere ekle';return;}
+  const favorite=event.target.closest('[data-toggle-favorite]');if(favorite){favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}return;}
   const item=event.target.closest('[data-profile-menu]');if(!item)return;const action=item.dataset.profileMenu;
   if(action==='settings'){$('profileSettingsPanel').hidden=!$('profileSettingsPanel').hidden;$('savedFaceitNickname').focus();return;}
   closeProfileMenu();$('profileSettingsPanel').hidden=true;
   if(action==='profile'){await selectMainTab(false);const nickname=$('savedFaceitNickname').value.trim();if(nickname)await loadProfile(nickname);else{$('status').textContent='FACEIT profili bağlı değil. Hesap ayarlarından kullanıcı adını ekleyebilirsin.';$('profileDropdown').hidden=false;$('profileMenuButton').setAttribute('aria-expanded','true');$('profileDropdown').classList.add('is-open');$('profileSettingsPanel').hidden=false;}}
   if(action==='favorites'){await selectMainTab(true);setConfigView('favorites');renderFavoriteConfigs();}
 });
-$('configProfile').addEventListener('click',event=>{const favorite=event.target.closest('[data-toggle-favorite]');if(!favorite)return;const saved=toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);favorite.classList.toggle('is-saved',saved);favorite.setAttribute('aria-pressed',String(saved));favorite.textContent=saved?'🔖 Favorilerde':'☆ Favorilere ekle';});
+$('configProfile').addEventListener('click',async event=>{const favorite=event.target.closest('[data-toggle-favorite]');if(!favorite)return;favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}});
 $('configFavoritesGrid').addEventListener('click',event=>{const item=event.target.closest('[data-favorite-config]');if(item)renderTop30Player(item.dataset.favoriteConfig,item.dataset.favoriteTeam)});
 $('configBackFavorites').addEventListener('click',()=>setConfigView('teams'));
 $('configBackTeams').addEventListener('click',()=>setConfigView('teams'));
@@ -283,7 +288,7 @@ async function setAccountState(data,openSavedProfile=false){
   if(!loggedIn){
     $('results').innerHTML='';$('error').textContent='';$('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.';
     $('steamResults').innerHTML='';$('steamStatus').textContent='Steam verisi henüz yüklenmedi.';$('steamFaceitPrompt').hidden=true;$('steamNotConnected').hidden=true;$('steamConnectSetting').hidden=true;$('steamConnectedSetting').hidden=true;steamProfileLoaded=false;activePlayerId=null;
-    $('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;closeProfileMenu();return;
+    $('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;favoriteConfigs=[];favoriteOwner='';renderFavoriteConfigs();closeProfileMenu();return;
   }
   $('profileMenuAccount').textContent=data.username||'';
   $('profileMenuSteam').textContent=data.steam_id?'Steam · '+(data.steam_persona_name||data.username):'Steam hesabı bağlı değil';
@@ -297,6 +302,7 @@ async function setAccountState(data,openSavedProfile=false){
   $('profileSettingsPanel').hidden=true;
   if(data.faceit_nickname&&openSavedProfile)await loadProfile(data.faceit_nickname);
   else if(!data.faceit_nickname)$('status').textContent=data.steam_id?'Steam hesabın hazır. FACEIT profilin varsa ekleyebilir veya daha sonra bağlayabilirsin.':'Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.';
+  try{await syncAccountFavorites()}catch(error){favoriteConfigs=readLocalFavorites();renderFavoriteConfigs();accountMessage('Favoriler bu tarayıcıda gösteriliyor; hesapla eşitlenemedi: '+error.message,'error')}
 }function accountMessage(text,type=''){
   const el=$('authMessage');el.textContent=text;el.className='account-message'+(type?' '+type:'');const profile=$('profileMessage');profile.textContent=text;profile.className='profile-message'+(type?' '+type:'');
 }

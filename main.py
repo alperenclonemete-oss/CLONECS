@@ -16,7 +16,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 load_dotenv()
 
-from account_store import authenticate_user, consume_steam_login_state, create_session, create_steam_login_state, create_user, delete_session, get_user_for_session, init_database, link_steam_account, persistent_storage_configured, save_faceit_nickname, upsert_steam_user
+from account_store import authenticate_user, consume_steam_login_state, create_session, create_steam_login_state, create_user, delete_session, get_user_for_session, init_database, link_steam_account, persistent_storage_configured, save_faceit_nickname, upsert_steam_user, list_favorites, set_favorite
 
 BASE_DIR = Path(__file__).resolve().parent
 FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
@@ -423,6 +423,28 @@ async def save_faceit_profile(payload: dict[str, Any], request: Request):
     canonical_nickname = str(profile.get("nickname") or nickname)
     await asyncio.to_thread(save_faceit_nickname, user["user_id"], canonical_nickname)
     return {"saved": True, "faceit_nickname": canonical_nickname, "ownership_verified": False, "persistent_storage": persistent_storage_configured()}
+
+@app.get("/api/account/favorites")
+async def account_favorites(request: Request):
+    user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
+    if not user:
+        raise HTTPException(status_code=401, detail="Favorilerini görmek için giriş yap.")
+    items = await asyncio.to_thread(list_favorites, user["user_id"])
+    return {"items": items}
+
+
+@app.put("/api/account/favorites")
+async def update_account_favorite(payload: dict[str, Any], request: Request):
+    user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
+    if not user:
+        raise HTTPException(status_code=401, detail="Favori kaydetmek için giriş yap.")
+    name = str(payload.get("name", "")).strip()
+    team = str(payload.get("team", "")).strip()
+    saved = payload.get("saved")
+    if not name or len(name) > 80 or not team or len(team) > 100 or not isinstance(saved, bool):
+        raise HTTPException(status_code=400, detail="Oyuncu, takım ve favori durumu geçerli olmalı.")
+    await asyncio.to_thread(set_favorite, user["user_id"], name, team, saved)
+    return {"items": await asyncio.to_thread(list_favorites, user["user_id"])}
 
 @app.get("/api/player")
 async def player(nickname: str = Query(min_length=2, max_length=40)):
