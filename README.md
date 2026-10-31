@@ -171,3 +171,11 @@ GitHub'daki `main` dalına gönder. Render bu dala bağlı otomatik deploy ediyo
 - **Steam / CS2** sekmesi Steam’in API’de görünür kıldığı profili, CS2 toplam ve son iki haftalık oyun süresini ve `GetUserStatsForGame` tarafından gerçekten döndürülen istatistikleri gösterir. Profil/oyun gizliliği bu alanları sınırlayabilir.
 - Steam Web API tam kişisel CS2 maç geçmişi sunmadığı için Steam sekmesi maç sonucu, K/D veya ELO uydurmaz. FACEIT maçları FACEIT sekmesinde kalır; Valve eşleştirme maçlarını detaylı analiz etmek için ileride oyun demosu veya kullanıcı tarafından sağlanan maç paylaşım verisi gerekir.
 - Steam API ayarları: `STEAM_API_KEY`, `PUBLIC_BASE_URL`. Steam API profili için `GET /api/steam/profile`; OpenID başlatma ve callback uçları `/api/auth/steam` ile `/api/auth/steam/callback`.
+### Supabase setup for persistent account storage
+
+1. Create a Supabase project and open **Connect**. For Render, select the **Session pooler** connection string (port 5432); Supabase documents this as the IPv4-compatible option for persistent backends on IPv4-only networks.
+2. Replace the password placeholder in the URI. URL-encode reserved characters in the password. Keep the connection string private; do not paste it into chat or commit it.
+3. In Render Dashboard, open the `cs2-coach` service, choose **Environment**, add `DATABASE_URL`, and paste the connection string. Choose **Save, rebuild, and deploy**.
+4. On startup, this app creates its account/session tables in PostgreSQL. The driver enforces SSL.
+
+Existing SQLite users are not copied automatically. If accounts already exist in SQLite, migrate that data before switching the production `DATABASE_URL`; otherwise those accounts will not exist in the new database.

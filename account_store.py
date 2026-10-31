@@ -42,7 +42,7 @@ def connection() -> Iterator[Any]:
             from psycopg.rows import dict_row
         except ImportError as exc:
             raise RuntimeError("DATABASE_URL is set but psycopg is not installed") from exc
-        conn = psycopg.connect(DATABASE_URL, row_factory=dict_row)
+        conn = psycopg.connect(DATABASE_URL, row_factory=dict_row, sslmode="require")
     else:
         conn = sqlite3.connect(DB_PATH, timeout=10)
 
