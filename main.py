@@ -20,7 +20,7 @@ FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
 FACEIT_GAME_ID = os.getenv("FACEIT_GAME_ID", "cs2").strip() or "cs2"
 FACEIT_BASE_URL = "https://open.faceit.com/data/v4"
 
-app = FastAPI(title="CLONE LAB", version="2.0.0")
+app = FastAPI(title="CLONE LAB", version="2.1.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
