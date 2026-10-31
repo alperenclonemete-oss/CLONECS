@@ -162,7 +162,7 @@ async def pro_configs():
         "notice": "Ayar snapshot'ı okunamadı; yerel oyuncu/CFG dizini ve kadro yedeği kullanılıyor.",
     }
 def _public_base_url(request: Request) -> str:
-    base = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
+    base = (os.getenv("PUBLIC_BASE_URL", "").strip() or os.getenv("RENDER_EXTERNAL_URL", "").strip()).rstrip("/")
     if not base:
         if os.getenv("RENDER"):
             raise HTTPException(status_code=503, detail="Steam girişini açmak için sunucuya PUBLIC_BASE_URL ayarlayın.")
@@ -176,7 +176,7 @@ def _public_base_url(request: Request) -> str:
 
 
 def _steam_redirect(request: Request, result: str, reason: str | None = None, token: str | None = None) -> RedirectResponse:
-    base = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
+    base = (os.getenv("PUBLIC_BASE_URL", "").strip() or os.getenv("RENDER_EXTERNAL_URL", "").strip()).rstrip("/")
     if not base:
         base = str(request.base_url).rstrip("/")
     query = {"steam_login": result}
