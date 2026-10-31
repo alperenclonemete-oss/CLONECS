@@ -231,15 +231,47 @@ $('configBackFavorites').addEventListener('click',()=>setConfigView('teams'));
 $('configBackTeams').addEventListener('click',()=>setConfigView('teams'));
 $('configBackPlayers').addEventListener('click',()=>setConfigView('players'));
 document.addEventListener('click',event=>{if(!$('profileWidget').contains(event.target))closeProfileMenu();});
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeProfileMenu();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeProfileMenu();closeAuthModal();}});
+function setAuthMode(mode){
+  const register=mode==='register';
+  $('loginPanel').hidden=register;
+  $('registerPanel').hidden=!register;
+  $('authLoginTab').classList.toggle('is-active',!register);
+  $('authRegisterTab').classList.toggle('is-active',register);
+  $('authLoginTab').setAttribute('aria-selected',String(!register));
+  $('authRegisterTab').setAttribute('aria-selected',String(register));
+}
+let authReturnFocus=null;
+let authCloseTimer=null;
+function openAuthModal(mode='login'){
+  clearTimeout(authCloseTimer);
+  authReturnFocus=document.activeElement;
+  $('authModal').hidden=false;
+  document.body.classList.add('auth-modal-open');
+  setAuthMode(mode);
+  requestAnimationFrame(()=>$('authModal').classList.add('is-open'));
+  setTimeout(()=>$(mode==='register'?'registerUsername':'loginUsername').focus(),80);
+}
+function closeAuthModal(){
+  const modal=$('authModal');
+  if(!modal||modal.hidden)return;
+  modal.classList.remove('is-open');
+  document.body.classList.remove('auth-modal-open');
+  authCloseTimer=setTimeout(()=>{if(modal.classList.contains('is-open'))return;modal.hidden=true;if(authReturnFocus?.focus)authReturnFocus.focus();},180);
+}
+document.querySelectorAll('[data-auth-open]').forEach(button=>button.addEventListener('click',()=>openAuthModal(button.dataset.authOpen)));
+document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>setAuthMode(button.dataset.authMode)));
+document.querySelectorAll('[data-auth-close]').forEach(button=>button.addEventListener('click',closeAuthModal));
 async function setAccountState(data,openSavedProfile=false){
   const loggedIn=Boolean(data?.authenticated);
-  $('guestWelcome').hidden=loggedIn;
+  $('landingPage').hidden=loggedIn;
+  $('authActions').hidden=loggedIn;
   $('appBranding').hidden=!loggedIn;
   $( 'appTabs' ).hidden=!loggedIn; $( 'faceitTab' ).hidden=!loggedIn; $( 'configsTab' ).hidden=true; document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
-  $('accountPanel').hidden=loggedIn;$('authLoggedOut').hidden=loggedIn;$('profileWidget').hidden=!loggedIn;
+  $('authLoggedOut').hidden=loggedIn;$('profileWidget').hidden=!loggedIn;
+  if(loggedIn) closeAuthModal();
   if(!loggedIn){ $('results').innerHTML=''; $('error').textContent=''; $('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.';activePlayerId=null;$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;closeProfileMenu();return; }
   $('profileMenuAccount').textContent=data.username||'';
   $('savedFaceitNickname').value=data.faceit_nickname||'';
@@ -283,4 +315,66 @@ $('logoutButton').addEventListener('click',async()=>{
   try{await api('/api/account/logout',{method:'POST'});await setAccountState({authenticated:false});accountMessage('Oturum kapatıldı.');}
   catch(e){accountMessage(e.message,'error');}
 });
+const warmupPlans=[
+  [['04:00','Bot aim · isabet ve kısa flick'],['06:00','DM · crosshair seviyesi ve ilk mermi'],['05:00','Recoil kontrolü · 2 favori silah']],
+  [['05:00','Kısa strafing aim çalışması'],['05:00','DM · açı temizleme ve trade mesafesi'],['05:00','Spray aktarımı · AK/M4']],
+  [['03:00','El bileği ve mouse kontrolü'],['07:00','DM · sakin pre-aim ve burst'],['05:00','Retake sunucusu · utility sonrası giriş']]
+];
+let warmupPlanIndex=0;
+$('newRoutine').addEventListener('click',()=>{
+  warmupPlanIndex=(warmupPlanIndex+1)%warmupPlans.length;
+  $('warmupRoutine').innerHTML=warmupPlans[warmupPlanIndex].map(([time,label])=>'<li><time>'+time+'</time><span>'+esc(label)+'</span></li>').join('');
+  $('routineIndex').textContent='0'+(warmupPlanIndex+1)+' / 03';
+});
+$('serverConnect').addEventListener('click',()=>{
+  const address=$('serverAddress').value.trim();
+  const message=$('serverMessage');
+  const match=address.match(/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i);
+  const port=match?Number(match[1]):0;
+  if(!match||port<1||port>65535){message.textContent='Geçerli bir sunucu adresi ve port gir (ör. sunucu:27015).';message.classList.add('is-error');$('serverAddress').focus();return;}
+  message.classList.remove('is-error');
+  message.textContent=$('serverMode').value+' sunucusu için Steam bağlantısı açılıyor…';
+  window.location.href='steam://connect/'+address;
+});
+const lineupScene=$('lineupScene');
+const clamp01=value=>Math.max(0,Math.min(1,value));
+let lineupFrame=0;
+function paintLineup(){
+  lineupFrame=0;
+  if(!lineupScene)return;
+  const rect=$('lineupFeature').getBoundingClientRect();
+  const progress=clamp01((window.innerHeight-rect.top)/(window.innerHeight+rect.height));
+  const handIn=clamp01(progress/.2),handOut=clamp01((progress-.28)/.16);
+  const throwFlight=clamp01((progress-.16)/.42);
+  const settle=clamp01((progress-.58)/.1);
+  const bounce=progress<.58||progress>.68?0:Math.sin(settle*Math.PI)*10;
+  const grenadeX=progress<.16?14:progress<.58?14+76*throwFlight:90-40*settle;
+  const grenadeY=progress<.16?83:progress<.58?83-43*Math.sin(throwFlight*Math.PI/2):40+38*settle-bounce;
+  lineupScene.style.setProperty('--scene-progress',progress.toFixed(3));
+  lineupScene.style.setProperty('--hand-x',(-24+handIn*20-handOut*42)+'%');
+  lineupScene.style.setProperty('--hand-y',(42-handIn*34+handOut*28)+'%');
+  lineupScene.style.setProperty('--hand-rot',(-18+throwFlight*52)+'deg');
+  lineupScene.style.setProperty('--grenade-x',grenadeX+'%');
+  lineupScene.style.setProperty('--grenade-y',grenadeY+'%');
+  lineupScene.style.setProperty('--grenade-rot',(throwFlight*720+settle*180)+'deg');
+  lineupScene.style.setProperty('--smoke-opacity',clamp01((progress-.65)/.17).toFixed(3));
+  lineupScene.style.setProperty('--result-reveal',clamp01((progress-.78)/.16).toFixed(3));
+  $('lineupProgress').style.width=(progress*100)+'%';
+}
+function requestLineupPaint(){if(!lineupFrame)lineupFrame=requestAnimationFrame(paintLineup);}
+if(lineupScene){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    lineupScene.style.setProperty('--hand-x','-46%');lineupScene.style.setProperty('--hand-y','36%');
+    lineupScene.style.setProperty('--grenade-x','50%');lineupScene.style.setProperty('--grenade-y','77%');
+    lineupScene.style.setProperty('--smoke-opacity','1');lineupScene.style.setProperty('--result-reveal','1');
+  }else{
+    window.addEventListener('scroll',requestLineupPaint,{passive:true});
+    window.addEventListener('resize',requestLineupPaint);
+    requestLineupPaint();
+  }
+}
+if('IntersectionObserver' in window){
+  const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
+  document.querySelectorAll('.reveal-on-scroll').forEach(element=>revealObserver.observe(element));
+}else document.querySelectorAll('.reveal-on-scroll').forEach(element=>element.classList.add('is-visible'));
 restoreAccount();
