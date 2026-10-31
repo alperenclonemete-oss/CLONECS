@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance · CloneCS 1.7
+# CLONE LAB · FACEIT Performance · CloneCS 2.0
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -116,4 +116,21 @@ Maç geçmişinde ilk iki kayıt görünür; devamı ikişer maçlık bölümler
 
 ## 1.7 giriş düzeltmesi
 Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık kalıcı sonuç kapsayıcısına bağlanır; sayfa açılışındaki JavaScript hatası giriş/kayıt işleyicilerini durduramaz. Yerel uçtan uca doğrulama: kayıt, oturum, profil kaydı, çıkış ve tekrar giriş.
+
+## CLONE LAB 1.8 — Pro Config kataloğu
+- Pro Config içinde takım/oyuncu/rol adına göre arama eklendi; takım ve oyuncu seçicileri arama sonucuna göre daralır.
+- Uygulama içindeki kayıtlar Guewenn MIT kataloğundan sunucuda en fazla bir saat önbellekle alınır. Kayıt ve takım sayısı ekranda kaynağın döndürdüğü gerçek veriden hesaplanır.
+- Daha geniş CSDB.gg ve CS Tools dizinlerine kaynak bağlantıları eklendi. Kaynak sayfaları sırasıyla 1.011 oyuncu/208 takım ve 35 takım/182 pro kaydı bildirmiştir; bu dış veriler Clone Lab'e kopyalanmış gibi gösterilmez.
+- Uygulama içindeki açık veri kaynağı yalnızca sınırlı sayıda oyuncunun yayımlanmış ayarını kapsar; bu nedenle bu sürüm henüz top 30 takımın tüm kadrolarını içermiyor. Bulunmayan CFG, video, viewmodel ve diğer ayarlar uydurulmaz. Kaynakta hangi değerler varsa onlar gösterilir.
+- FACEIT/Render ayarları ve başlangıç komutu değişmedi. Render'a güncellemek için bu klasörün içeriğini yayınladığın Git deposuna aktar ve mevcut Web Service'i yeniden deploy et. FACEIT API anahtarı sadece sunucu ortam değişkeninde tutulmalı.
+
+## CLONE LAB 1.9 — Oyuncu portreleri ve takım logoları
+- Pro Config oyuncu kartlarına oyuncu portresi ve takım logosu eklendi. Görseller CS Tools'un herkese açık PNG adreslerinden yüklenir.
+- Görsel bulunamazsa kartta oyuncu/takım baş harfleri görünür; görsel yüklenmemesi ayar kartını bozmaz.
+- Görseller haricî kaynaktan geldiğinden internet bağlantısı gerekir. Kaynak örnekleri: https://cstools.io/pros/donk.png ve https://cstools.io/teams/spirit.png.
+
+## CLONE LAB 2.0 — Takım ve oyuncu kartları
+- Config bölümünde takım/oyuncu açılır kutuları kaldırıldı. Beş sütunlu kare takım logosu kartları gösterilir; dar ekranlarda sütun sayısı azaltılır.
+- Takım kartına basınca o takımın oyuncu portreleri kart olarak açılır. Oyuncu kartına basınca ayar ayrıntıları açılır. Her ekranda geri dönüş düğmesi bulunur.
+- Takım araması logolu kartları filtreler. Görsel yüklenemezse baş harf yedeği görünür.
 

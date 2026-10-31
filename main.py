@@ -20,7 +20,7 @@ FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
 FACEIT_GAME_ID = os.getenv("FACEIT_GAME_ID", "cs2").strip() or "cs2"
 FACEIT_BASE_URL = "https://open.faceit.com/data/v4"
 
-app = FastAPI(title="CLONE LAB", version="1.7.0")
+app = FastAPI(title="CLONE LAB", version="2.0.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
@@ -70,7 +70,7 @@ async def pro_configs():
     global _pro_configs_cache, _pro_configs_cached_at
     import time
     if _pro_configs_cache and time.time() - _pro_configs_cached_at < 3600:
-        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": True}
+        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": True, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
     try:
         async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
             response = await client.get(PRO_CONFIGS_URL, headers={"Accept": "application/json"})
@@ -80,10 +80,10 @@ async def pro_configs():
             raise ValueError("Config kaynağı beklenen liste biçiminde değil.")
         _pro_configs_cache = [item for item in data if isinstance(item, dict) and item.get("name") and item.get("team")]
         _pro_configs_cached_at = time.time()
-        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": False}
+        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": False, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
     except (httpx.HTTPError, ValueError) as exc:
         if _pro_configs_cache:
-            return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "cached": True}
+            return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": True, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
         raise HTTPException(status_code=502, detail=f"Pro config verisi alınamadı: {exc}") from exc
 @app.get("/api/health")
 async def health():
