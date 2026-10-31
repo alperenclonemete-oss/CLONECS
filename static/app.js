@@ -340,6 +340,8 @@ const lineupScene=$('lineupScene');
 const lineupHand=document.querySelector('.lineup-hand');
 const lineupGrenade=document.querySelector('.lineup-grenade');
 const lineupResult=document.querySelector('.lineup-result');
+const lineupCopy=$('lineupCopy');
+const lineupStageLabel=$('lineupStageLabel');
 const smokeCanvas=$('smokeCanvas');
 const smokeContext=smokeCanvas?.getContext('2d');
 const smokeArtwork=new Image();
@@ -356,14 +358,19 @@ smokeArtwork.addEventListener('load',fitSmokeArtwork);
 smokeArtwork.src='/static/lineup/smoke-cloud.png';
 window.addEventListener('resize',fitSmokeArtwork,{passive:true});
 if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
+  const activateGuideVideos=()=>{
+    document.querySelectorAll('.guide-video-frame iframe[data-src]').forEach(frame=>{
+      if(!frame.hasAttribute('src'))frame.setAttribute('src',frame.dataset.src);
+    });
+  };
   if(window.gsap&&window.ScrollTrigger&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     gsap.registerPlugin(ScrollTrigger);
-    const pinned=$('lineupPinned'),section=$('lineupFeature'),header=document.querySelector('.site-header');
+    const pinned=$('lineupPinned'),section=$('lineupFeature');
     const flight={progress:0};
     const drawFlight=()=>{
       const t=flight.progress,inv=1-t;
-      const x=inv*inv*14+2*inv*t*84+t*t*90;
-      const y=inv*inv*83+2*inv*t*5+t*t*42;
+      const x=inv*inv*8+2*inv*t*94+t*t*98;
+      const y=inv*inv*84+2*inv*t*0+t*t*22;
       gsap.set(lineupGrenade,{left:x+'%',top:y+'%',rotation:720*t});
     };
     gsap.set(lineupHand,{xPercent:-76,yPercent:34,rotation:-27,autoAlpha:0});
@@ -373,10 +380,14 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
     const lineupTimeline=gsap.timeline({
       scrollTrigger:{
         trigger:section,pin:pinned,pinSpacing:true,anticipatePin:1,
-        start:()=>'top '+(header?.offsetHeight||0)+'px',
+        start:'top top',
         end:()=>'+='+Math.round(window.innerHeight*(window.innerWidth<700?1.3:1.55)),
         scrub:1.2,invalidateOnRefresh:true,
-        onUpdate:self=>gsap.set($('lineupProgress'),{scaleX:self.progress})
+        onUpdate:self=>{
+          gsap.set($('lineupProgress'),{scaleX:self.progress});
+          lineupStageLabel.textContent=self.progress<.4?'01 — HAND / THROW':self.progress<.7?'02 — FLIGHT / IMPACT':'03 — SMOKE / LINEUP GUIDE';
+          if(self.progress>=.8)activateGuideVideos();
+        }
       }
     });
     lineupTimeline
@@ -384,16 +395,19 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       .to(lineupHand,{xPercent:-95,yPercent:45,rotation:24,autoAlpha:.12,duration:.2,ease:'power2.in'},.2)
       .set(lineupGrenade,{autoAlpha:1},.4)
       .to(flight,{progress:1,duration:.28,ease:'none',onUpdate:drawFlight},.4)
-      .to(lineupGrenade,{left:'50%',top:'77%',rotation:810,duration:.02,ease:'power1.out'},.68)
+      .to(lineupGrenade,{x:-9,rotation:755,duration:.008,ease:'power2.in'},.68)
+      .to(lineupGrenade,{left:'50%',top:'77%',x:0,rotation:810,duration:.012,ease:'bounce.out'},.688)
       .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.7)
       .to(smokeCanvas,{autoAlpha:1,scale:1.16,duration:.2,ease:'power2.out'},.7)
-      .to(lineupResult,{autoAlpha:1,y:0,scale:1,duration:.2,ease:'power2.out'},.8);
+      .to(lineupCopy,{autoAlpha:0,duration:.08},.72)
+      .to(lineupResult,{autoAlpha:1,y:0,scale:1,duration:.2,ease:'power2.out',onStart:activateGuideVideos},.8);
     smokeArtwork.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
   }else{
     fitSmokeArtwork();
     lineupHand.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'0':'1';
     lineupGrenade.style.opacity='1';lineupGrenade.style.left='50%';lineupGrenade.style.top='77%';
     smokeCanvas.style.opacity='1';lineupResult.style.opacity='1';lineupResult.style.transform='none';
+    lineupCopy.style.opacity='0';activateGuideVideos();
   }
 }
 if('IntersectionObserver' in window){
