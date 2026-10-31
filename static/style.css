@@ -114,6 +114,14 @@ header{
   background:#121418;
   filter:drop-shadow(0 0 16px rgba(255,85,0,.22))
 }
+.site-logo{
+  display:block;
+  width:auto;
+  height:38px;
+  max-width:min(54vw,240px);
+  object-fit:contain;
+  object-position:left center
+}
 .brand-word b{
   color:var(--accent)
 }
@@ -918,6 +926,9 @@ button.secondary:hover:not(:disabled),.secondary:hover:not(:disabled){
 .dashboard{
   grid-column:span 12;
   padding:0;
+  min-width:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
   overflow:hidden
 }
 .season-head{
@@ -999,6 +1010,7 @@ button.secondary:hover:not(:disabled),.secondary:hover:not(:disabled){
   padding:0 20px
 }
 .radar-card{
+  min-width:0;
   margin:10px 20px 20px
 }
 .radar-card svg{
@@ -1006,6 +1018,30 @@ button.secondary:hover:not(:disabled),.secondary:hover:not(:disabled){
   height:auto;
   max-height:370px
 }
+
+.loading-card{grid-column:1/-1;min-width:0}
+.skeleton-stack{display:grid;gap:10px;min-width:0}
+.skeleton{display:block;position:relative;overflow:hidden;border-radius:7px;background:rgba(255,255,255,.055)}
+.skeleton::after{content:"";position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent);animation:skeleton-shimmer 1.35s infinite}
+.skeleton-row{height:54px}
+.skeleton-heading{height:30px;width:min(44%,260px);margin-bottom:18px}
+.skeleton-value{width:48px;height:22px;color:transparent!important;border-radius:5px;vertical-align:middle}
+.config-team-skeleton{display:grid;justify-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:13px;background:rgba(255,255,255,.025)}
+.skeleton-square{width:100%;aspect-ratio:1;border-radius:9px}
+.skeleton-name{width:60%;height:14px}
+.config-loading{min-height:55px}
+.config-note{display:block;margin-top:5px}
+@keyframes skeleton-shimmer{100%{transform:translateX(100%)}}
+
+@media(max-width:700px){
+  .site-logo{height:34px;max-width:50vw}
+  .dashboard-chart,.dashboard-metrics,.elo-note{min-width:0}
+  .charts{grid-template-columns:minmax(0,1fr)}
+  .dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chart-card,.radar-card{min-width:0;max-width:100%}
+  .radar-card svg{max-height:300px}
+}
+@media(prefers-reduced-motion:reduce){.skeleton::after{animation:none;transform:none;opacity:.45}}
 .radar-card svg polygon{
   fill:none;
   stroke:rgba(255,255,255,.14);

@@ -77,10 +77,17 @@
     "ok": true
   },
   {
-    "team": "M80",
-    "file": "m80.png",
-    "source": "https://cdn.escharts.com/uploads/public/691/a0f/9c1/691a0f9c19f58692556203.png",
-    "bytes": 186826,
+    "team": "FUT",
+    "file": "fut.png",
+    "source": "https://liquipedia.net/commons/images/9/90/Futbolist_2021_lightmode.png",
+    "bytes": 175386,
+    "ok": true
+  },
+  {
+    "team": "Gentle Mates",
+    "file": "gentlemates.png",
+    "source": "https://liquipedia.net/commons/images/4/42/Gentle_Mates_2024_darkmode.png",
+    "bytes": 342518,
     "ok": true
   }
 ]
