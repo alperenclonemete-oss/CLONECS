@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 240 300" fill="none" shape-rendering="geometricPrecision">
+ <defs><linearGradient id="body" x1="48" y1="52" x2="198" y2="264" gradientUnits="userSpaceOnUse"><stop stop-color="#1a495d" stop-opacity=".78"/><stop offset=".5" stop-color="#102b39" stop-opacity=".93"/><stop offset="1" stop-color="#07151f" stop-opacity=".98"/></linearGradient><filter id="glow" x="-35%" y="-25%" width="170%" height="160%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+ <g stroke="#48dfff" stroke-width="4" stroke-linejoin="round" filter="url(#glow)">
+  <path d="M73 45h92l16 20v164l-15 26H72l-15-25V65l16-20Z" fill="url(#body)"/>
+  <path d="M73 45h92v24H73zM57 203h124v26H57z" fill="#ff773d" fill-opacity=".2" stroke="#ff773d"/>
+  <path d="M78 79h82v116H78z" stroke-opacity=".6"/><path d="M88 93h62m-62 14h46m-46 67h62" stroke-width="3" stroke-opacity=".75"/>
+  <path d="M81 33h77V45H81zM103 20h34v13h-34z" fill="#16384a"/><path d="M166 27c23 2 32 14 28 31l-14 12"/>
+  <circle cx="120" cy="139" r="26" stroke="#ff773d" stroke-width="3"/><path d="M120 99v80m-40-40h80" stroke-width="2" opacity=".75"/>
+  <path d="M68 238h103m-88 10h74" stroke-width="2" opacity=".6"/>
+ </g><g fill="#ff773d"><circle cx="120" cy="139" r="4"/><circle cx="92" cy="57" r="3"/><circle cx="148" cy="57" r="3"/></g>
+</svg>

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CLONE LAB | FACEIT Performance</title>
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=4.5">
+  <link rel="stylesheet" href="/static/style.css?v=4.6">
 </head>
 <body>
 <div class="wrap">
@@ -50,10 +50,10 @@
               <div class="scene-map-label map-label-a">T SPAWN <span>START POSITION</span></div>
               <div class="scene-map-label map-label-b">MID <span>WINDOW SMOKE</span></div>
               <div class="scene-map-label map-label-c">LANDING ZONE</div>
-              <svg class="trajectory" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true"><path d="M80 790 C390 45 1210 12 1570 175"/></svg>
+              <svg class="trajectory" viewBox="0 0 1600 900" preserveAspectRatio="none" shape-rendering="geometricPrecision" aria-hidden="true"><path id="smoke-trajectory" d="M 120 756 C 470 80 1300 28 1570 170 C 1630 250 1570 350 1450 455 C 1300 585 1100 690 840 704" shape-rendering="geometricPrecision" vector-effect="non-scaling-stroke"/></svg>
               <div class="lineup-copy" id="lineupCopy"><div class="eyebrow">TACTICAL LAB <span>// INTERACTIVE LINEUP</span></div><h3>Her smoke,<br><span class="accent">bir plan başlatır.</span></h3><p>Kaydırmaya devam et. Rehber ekranı smoke’un inişinden sonra açılacak.</p><div class="lineup-scroll-hint">SCROLL TO THROW <span>↓</span></div></div>
-              <div class="lineup-hand" aria-hidden="true"><img src="/static/lineup/hand.png" alt="" draggable="false"></div>
-              <div class="lineup-grenade" aria-hidden="true"><img src="/static/lineup/smoke-grenade.png" alt="" draggable="false"></div>
+              <div class="lineup-hand" aria-hidden="true"><img src="/static/lineup/hand.svg" alt="" draggable="false"></div>
+              <div class="lineup-grenade" aria-hidden="true"><img src="/static/lineup/smoke-grenade.svg" alt="" draggable="false"></div>
               <canvas class="smoke-cloud" id="smokeCanvas" aria-hidden="true"></canvas>
               <section class="lineup-result" id="lineupGuidePanel" aria-label="Mirage Window Smoke rehberi">
                 <header class="guide-panel-top"><div><span class="result-kicker">INTERACTIVE LINEUP GUIDE</span><h2>Mirage <i>/</i> Window Smoke</h2></div><span class="guide-side-tag">T SIDE · MID CONTROL</span></header>
@@ -102,7 +102,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="/static/app.js?v=4.5" defer></script>
-<script src="/static/ui-motion.js?v=4.5" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js" defer></script>
+<script src="/static/app.js?v=4.6" defer></script>
+<script src="/static/ui-motion.js?v=4.6" defer></script>
 </body>
 </html>

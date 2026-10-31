@@ -359,19 +359,13 @@ smokeArtwork.addEventListener('load',fitSmokeArtwork);
 smokeArtwork.src='/static/lineup/smoke-cloud.svg';
 window.addEventListener('resize',fitSmokeArtwork,{passive:true});
 if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
-  if(window.gsap&&window.ScrollTrigger&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    gsap.registerPlugin(ScrollTrigger);
+  if(window.gsap&&window.ScrollTrigger&&window.MotionPathPlugin&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    gsap.registerPlugin(ScrollTrigger,MotionPathPlugin);
     const pinned=$('lineupPinned'),section=$('lineupFeature');
-    const flight={progress:0};
-    const drawFlight=()=>{
-      const t=flight.progress,inv=1-t;
-      const x=inv*inv*8+2*inv*t*94+t*t*98;
-      const y=inv*inv*84+2*inv*t*0+t*t*22;
-      gsap.set(lineupGrenade,{left:x+'%',top:y+'%',rotation:720*t});
-    };
+    const grenadeArtwork=lineupGrenade.querySelector('img');
     gsap.set(lineupHand,{xPercent:-76,yPercent:34,rotation:-27,autoAlpha:0});
-    gsap.set(lineupGrenade,{left:'8%',top:'84%',rotation:0,scale:1,autoAlpha:0});
-    gsap.set(smokeCanvas,{autoAlpha:0,scale:.38,transformOrigin:'50% 65%'});
+    gsap.set(lineupGrenade,{left:0,top:0,x:0,y:0,scale:1,autoAlpha:0,transformOrigin:'50% 50%'});
+    gsap.set(smokeCanvas,{visibility:'hidden',opacity:0,scale:.38,transformOrigin:'50% 65%'});
     gsap.set(guideRevealTargets,{autoAlpha:0,y:22,filter:'blur(12px)'});
     const lineupTimeline=gsap.timeline({
       scrollTrigger:{
@@ -389,13 +383,15 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       .to(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4,autoAlpha:1,duration:.2,ease:'power1.out'},0)
       .to(lineupHand,{xPercent:-95,yPercent:45,rotation:24,autoAlpha:.12,duration:.2,ease:'power2.in'},.2)
       .set(lineupGrenade,{autoAlpha:1},.4)
-      .to(flight,{progress:1,duration:.22,ease:'none',onUpdate:drawFlight},.4)
-      .to(lineupGrenade,{x:-12,y:-16,rotation:755,duration:.02,ease:'power2.out'},.62)
-      .to(lineupGrenade,{left:'54%',top:'76%',x:0,y:0,rotation:1030,duration:.1,ease:'power2.in'},.64)
-      .to(lineupGrenade,{top:'73%',rotation:1050,duration:.025,ease:'power1.out'},.74)
-      .to(lineupGrenade,{top:'78%',rotation:1080,duration:.035,ease:'bounce.out'},.765)
+      .to(lineupGrenade,{
+        motionPath:{path:'#smoke-trajectory',align:'#smoke-trajectory',alignOrigin:[.5,.5],autoRotate:false,start:0,end:1},
+        duration:.34,ease:'none'
+      },.4)
+      .to(grenadeArtwork,{rotation:360,duration:.34,ease:'none',transformOrigin:'50% 50%'},.4)
+      .to(lineupGrenade,{y:-18,duration:.025,ease:'power2.out'},.74)
+      .to(lineupGrenade,{y:0,duration:.035,ease:'bounce.out'},.765)
       .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.8)
-      .to(smokeCanvas,{autoAlpha:1,scale:1.28,duration:.16,ease:'power2.out'},.8)
+      .to(smokeCanvas,{visibility:'visible',opacity:.25,scale:1.28,duration:.16,ease:'power2.out'},.8)
       .to(lineupCopy,{autoAlpha:0,duration:.08},.8)
       .to(guideRevealTargets,{autoAlpha:1,y:0,filter:'blur(0px)',duration:.1,stagger:.015,ease:'power2.out'},.82);
     smokeArtwork.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
