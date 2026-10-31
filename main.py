@@ -28,11 +28,16 @@ STEAM_OPENID_URL = "https://steamcommunity.com/openid/login"
 STEAM_APP_ID = 730
 
 app = FastAPI(title="CLONE LAB", version="2.5.0")
+from match_routes import router as match_router
+from match_tracking import init_tracking
+app.include_router(match_router)
+
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
 async def initialize_account_store() -> None:
     await asyncio.to_thread(init_database)
+    await asyncio.to_thread(init_tracking)
 
 
 @app.get("/")

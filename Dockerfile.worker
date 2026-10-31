@@ -1,0 +1,16 @@
+FROM node:22-bookworm-slim AS node-deps
+WORKDIR /deps
+COPY worker/package.json ./
+RUN npm install --omit=dev --ignore-scripts
+
+FROM python:3.12-slim-bookworm
+COPY --from=node-deps /usr/local/bin/node /usr/local/bin/node
+WORKDIR /app
+COPY requirements.txt requirements-worker.txt ./
+RUN pip install --no-cache-dir -r requirements-worker.txt
+COPY account_store.py match_tracking.py match_worker.py match_analysis.py ./
+COPY worker/resolve-demo.cjs ./worker/resolve-demo.cjs
+COPY --from=node-deps /deps/node_modules ./worker/node_modules
+RUN useradd --create-home worker
+USER worker
+CMD ["python", "-u", "match_worker.py"]
