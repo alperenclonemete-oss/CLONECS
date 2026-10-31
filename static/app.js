@@ -288,7 +288,7 @@ async function setAccountState(data,openSavedProfile=false){
   $('profileMenuAccount').textContent=data.username||'';
   $('profileMenuSteam').textContent=data.steam_id?'Steam · '+(data.steam_persona_name||data.username):'Steam hesabı bağlı değil';
   $('profileMenuFaceit').textContent=data.faceit_nickname?`FACEIT · ${data.faceit_nickname}`:'FACEIT profili bağlı değil';
-  $('savedFaceitNickname').value=data.faceit_nickname||'';
+  
   $('profileWidgetName').textContent=data.faceit_nickname||data.steam_persona_name||data.username||'';
   $('steamFaceitPrompt').hidden=!data.steam_id||Boolean(data.faceit_nickname);$('steamNotConnected').hidden=Boolean(data.steam_id);
   $('steamConnectSetting').hidden=Boolean(data.steam_id);$('steamConnectedSetting').hidden=!data.steam_id;
@@ -345,121 +345,10 @@ async function loadSteamProfile(){
   catch(error){$('steamResults').innerHTML='';$('steamStatus').textContent=error.message;$('steamStatus').className='error';}
 }
 $('steamRefresh').addEventListener('click',()=>loadSteamProfile());
-$('connectFaceitPrompt').addEventListener('click',event=>{
-  event.stopPropagation();$('profileDropdown').hidden=false;$('profileMenuButton').setAttribute('aria-expanded','true');$('profileDropdown').classList.add('is-open');$('profileSettingsPanel').hidden=false;$('savedFaceitNickname').focus();
-});
+
 $('loginForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/login');});
 $('registerForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/register');});
-$('faceitLinkForm').addEventListener('submit',async e=>{
-  e.preventDefault();const button=e.currentTarget.querySelector('button[type="submit"]');button.disabled=true;accountMessage('FACEIT profili aranıyor…');
-  try{
-    const nickname=$('savedFaceitNickname').value.trim();
-    const data=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});
-    await setAccountState({authenticated:true,username:$('profileMenuAccount').textContent,faceit_nickname:data.faceit_nickname,persistent_storage:data.persistent_storage},false);
-    accountMessage('FACEIT profili bulundu ve bu hesaba kaydedildi.','success');
-    $('profileSettingsPanel').hidden=true;
-    await loadProfile(data.faceit_nickname);
-  }catch(err){accountMessage(err.message,'error');}
-  finally{button.disabled=false;}
-});
-$('logoutButton').addEventListener('click',async()=>{
-  try{await api('/api/account/logout',{method:'POST'});await setAccountState({authenticated:false});accountMessage('Oturum kapatıldı.');}
-  catch(e){accountMessage(e.message,'error');}
-});
-const warmupPlans=[
-  [['04:00','Bot aim · isabet ve kısa flick'],['06:00','DM · crosshair seviyesi ve ilk mermi'],['05:00','Recoil kontrolü · 2 favori silah']],
-  [['05:00','Kısa strafing aim çalışması'],['05:00','DM · açı temizleme ve trade mesafesi'],['05:00','Spray aktarımı · AK/M4']],
-  [['03:00','El bileği ve mouse kontrolü'],['07:00','DM · sakin pre-aim ve burst'],['05:00','Retake sunucusu · utility sonrası giriş']]
-];
-let warmupPlanIndex=0;
-$('newRoutine').addEventListener('click',()=>{
-  warmupPlanIndex=(warmupPlanIndex+1)%warmupPlans.length;
-  $('warmupRoutine').innerHTML=warmupPlans[warmupPlanIndex].map(([time,label])=>'<li><time>'+time+'</time><span>'+esc(label)+'</span></li>').join('');
-  $('routineIndex').textContent='0'+(warmupPlanIndex+1)+' / 03';
-});
-$('serverConnect').addEventListener('click',()=>{
-  const address=$('serverAddress').value.trim();
-  const message=$('serverMessage');
-  const match=address.match(/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i);
-  const port=match?Number(match[1]):0;
-  if(!match||port<1||port>65535){message.textContent='Geçerli bir sunucu adresi ve port gir (ör. sunucu:27015).';message.classList.add('is-error');$('serverAddress').focus();return;}
-  message.classList.remove('is-error');
-  message.textContent=$('serverMode').value+' sunucusu için Steam bağlantısı açılıyor…';
-  window.location.href='steam://connect/'+address;
-});
-const lineupScene=$('lineupScene');
-const lineupHand=document.querySelector('.lineup-hand');
-const lineupGrenade=document.querySelector('.lineup-grenade');
-const lineupResult=document.querySelector('.lineup-result');
-const lineupCopy=$('lineupCopy');
-const lineupStageLabel=$('lineupStageLabel');
-const smokeCanvas=$('smokeCanvas');
-const smokeContext=smokeCanvas?.getContext('2d');
-const smokeArtwork=new Image();
-const guideRevealTargets=[...document.querySelectorAll('.guide-panel-top,.guide-instructions,.guide-video-card,.guide-panel-foot')];
-function fitSmokeArtwork(){
-  if(!smokeCanvas||!smokeContext||!smokeArtwork.complete||!smokeArtwork.naturalWidth)return;
-  const bounds=smokeCanvas.getBoundingClientRect(),ratio=Math.min(window.devicePixelRatio||1,2);
-  smokeCanvas.width=Math.max(1,Math.round(bounds.width*ratio));smokeCanvas.height=Math.max(1,Math.round(bounds.height*ratio));
-  smokeContext.setTransform(ratio,0,0,ratio,0,0);smokeContext.clearRect(0,0,bounds.width,bounds.height);
-  const scale=Math.min(bounds.width/smokeArtwork.width,bounds.height/smokeArtwork.height);
-  const width=smokeArtwork.width*scale,height=smokeArtwork.height*scale;
-  smokeContext.drawImage(smokeArtwork,(bounds.width-width)/2,(bounds.height-height)/2,width,height);
-}
-smokeArtwork.addEventListener('load',fitSmokeArtwork);
-smokeArtwork.src='/static/lineup/smoke-cloud.png';
-window.addEventListener('resize',fitSmokeArtwork,{passive:true});
-if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
-  if(window.gsap&&window.ScrollTrigger&&window.MotionPathPlugin&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    gsap.registerPlugin(ScrollTrigger,MotionPathPlugin);
-    const pinned=$('lineupPinned'),section=$('lineupFeature');
-    const grenadeArtwork=lineupGrenade.querySelector('img');
-    gsap.set(lineupHand,{xPercent:-76,yPercent:34,rotation:-27,autoAlpha:0});
-    gsap.set(lineupGrenade,{left:0,top:0,x:0,y:0,scale:1,autoAlpha:0,transformOrigin:'50% 50%'});
-    gsap.set(smokeCanvas,{visibility:'hidden',opacity:0,scale:.38,transformOrigin:'50% 65%'});
-    gsap.set(guideRevealTargets,{autoAlpha:0,y:22,filter:'blur(12px)'});
-    const lineupTimeline=gsap.timeline({
-      scrollTrigger:{
-        trigger:section,pin:pinned,pinSpacing:true,anticipatePin:1,
-        start:'top top',
-        end:()=>'+='+Math.round(window.innerHeight*(window.innerWidth<700?1.3:1.55)),
-        scrub:1.2,invalidateOnRefresh:true,
-        onUpdate:self=>{
-          gsap.set($('lineupProgress'),{scaleX:self.progress});
-          lineupStageLabel.textContent=self.progress<.4?'01 — HAND / THROW':self.progress<.8?'02 — FLIGHT / BOUNCE':'03 — SMOKE / LINEUP GUIDE';
-        }
-      }
-    });
-    lineupTimeline
-      .to(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4,autoAlpha:1,duration:.2,ease:'power1.out'},0)
-      .to(lineupHand,{xPercent:-95,yPercent:45,rotation:24,autoAlpha:.12,duration:.2,ease:'power2.in'},.2)
-      .set(lineupGrenade,{autoAlpha:1},.4)
-      .to(lineupGrenade,{
-        motionPath:{path:'#smoke-trajectory',align:'#smoke-trajectory',alignOrigin:[.5,.5],autoRotate:false,start:0,end:1},
-        duration:.34,ease:'none'
-      },.4)
-      .to(grenadeArtwork,{rotation:360,duration:.34,ease:'none',transformOrigin:'50% 50%'},.4)
-      .to(lineupGrenade,{y:-18,duration:.025,ease:'power2.out'},.74)
-      .to(lineupGrenade,{y:0,duration:.035,ease:'bounce.out'},.765)
-      .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.8)
-      .to(smokeCanvas,{visibility:'visible',opacity:.25,scale:1.28,duration:.16,ease:'power2.out'},.8)
-      .to(lineupCopy,{autoAlpha:0,duration:.08},.8)
-      .to(guideRevealTargets,{autoAlpha:1,y:0,filter:'blur(0px)',duration:.1,stagger:.015,ease:'power2.out'},.82);
-    smokeArtwork.addEventListener('load',()=>ScrollTrigger.refresh(),{once:true});
-  }else{
-    fitSmokeArtwork();
-    lineupHand.style.opacity=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'0':'1';
-    lineupGrenade.style.opacity='1';lineupGrenade.style.left='54%';lineupGrenade.style.top='78%';
-    smokeCanvas.style.opacity='1';lineupResult.style.opacity='1';lineupResult.style.transform='none';
-    lineupCopy.style.opacity='0';guideRevealTargets.forEach(item=>{item.style.opacity='1';item.style.visibility='visible';item.style.filter='none';item.style.transform='none';});
-  }
-}
-if('IntersectionObserver' in window){
-  const revealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');revealObserver.unobserve(entry.target);}}),{threshold:.12});
-  document.querySelectorAll('.reveal-on-scroll').forEach(element=>revealObserver.observe(element));
-}else document.querySelectorAll('.reveal-on-scroll').forEach(element=>element.classList.add('is-visible'));
-restoreAccount();
-$('faceitInlineForm').addEventListener('submit',async e=>{e.preventDefault();const input=$('faceitInlineInput'),message=$('faceitInlineMessage'),button=e.currentTarget.querySelector('button');let nickname=input.value.trim();try{if(/^https?:/i.test(nickname)){const parts=new URL(nickname).pathname.split('/').filter(Boolean);const i=parts.findIndex(x=>x.toLowerCase()==='players');nickname=(i>=0?parts[i+1]:parts[parts.length-1])||'';}button.disabled=true;message.textContent='FACEIT profili aranıyor…';const result=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});await setAccountState({...activeAccountData,authenticated:true,faceit_nickname:result.faceit_nickname,persistent_storage:result.persistent_storage},false);await selectMainTab('faceit');message.textContent='Profil bağlandı. Analiz yükleniyor…';await loadProfile(result.faceit_nickname);message.textContent='FACEIT profilin bağlandı ve analiz edildi.';}catch(error){message.textContent=error.message||'FACEIT profili bağlanamadı.';}finally{button.disabled=false;}});
+
 $('bannerRefresh').addEventListener('click',()=>loadSteamProfile());
 /* Portal-only presentation sync; all provider data and tab logic remain unchanged. */
 const renderAccountState=setAccountState;

@@ -24,7 +24,7 @@
         <button type="button" role="menuitem" data-profile-menu="settings"><span>⚙️</span> Hesap ayarları & FACEIT nick değiştir</button>
         <button type="button" role="menuitem" id="logoutButton" class="profile-logout"><span>🚪</span> Çıkış yap</button>
         <div id="profileSettingsPanel" class="profile-settings-panel" hidden>
-          <form id="faceitLinkForm" class="faceit-link-form"><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet</button></div></form>
+          
           <a id="steamConnectSetting" class="steam-link-button" href="/api/auth/steam?intent=link">Steam hesabını bağla ↗</a><span id="steamConnectedSetting" class="steam-connected-note" hidden>Steam hesabı bağlı</span><p class="account-copy">FACEIT hesabın varsa kullanıcı adını ekleyebilirsin. Bu herkese açık profili bulur; hesap sahipliğini doğrulamaz.</p><p id="accountPersistenceNote" class="account-copy"></p>
         </div>
         <div id="profileMessage" class="profile-message" role="status" aria-live="polite"></div>
