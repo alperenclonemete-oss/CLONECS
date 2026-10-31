@@ -1,0 +1,560 @@
+[
+  {
+    "rank": 1,
+    "player": "mezii",
+    "team": "Vitality",
+    "file": "/static/player-photos/01-mezii.png"
+  },
+  {
+    "rank": 1,
+    "player": "apEX",
+    "team": "Vitality",
+    "file": "/static/player-photos/01-apex.png"
+  },
+  {
+    "rank": 1,
+    "player": "ropz",
+    "team": "Vitality",
+    "file": "/static/player-photos/01-ropz.png"
+  },
+  {
+    "rank": 1,
+    "player": "flameZ",
+    "team": "Vitality",
+    "file": "/static/player-photos/01-flamez.png"
+  },
+  {
+    "rank": 1,
+    "player": "ZywOo",
+    "team": "Vitality",
+    "file": "/static/player-photos/01-zywoo.png"
+  },
+  {
+    "rank": 2,
+    "player": "YEKINDAR",
+    "team": "FURIA",
+    "file": "/static/player-photos/02-yekindar.png"
+  },
+  {
+    "rank": 2,
+    "player": "molodoy",
+    "team": "FURIA",
+    "file": "/static/player-photos/02-molodoy.png"
+  },
+  {
+    "rank": 2,
+    "player": "yuurih",
+    "team": "FURIA",
+    "file": "/static/player-photos/02-yuurih.png"
+  },
+  {
+    "rank": 2,
+    "player": "FalleN",
+    "team": "FURIA",
+    "file": "/static/player-photos/02-fallen.png"
+  },
+  {
+    "rank": 2,
+    "player": "KSCERATO",
+    "team": "FURIA",
+    "file": "/static/player-photos/02-kscerato.png"
+  },
+  {
+    "rank": 3,
+    "player": "iM",
+    "team": "Natus Vincere",
+    "file": "/static/player-photos/03-im.png"
+  },
+  {
+    "rank": 3,
+    "player": "makazze",
+    "team": "Natus Vincere",
+    "file": "/static/player-photos/03-makazze.png"
+  },
+  {
+    "rank": 3,
+    "player": "b1t",
+    "team": "Natus Vincere",
+    "file": "/static/player-photos/03-b1t.png"
+  },
+  {
+    "rank": 3,
+    "player": "w0nderful",
+    "team": "Natus Vincere",
+    "file": "/static/player-photos/03-w0nderful.png"
+  },
+  {
+    "rank": 3,
+    "player": "Aleksib",
+    "team": "Natus Vincere",
+    "file": "/static/player-photos/03-aleksib.png"
+  },
+  {
+    "rank": 4,
+    "player": "m0NESY",
+    "team": "Falcons",
+    "file": "/static/player-photos/04-m0nesy.png"
+  },
+  {
+    "rank": 4,
+    "player": "NiKo",
+    "team": "Falcons",
+    "file": "/static/player-photos/04-niko.png"
+  },
+  {
+    "rank": 4,
+    "player": "TeSeS",
+    "team": "Falcons",
+    "file": "/static/player-photos/04-teses.png"
+  },
+  {
+    "rank": 4,
+    "player": "kyxsan",
+    "team": "Falcons",
+    "file": "/static/player-photos/04-kyxsan.png"
+  },
+  {
+    "rank": 4,
+    "player": "kyousuke",
+    "team": "Falcons",
+    "file": "/static/player-photos/04-kyousuke.png"
+  },
+  {
+    "rank": 5,
+    "player": "xiELO",
+    "team": "PARIVISION",
+    "file": "/static/player-photos/05-xielo.png"
+  },
+  {
+    "rank": 5,
+    "player": "BELCHONOKK",
+    "team": "PARIVISION",
+    "file": "/static/player-photos/05-belchonokk.png"
+  },
+  {
+    "rank": 5,
+    "player": "Jame",
+    "team": "PARIVISION",
+    "file": "/static/player-photos/05-jame.png"
+  },
+  {
+    "rank": 5,
+    "player": "zweih",
+    "team": "PARIVISION",
+    "file": "/static/player-photos/05-zweih.png"
+  },
+  {
+    "rank": 6,
+    "player": "torzsi",
+    "team": "MOUZ",
+    "file": "/static/player-photos/06-torzsi.png"
+  },
+  {
+    "rank": 6,
+    "player": "Spinx",
+    "team": "MOUZ",
+    "file": "/static/player-photos/06-spinx.png"
+  },
+  {
+    "rank": 6,
+    "player": "Brollan",
+    "team": "MOUZ",
+    "file": "/static/player-photos/06-brollan.png"
+  },
+  {
+    "rank": 6,
+    "player": "xertioN",
+    "team": "MOUZ",
+    "file": "/static/player-photos/06-xertion.png"
+  },
+  {
+    "rank": 6,
+    "player": "Jimpphat",
+    "team": "MOUZ",
+    "file": "/static/player-photos/06-jimpphat.png"
+  },
+  {
+    "rank": 7,
+    "player": "MAJ3R",
+    "team": "Aurora",
+    "file": "/static/player-photos/07-maj3r.png"
+  },
+  {
+    "rank": 7,
+    "player": "XANTARES",
+    "team": "Aurora",
+    "file": "/static/player-photos/07-xantares.png"
+  },
+  {
+    "rank": 7,
+    "player": "woxic",
+    "team": "Aurora",
+    "file": "/static/player-photos/07-woxic.png"
+  },
+  {
+    "rank": 7,
+    "player": "Wicadia",
+    "team": "Aurora",
+    "file": "/static/player-photos/07-wicadia.png"
+  },
+  {
+    "rank": 7,
+    "player": "soulfly",
+    "team": "Aurora",
+    "file": "/static/player-photos/07-soulfly.png"
+  },
+  {
+    "rank": 8,
+    "player": "cobrazera",
+    "team": "The MongolZ",
+    "file": "/static/player-photos/08-cobrazera.png"
+  },
+  {
+    "rank": 8,
+    "player": "910",
+    "team": "The MongolZ",
+    "file": "/static/player-photos/08-910.png"
+  },
+  {
+    "rank": 8,
+    "player": "mzinho",
+    "team": "The MongolZ",
+    "file": "/static/player-photos/08-mzinho.png"
+  },
+  {
+    "rank": 8,
+    "player": "bLitz",
+    "team": "The MongolZ",
+    "file": "/static/player-photos/08-blitz.png"
+  },
+  {
+    "rank": 9,
+    "player": "sh1ro",
+    "team": "Spirit",
+    "file": "/static/player-photos/09-sh1ro.png"
+  },
+  {
+    "rank": 9,
+    "player": "magixx",
+    "team": "Spirit",
+    "file": "/static/player-photos/09-magixx.png"
+  },
+  {
+    "rank": 9,
+    "player": "tN1R",
+    "team": "Spirit",
+    "file": "/static/player-photos/09-tn1r.png"
+  },
+  {
+    "rank": 9,
+    "player": "donk",
+    "team": "Spirit",
+    "file": "/static/player-photos/09-donk.png"
+  },
+  {
+    "rank": 9,
+    "player": "zont1x",
+    "team": "Spirit",
+    "file": "/static/player-photos/09-zont1x.png"
+  },
+  {
+    "rank": 10,
+    "player": "phzy",
+    "team": "Astralis",
+    "file": "/static/player-photos/10-phzy.png"
+  },
+  {
+    "rank": 10,
+    "player": "HooXi",
+    "team": "Astralis",
+    "file": "/static/player-photos/10-hooxi.png"
+  },
+  {
+    "rank": 10,
+    "player": "Staehr",
+    "team": "Astralis",
+    "file": "/static/player-photos/10-staehr.png"
+  },
+  {
+    "rank": 10,
+    "player": "ryu",
+    "team": "Astralis",
+    "file": "/static/player-photos/10-ryu.png"
+  },
+  {
+    "rank": 11,
+    "player": "karrigan",
+    "team": "FaZe",
+    "file": "/static/player-photos/11-karrigan.png"
+  },
+  {
+    "rank": 11,
+    "player": "broky",
+    "team": "FaZe",
+    "file": "/static/player-photos/11-broky.png"
+  },
+  {
+    "rank": 11,
+    "player": "Twistzz",
+    "team": "FaZe",
+    "file": "/static/player-photos/11-twistzz.png"
+  },
+  {
+    "rank": 11,
+    "player": "jcobbb",
+    "team": "FaZe",
+    "file": "/static/player-photos/11-jcobbb.png"
+  },
+  {
+    "rank": 11,
+    "player": "frozen",
+    "team": "FaZe",
+    "file": "/static/player-photos/11-frozen.png"
+  },
+  {
+    "rank": 12,
+    "player": "MATYS",
+    "team": "G2",
+    "file": "/static/player-photos/12-matys.png"
+  },
+  {
+    "rank": 12,
+    "player": "SunPayus",
+    "team": "G2",
+    "file": "/static/player-photos/12-sunpayus.png"
+  },
+  {
+    "rank": 12,
+    "player": "NertZ",
+    "team": "G2",
+    "file": "/static/player-photos/12-nertz.png"
+  },
+  {
+    "rank": 12,
+    "player": "HeavyGod",
+    "team": "G2",
+    "file": "/static/player-photos/12-heavygod.png"
+  },
+  {
+    "rank": 12,
+    "player": "huNter-",
+    "team": "G2",
+    "file": "/static/player-photos/12-hunter.png"
+  },
+  {
+    "rank": 13,
+    "player": "cmtry",
+    "team": "FUT",
+    "file": "/static/player-photos/13-cmtry.png"
+  },
+  {
+    "rank": 14,
+    "player": "saadzin",
+    "team": "Legacy",
+    "file": "/static/player-photos/14-saadzin.png"
+  },
+  {
+    "rank": 15,
+    "player": "Ex3rcice",
+    "team": "3DMAX",
+    "file": "/static/player-photos/15-ex3rcice.png"
+  },
+  {
+    "rank": 16,
+    "player": "nilo",
+    "team": "HEROIC",
+    "file": "/static/player-photos/16-nilo.png"
+  },
+  {
+    "rank": 16,
+    "player": "Chr1zN",
+    "team": "HEROIC",
+    "file": "/static/player-photos/16-chr1zn.png"
+  },
+  {
+    "rank": 16,
+    "player": "susp",
+    "team": "HEROIC",
+    "file": "/static/player-photos/16-susp.png"
+  },
+  {
+    "rank": 18,
+    "player": "malbsMd",
+    "team": "Liquid",
+    "file": "/static/player-photos/18-malbsmd.png"
+  },
+  {
+    "rank": 18,
+    "player": "siuhy",
+    "team": "Liquid",
+    "file": "/static/player-photos/18-siuhy.png"
+  },
+  {
+    "rank": 18,
+    "player": "NAF",
+    "team": "Liquid",
+    "file": "/static/player-photos/18-naf.png"
+  },
+  {
+    "rank": 18,
+    "player": "EliGE",
+    "team": "Liquid",
+    "file": "/static/player-photos/18-elige.png"
+  },
+  {
+    "rank": 19,
+    "player": "biguzera",
+    "team": "paiN",
+    "file": "/static/player-photos/19-biguzera.png"
+  },
+  {
+    "rank": 19,
+    "player": "snow",
+    "team": "paiN",
+    "file": "/static/player-photos/19-snow.png"
+  },
+  {
+    "rank": 21,
+    "player": "JamYoung",
+    "team": "TYLOO",
+    "file": "/static/player-photos/21-jamyoung.png"
+  },
+  {
+    "rank": 21,
+    "player": "Jee",
+    "team": "TYLOO",
+    "file": "/static/player-photos/21-jee.png"
+  },
+  {
+    "rank": 21,
+    "player": "Mercury",
+    "team": "TYLOO",
+    "file": "/static/player-photos/21-mercury.png"
+  },
+  {
+    "rank": 21,
+    "player": "Moseyuh",
+    "team": "TYLOO",
+    "file": "/static/player-photos/21-moseyuh.png"
+  },
+  {
+    "rank": 21,
+    "player": "Zero",
+    "team": "TYLOO",
+    "file": "/static/player-photos/21-zero.png"
+  },
+  {
+    "rank": 22,
+    "player": "Snax",
+    "team": "GamerLegion",
+    "file": "/static/player-photos/22-snax.png"
+  },
+  {
+    "rank": 22,
+    "player": "Tauson",
+    "team": "GamerLegion",
+    "file": "/static/player-photos/22-tauson.png"
+  },
+  {
+    "rank": 22,
+    "player": "hypex",
+    "team": "GamerLegion",
+    "file": "/static/player-photos/22-hypex.png"
+  },
+  {
+    "rank": 22,
+    "player": "REZ",
+    "team": "GamerLegion",
+    "file": "/static/player-photos/22-rez.png"
+  },
+  {
+    "rank": 22,
+    "player": "PR",
+    "team": "GamerLegion",
+    "file": "/static/player-photos/22-pr.png"
+  },
+  {
+    "rank": 23,
+    "player": "Gizmy",
+    "team": "Monte",
+    "file": "/static/player-photos/23-gizmy.png"
+  },
+  {
+    "rank": 24,
+    "player": "r1nkle",
+    "team": "Ninjas in Pyjamas",
+    "file": "/static/player-photos/24-r1nkle.png"
+  },
+  {
+    "rank": 25,
+    "player": "Sonic",
+    "team": "NRG",
+    "file": "/static/player-photos/25-sonic.png"
+  },
+  {
+    "rank": 25,
+    "player": "nitr0",
+    "team": "NRG",
+    "file": "/static/player-photos/25-nitr0.png"
+  },
+  {
+    "rank": 25,
+    "player": "Grim",
+    "team": "NRG",
+    "file": "/static/player-photos/25-grim.png"
+  },
+  {
+    "rank": 26,
+    "player": "MartinezSa",
+    "team": "Gentle Mates",
+    "file": "/static/player-photos/26-martinezsa.png"
+  },
+  {
+    "rank": 28,
+    "player": "FL4MUS",
+    "team": "BetBoom",
+    "file": "/static/player-photos/28-fl4mus.png"
+  },
+  {
+    "rank": 28,
+    "player": "Magnojez",
+    "team": "BetBoom",
+    "file": "/static/player-photos/28-magnojez.png"
+  },
+  {
+    "rank": 28,
+    "player": "S1ren",
+    "team": "BetBoom",
+    "file": "/static/player-photos/28-s1ren.png"
+  },
+  {
+    "rank": 28,
+    "player": "Boombl4",
+    "team": "BetBoom",
+    "file": "/static/player-photos/28-boombl4.png"
+  },
+  {
+    "rank": 28,
+    "player": "zorte",
+    "team": "BetBoom",
+    "file": "/static/player-photos/28-zorte.png"
+  },
+  {
+    "rank": 30,
+    "player": "Senzu",
+    "team": "Passion UA",
+    "file": "/static/player-photos/30-senzu.png"
+  },
+  {
+    "rank": 30,
+    "player": "JT",
+    "team": "Passion UA",
+    "file": "/static/player-photos/30-jt.png"
+  },
+  {
+    "rank": 30,
+    "player": "Kvem",
+    "team": "Passion UA",
+    "file": "/static/player-photos/30-kvem.png"
+  }
+]

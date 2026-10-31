@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance · CloneCS 2.2
+# CLONE LAB · FACEIT Performance · CloneCS 2.4
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -146,3 +146,9 @@ Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık k
 - Kadro listesi tarihli statik dosyadır; açılışta HLTV'den güncelleme çekmez.
 - Oyuncu ayarları halen açık kaynak profillerinden gelen alanlarla sınırlıdır. Bazı top 30 oyuncular için uygulamada ayrıntılı CFG bulunmayabilir; eksik alanlar gerçekmiş gibi doldurulmaz.
 
+
+## CLONE LAB 2.4 — CFG arşivi ve görsel iyileştirmeleri
+- `static/configs/` içinde Top 30 kadrosundaki 150 oyuncunun indirilebilir CFG dosyaları bulunur; `static/player-config-index.json` eşleştirme ve kaynak profili bağlantılarını içerir.
+- CFG dosyaları yayımlanmış kaynaklardan derlenmiştir. Kaynakta olmayan ayarlar tahmin edilmez. Üç oyuncunun temel ayar dosyası alternatif açık kaynaklardan hazırlanmıştır ve kaynakları indeks dosyasında görünür.
+- Bulunabilen 93 oyuncu portresi yerel dosya olarak sunulur. Kalan portrelerde dış kaynak denenir; fotoğraf bulunamazsa oyuncu baş harfleri görünür.
+- FaZe, FURIA, Legacy, 3DMAX, HEROIC, 9z, B8, Monte, NiP, HOTU ve Passion UA için daha yüksek çözünürlüklü logolar `static/team-logos/` içine eklendi. Ek M80 logosu Top 30 dışında ayrı gösterilir. Kaynak bağlantıları `static/team-logo-sources.json` dosyasındadır.
