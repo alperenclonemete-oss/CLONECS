@@ -1,5 +1,7 @@
 const $ = (id) => document.getElementById(id);
 let activePlayerId=null;
+let activeAccountData={};
+let steamProfileLoaded=false;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path, options={}) {
   const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
@@ -206,7 +208,7 @@ async function loadProConfigs(){
   try{const [data,rankingResponse,cfgResponse,photoResponse,localResponse]=await Promise.all([api('/api/pro-configs').catch(()=>({items:[]})),fetch('/static/hltv-top30.json'),fetch('/static/player-config-index.json'),fetch('/static/player-photo-index.json'),fetch('/static/pro_players.json')]);if(!rankingResponse.ok)throw new Error('HLTV takım listesi yüklenemedi.');const ranking=await rankingResponse.json();const localSnapshot=localResponse.ok?await localResponse.json():{};proConfigItems=mergeProConfigItems(data.items,localSnapshot.players);hltvTeams=Array.isArray(ranking.teams)?ranking.teams:[];hltvRankingMeta=ranking;playerConfigFiles=cfgResponse.ok?await cfgResponse.json():[];playerPhotoFiles=photoResponse.ok?await photoResponse.json():[];if(hltvTeams.length!==29||hltvTeams.some(team=>team.players.length!==5))throw new Error('HLTV liste dosyası 29 takım ve beşer kişilik kadro içermeli.');renderConfigTeams();proConfigLoaded=true;$('configStatus').className='notice';$('configStatus').innerHTML=`HLTV · ${esc(ranking.ranking_date)} sıralaması · ${hltvTeams.length} takım / ${hltvTeams.reduce((n,t)=>n+t.players.length,0)} oyuncu · ${playerConfigFiles.length} indirilebilir CFG · ${playerPhotoFiles.filter(item=>item.file).length} yerel + ${playerPhotoFiles.filter(item=>item.remote_url).length} uzak kaynaklı portre · <a href="${esc(ranking.source_url)}" target="_blank" rel="noopener noreferrer">kaynağı aç ↗</a>${ranking.note?`<span class="config-note">${esc(ranking.note)}</span>`:''}`; }
   catch(error){$('configTeamsGrid').innerHTML='';$('configStatus').textContent=error.message;$('configStatus').className='error';}
 }
-$('appTabs').addEventListener('click',async event=>{const button=event.target.closest('[data-tab]');if(button)await selectMainTab(button.dataset.tab==='configs');});
+$('appTabs').addEventListener('click',async event=>{const button=event.target.closest('[data-tab]');if(button)await selectMainTab(button.dataset.tab);});
 $('configSearch').addEventListener('input',renderConfigTeams);
 $('configTeamsGrid').addEventListener('click',event=>{const card=event.target.closest('[data-config-team]');if(card)openConfigTeam(card.dataset.configTeam)});
 $('configPlayersGrid').addEventListener('click',event=>{const card=event.target.closest('[data-config-player]');if(card)renderTop30Player(card.dataset.configPlayer,$('configSelectedTeam').textContent.replace(/^#\d+\s*/,''))});
@@ -214,8 +216,14 @@ $('configBackTeams').addEventListener('click',()=>{$('configPlayersView').hidden
 $('configBackPlayers').addEventListener('click',()=>{$('configProfileView').hidden=true;$('configPlayersView').hidden=false});
 $('configProfile').addEventListener('click',async event=>{const button=event.target.closest('[data-copy-crosshair]');if(!button)return;try{await navigator.clipboard.writeText(button.dataset.copyCrosshair);button.textContent='Kopyalandı';setTimeout(()=>button.textContent='Kodu kopyala',1500);}catch{$('configStatus').textContent='Panoya erişilemedi; crosshair kodunu seçip kopyalayabilirsin.';}});
 function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('configPlayersView').hidden=view!=='players';$('configProfileView').hidden=view!=='profile';$('configFavoritesView').hidden=view!=='favorites'}
-async function selectMainTab(configs){const button=document.querySelector(`.app-tab[data-tab="${configs?'configs':'faceit'}"]`);$('faceitTab').hidden=configs;$('configsTab').hidden=!configs;document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab===button)));if(configs)await loadProConfigs();}
-function closeProfileMenu(){const menu=$('profileDropdown');menu.classList.remove('is-open');$('profileMenuButton').setAttribute('aria-expanded','false');setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},150)}
+async function selectMainTab(target){
+  const selected=typeof target==='string'?target:(target?'configs':'faceit');
+  const panels={faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab')};
+  Object.entries(panels).forEach(([name,panel])=>{panel.hidden=name!==selected;});
+  document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
+  if(selected==='configs')await loadProConfigs();
+  if(selected==='steam')await loadSteamProfile();
+}function closeProfileMenu(){const menu=$('profileDropdown');menu.classList.remove('is-open');$('profileMenuButton').setAttribute('aria-expanded','false');setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},150)}
 $('profileMenuButton').addEventListener('click',()=>{const menu=$('profileDropdown'),open=menu.hidden;menu.hidden=!open;$('profileMenuButton').setAttribute('aria-expanded',String(open));requestAnimationFrame(()=>menu.classList.toggle('is-open',open));});
 $('profileDropdown').addEventListener('click',async event=>{
   const favorite=event.target.closest('[data-toggle-favorite]');if(favorite){const saved=toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);favorite.classList.toggle('is-saved',saved);favorite.setAttribute('aria-pressed',String(saved));favorite.textContent=saved?'🔖 Favorilerde':'☆ Favorilere ekle';return;}
@@ -263,30 +271,50 @@ document.querySelectorAll('[data-auth-open]').forEach(button=>button.addEventLis
 document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>setAuthMode(button.dataset.authMode)));
 document.querySelectorAll('[data-auth-close]').forEach(button=>button.addEventListener('click',closeAuthModal));
 async function setAccountState(data,openSavedProfile=false){
+  if(data?.authenticated){data={...activeAccountData,...data};activeAccountData=data;}else activeAccountData={};
   const loggedIn=Boolean(data?.authenticated);
-  $('landingPage').hidden=loggedIn;
-  $('authActions').hidden=loggedIn;
-  $('appBranding').hidden=!loggedIn;
-  $( 'appTabs' ).hidden=!loggedIn; $( 'faceitTab' ).hidden=!loggedIn; $( 'configsTab' ).hidden=true; document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
+  $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
+  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;
+  document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
   $('authLoggedOut').hidden=loggedIn;$('profileWidget').hidden=!loggedIn;
-  if(loggedIn) closeAuthModal();
-  if(!loggedIn){ $('results').innerHTML=''; $('error').textContent=''; $('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.';activePlayerId=null;$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;closeProfileMenu();return; }
+  if(loggedIn)closeAuthModal();
+  if(!loggedIn){
+    $('results').innerHTML='';$('error').textContent='';$('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.';
+    $('steamResults').innerHTML='';$('steamStatus').textContent='Steam verisi henüz yüklenmedi.';$('steamFaceitPrompt').hidden=true;$('steamNotConnected').hidden=true;$('steamConnectSetting').hidden=true;$('steamConnectedSetting').hidden=true;steamProfileLoaded=false;activePlayerId=null;
+    $('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;closeProfileMenu();return;
+  }
   $('profileMenuAccount').textContent=data.username||'';
+  $('profileMenuSteam').textContent=data.steam_id?'Steam · '+(data.steam_persona_name||data.username):'Steam hesabı bağlı değil';
+  $('profileMenuFaceit').textContent=data.faceit_nickname?`FACEIT · ${data.faceit_nickname}`:'FACEIT profili bağlı değil';
   $('savedFaceitNickname').value=data.faceit_nickname||'';
-  $('profileWidgetName').textContent=data.faceit_nickname||data.username||'';$('profileMenuFaceit').textContent=data.faceit_nickname?`FACEIT · ${data.faceit_nickname}`:'FACEIT profili bağlanmadı';
-  $('profileWidgetInitials').textContent=String(data.username||'CL').slice(0,2).toUpperCase();$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;$('profileSettingsPanel').hidden=true;
-  if(data.faceit_nickname&&openSavedProfile) await loadProfile(data.faceit_nickname); else if(!data.faceit_nickname) $( 'status' ).textContent='Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.';
-}
-function accountMessage(text,type=''){
+  $('profileWidgetName').textContent=data.faceit_nickname||data.steam_persona_name||data.username||'';
+  $('steamFaceitPrompt').hidden=!data.steam_id||Boolean(data.faceit_nickname);$('steamNotConnected').hidden=Boolean(data.steam_id);
+  $('steamConnectSetting').hidden=Boolean(data.steam_id);$('steamConnectedSetting').hidden=!data.steam_id;
+  $('profileWidgetInitials').textContent=String(data.username||'CL').slice(0,2).toUpperCase();
+  if(data.steam_avatar_url){$('profileWidgetAvatar').src=data.steam_avatar_url;$('profileWidgetAvatar').hidden=false;$('profileWidgetInitials').hidden=true;}else{$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;}
+  $('profileSettingsPanel').hidden=true;
+  if(data.faceit_nickname&&openSavedProfile)await loadProfile(data.faceit_nickname);
+  else if(!data.faceit_nickname)$('status').textContent=data.steam_id?'Steam hesabın hazır. FACEIT profilin varsa ekleyebilir veya daha sonra bağlayabilirsin.':'Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.';
+}function accountMessage(text,type=''){
   const el=$('authMessage');el.textContent=text;el.className='account-message'+(type?' '+type:'');const profile=$('profileMessage');profile.textContent=text;profile.className='profile-message'+(type?' '+type:'');
 }
 async function restoreAccount(){
-  try{const data=await api('/api/account');await setAccountState(data,true);}
-  catch(e){accountMessage('Hesap bilgisi alınamadı: '+e.message,'error');}
-}
-async function submitAuth(form,path){
+  try{
+    const data=await api('/api/account');
+    const params=new URLSearchParams(location.search),steamResult=params.get('steam_login'),reason=params.get('reason');
+    await setAccountState(data,true);
+    if(steamResult==='success'||steamResult==='linked'){
+      $('status').textContent=steamResult==='linked'?'Steam hesabı Clone Lab hesabına bağlandı.':'Steam ile giriş başarılı. FACEIT kullanıyorsan profil menüsünden ekleyebilirsin.';
+      if(data.steam_id&&!data.faceit_nickname){$('steamFaceitPrompt').hidden=false;}
+      history.replaceState({},'',location.pathname+location.hash);
+    }else if(steamResult==='error'){
+      const messages={state:'Steam giriş doğrulaması başarısız oldu. Lütfen tekrar dene.',expired:'Steam giriş isteğinin süresi doldu. Tekrar dene.',cancelled:'Steam girişi iptal edildi.',setup:'Steam girişi için sunucu adresi yapılandırılmamış.',return:'Steam dönüş adresi doğrulanamadı.',identity:'Steam hesabı doğrulanamadı.',verify:'Steam doğrulama sunucusuna erişilemedi.',already_linked:'Bu Steam hesabı başka bir Clone Lab hesabına bağlı.'};
+      openAuthModal('login');accountMessage(messages[reason]||'Steam ile giriş tamamlanamadı. Tekrar dene.','error');history.replaceState({},'',location.pathname+location.hash);
+    }
+  }catch(e){accountMessage('Hesap bilgisi alınamadı: '+e.message,'error');}
+}async function submitAuth(form,path){
   const button=form.querySelector('button[type="submit"]');button.disabled=true;accountMessage('Hesabın kontrol ediliyor…');
   try{
     const body=Object.fromEntries(new FormData(form).entries());
@@ -297,6 +325,29 @@ async function submitAuth(form,path){
   }catch(e){accountMessage(e.message,'error');}
   finally{button.disabled=false;}
 }
+function steamMetric(label,value,suffix=''){
+  const shown=value===null||value===undefined?'—':String(value)+suffix;
+  return `<article class="steam-metric"><span>${esc(label)}</span><b>${esc(shown)}</b></article>`;
+}
+function renderSteamProfile(data){
+  const profile=data.steam||{},cs2=data.cs2||{};
+  const hours=value=>value!==null&&value!==undefined&&Number.isFinite(Number(value))?Math.round(Number(value)/60).toLocaleString('tr-TR')+' saat':null;
+  const metrics=[steamMetric('Toplam CS2 süresi',hours(cs2.playtime_minutes)),steamMetric('Son 2 haftada',hours(cs2.recent_playtime_minutes)),steamMetric('Steam oyun istatistiği',cs2.stats_available?cs2.stats.length:null,' kayıt')].join('');
+  const avatar=profile.avatar_url?`<img class="steam-profile-avatar" src="${esc(profile.avatar_url)}" alt="${esc(profile.persona_name||'Steam')} avatarı">`:'<div class="steam-profile-avatar steam-avatar-fallback">S</div>';
+  const stats=(cs2.stats||[]).map(item=>`<div class="steam-stat-row"><span>${esc(String(item.name).replaceAll('_',' '))}</span><b>${esc(item.value)}</b></div>`).join('');
+  const statusNote=data.unavailable_sources?.length?`<p class="notice">Gizlilik ayarları veya Steam API erişimi nedeniyle bazı alanlar alınamadı: ${esc(data.unavailable_sources.join(', '))}.</p>`:'';
+  $('steamResults').innerHTML=`<section class="steam-profile-card">${avatar}<div class="steam-profile-copy"><span class="eyebrow">STEAM PLAYER</span><h2>${esc(profile.persona_name||'Steam hesabı')}</h2><a href="${esc(profile.profile_url||'#')}" target="_blank" rel="noopener noreferrer">Steam profilini aç ↗</a></div><span class="steam-app-badge">COUNTER-STRIKE 2 · 730</span></section><div class="steam-metrics">${metrics}</div>${stats?`<details class="steam-stats-details"><summary>Steam’in yayımladığı ${stats.length} oyun istatistiği</summary><div class="steam-stats-grid">${stats}</div></details>`:'<div class="notice">Steam bu profil için herkese açık CS2 oyun istatistiği döndürmedi.</div>'}<section class="steam-history-note"><b>Maç geçmişi</b><p>${esc(cs2.match_history?.message||'Steam Web API kişisel CS2 maç geçmişini maç maç sağlamıyor.')}</p></section>${statusNote}<p class="steam-source">Kaynak: ${esc(data.source||'Steam Web API')}. ${esc(data.privacy_note||'Gizlilik ayarları erişilebilir alanları etkileyebilir.')}</p>`;
+}
+async function loadSteamProfile(){
+  if(!activeAccountData.steam_id){$('steamNotConnected').hidden=false;$('steamStatus').textContent='Steam hesabı bağlı değil.';$('steamResults').innerHTML='';return;}
+  $('steamNotConnected').hidden=true;$('steamStatus').className='notice';$('steamStatus').innerHTML='<div class="skeleton-stack" aria-label="Steam verisi yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div>';
+  try{const data=await api('/api/steam/profile');renderSteamProfile(data);steamProfileLoaded=true;$('steamStatus').textContent='Steam hesabı doğrulandı. Yalnızca API’den alınan alanlar gösteriliyor.';}
+  catch(error){$('steamResults').innerHTML='';$('steamStatus').textContent=error.message;$('steamStatus').className='error';}
+}
+$('steamRefresh').addEventListener('click',()=>loadSteamProfile());
+$('connectFaceitPrompt').addEventListener('click',event=>{
+  event.stopPropagation();$('profileDropdown').hidden=false;$('profileMenuButton').setAttribute('aria-expanded','true');$('profileDropdown').classList.add('is-open');$('profileSettingsPanel').hidden=false;$('savedFaceitNickname').focus();
+});
 $('loginForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/login');});
 $('registerForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/register');});
 $('faceitLinkForm').addEventListener('submit',async e=>{

@@ -4,22 +4,28 @@ import asyncio
 import json
 import os
 import re
+import secrets
+from urllib.parse import quote, urlencode, urlsplit
 from pathlib import Path
 from typing import Any
 
 import httpx
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query, Request, Response
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 load_dotenv()
 
-from account_store import authenticate_user, create_session, create_user, delete_session, get_user_for_session, init_database, persistent_storage_configured, save_faceit_nickname
+from account_store import authenticate_user, consume_steam_login_state, create_session, create_steam_login_state, create_user, delete_session, get_user_for_session, init_database, link_steam_account, persistent_storage_configured, save_faceit_nickname, upsert_steam_user
 
 BASE_DIR = Path(__file__).resolve().parent
 FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
 FACEIT_GAME_ID = os.getenv("FACEIT_GAME_ID", "cs2").strip() or "cs2"
 FACEIT_BASE_URL = "https://open.faceit.com/data/v4"
+STEAM_API_KEY = os.getenv("STEAM_API_KEY", "").strip()
+STEAM_API_BASE = "https://api.steampowered.com"
+STEAM_OPENID_URL = "https://steamcommunity.com/openid/login"
+STEAM_APP_ID = 730
 
 app = FastAPI(title="CLONE LAB", version="2.5.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -155,9 +161,198 @@ async def pro_configs():
         "fallback": True,
         "notice": "Ayar snapshot'ı okunamadı; yerel oyuncu/CFG dizini ve kadro yedeği kullanılıyor.",
     }
+def _public_base_url(request: Request) -> str:
+    base = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
+    if not base:
+        if os.getenv("RENDER"):
+            raise HTTPException(status_code=503, detail="Steam girişini açmak için sunucuya PUBLIC_BASE_URL ayarlayın.")
+        base = str(request.base_url).rstrip("/")
+    parts = urlsplit(base)
+    if parts.scheme not in ("http", "https") or not parts.netloc or parts.path not in ("", "/"):
+        raise HTTPException(status_code=503, detail="PUBLIC_BASE_URL geçerli bir site adresi olmalı.")
+    if os.getenv("RENDER") and parts.scheme != "https":
+        raise HTTPException(status_code=503, detail="Yayındaki Steam girişi için PUBLIC_BASE_URL https:// ile başlamalı.")
+    return base
+
+
+def _steam_redirect(request: Request, result: str, reason: str | None = None, token: str | None = None) -> RedirectResponse:
+    base = os.getenv("PUBLIC_BASE_URL", "").strip().rstrip("/")
+    if not base:
+        base = str(request.base_url).rstrip("/")
+    query = {"steam_login": result}
+    if reason:
+        query["reason"] = reason
+    response = RedirectResponse(f"{base}/?{urlencode(query)}", status_code=303)
+    response.delete_cookie("steam_oauth_state", path="/api/auth/steam", httponly=True, secure=os.getenv("COOKIE_SECURE", "").lower() in ("1", "true", "yes"), samesite="lax")
+    if token:
+        set_session_cookie(response, token)
+    return response
+
+
+async def steam_api_get(interface: str, method: str, params: dict[str, Any]) -> dict[str, Any]:
+    if not STEAM_API_KEY:
+        raise HTTPException(status_code=503, detail="STEAM_API_KEY sunucuda ayarlanmamış.")
+    query = {"key": STEAM_API_KEY, "format": "json", **params}
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            response = await client.get(f"{STEAM_API_BASE}/{interface}/{method}/v1/" if method != "GetPlayerSummaries" and method != "GetUserStatsForGame" else f"{STEAM_API_BASE}/{interface}/{method}/v2/", params=query)
+    except httpx.HTTPError as exc:
+        raise HTTPException(status_code=502, detail=f"Steam API bağlantı hatası: {exc.__class__.__name__}") from exc
+    if response.status_code in (401, 403):
+        raise HTTPException(status_code=502, detail="Steam API erişimi reddedildi. API anahtarını ve profil görünürlüğünü kontrol et.")
+    if response.status_code >= 400:
+        raise HTTPException(status_code=502, detail=f"Steam API HTTP {response.status_code} döndürdü.")
+    try:
+        return response.json()
+    except ValueError as exc:
+        raise HTTPException(status_code=502, detail="Steam API geçerli JSON döndürmedi.") from exc
+
+
+async def steam_player_summary(steam_id: str) -> dict[str, Any] | None:
+    if not STEAM_API_KEY:
+        return None
+    try:
+        payload = await steam_api_get("ISteamUser", "GetPlayerSummaries", {"steamids": steam_id})
+    except HTTPException:
+        return None
+    players = ((payload.get("response") or {}).get("players") or [])
+    return players[0] if players else None
+
+
+@app.get("/api/auth/steam")
+async def steam_auth_start(request: Request, intent: str = Query(default="login", pattern="^(login|link)$")):
+    user_id = None
+    if intent == "link":
+        user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
+        if not user:
+            raise HTTPException(status_code=401, detail="Steam’i bağlamak için önce Clone Lab hesabına giriş yap.")
+        user_id = user["user_id"]
+    base = _public_base_url(request)
+    state = secrets.token_urlsafe(32)
+    await asyncio.to_thread(create_steam_login_state, state, user_id)
+    return_to = f"{base}/api/auth/steam/callback?state={quote(state)}"
+    params = {
+        "openid.ns": "http://specs.openid.net/auth/2.0",
+        "openid.mode": "checkid_setup",
+        "openid.return_to": return_to,
+        "openid.realm": f"{base}/",
+        "openid.identity": "http://specs.openid.net/auth/2.0/identifier_select",
+        "openid.claimed_id": "http://specs.openid.net/auth/2.0/identifier_select",
+    }
+    response = RedirectResponse(f"{STEAM_OPENID_URL}?{urlencode(params)}", status_code=303)
+    response.set_cookie("steam_oauth_state", state, max_age=600, path="/api/auth/steam", httponly=True, secure=os.getenv("COOKIE_SECURE", "").lower() in ("1", "true", "yes"), samesite="lax")
+    return response
+
+
+@app.get("/api/auth/steam/callback")
+async def steam_auth_callback(request: Request):
+    state = request.query_params.get("state", "")
+    state_cookie = request.cookies.get("steam_oauth_state", "")
+    if not state or not state_cookie or not secrets.compare_digest(state, state_cookie):
+        return _steam_redirect(request, "error", "state")
+    state_record = await asyncio.to_thread(consume_steam_login_state, state)
+    if not state_record:
+        return _steam_redirect(request, "error", "expired")
+    query = dict(request.query_params)
+    if query.get("openid.mode") != "id_res":
+        return _steam_redirect(request, "error", "cancelled")
+    try:
+        base = _public_base_url(request)
+    except HTTPException:
+        return _steam_redirect(request, "error", "setup")
+    expected_return_to = f"{base}/api/auth/steam/callback?state={quote(state)}"
+    if query.get("openid.return_to") != expected_return_to or query.get("openid.op_endpoint") != STEAM_OPENID_URL:
+        return _steam_redirect(request, "error", "return")
+    claimed_id = query.get("openid.claimed_id", "")
+    identity = query.get("openid.identity", "")
+    match = re.fullmatch(r"https://steamcommunity\.com/openid/id/(\d{17})", claimed_id)
+    if not match or identity != claimed_id:
+        return _steam_redirect(request, "error", "identity")
+    verification = {key: value for key, value in query.items() if key.startswith("openid.")}
+    verification["openid.mode"] = "check_authentication"
+    try:
+        async with httpx.AsyncClient(timeout=15.0) as client:
+            verified = await client.post(STEAM_OPENID_URL, data=verification)
+        if verified.status_code != 200 or not re.search(r"(?:^|\r?\n)is_valid:true(?:\r?\n|$)", verified.text):
+            return _steam_redirect(request, "error", "verify")
+    except httpx.HTTPError:
+        return _steam_redirect(request, "error", "verify")
+    steam_id = match.group(1)
+    summary = await steam_player_summary(steam_id)
+    persona_name = str(summary.get("personaname") or "") if summary else None
+    avatar_url = str(summary.get("avatarfull") or "") if summary else None
+    link_user_id = state_record.get("user_id")
+    try:
+        if link_user_id:
+            user = await asyncio.to_thread(link_steam_account, link_user_id, steam_id, persona_name, avatar_url)
+            result = "linked"
+        else:
+            user = await asyncio.to_thread(upsert_steam_user, steam_id, persona_name, avatar_url)
+            result = "success"
+    except ValueError:
+        return _steam_redirect(request, "error", "already_linked")
+    token = await asyncio.to_thread(create_session, user["user_id"])
+    return _steam_redirect(request, result, token=token)
+
+
+@app.get("/api/steam/profile")
+async def steam_profile(request: Request):
+    user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
+    if not user:
+        raise HTTPException(status_code=401, detail="Önce giriş yap.")
+    steam_id = user.get("steam_id")
+    if not steam_id:
+        raise HTTPException(status_code=404, detail="Bu Clone Lab hesabına Steam bağlı değil.")
+    if not STEAM_API_KEY:
+        raise HTTPException(status_code=503, detail="Steam API anahtarı sunucuda henüz ayarlanmamış.")
+    calls = await asyncio.gather(
+        steam_api_get("ISteamUser", "GetPlayerSummaries", {"steamids": steam_id}),
+        steam_api_get("IPlayerService", "GetOwnedGames", {"steamid": steam_id, "include_appinfo": 1, "include_played_free_games": 1, "appids_filter[0]": STEAM_APP_ID}),
+        steam_api_get("IPlayerService", "GetRecentlyPlayedGames", {"steamid": steam_id, "count": 0}),
+        steam_api_get("ISteamUserStats", "GetUserStatsForGame", {"steamid": steam_id, "appid": STEAM_APP_ID}),
+        return_exceptions=True,
+    )
+    summary_data = calls[0] if isinstance(calls[0], dict) else None
+    owned_data = calls[1] if isinstance(calls[1], dict) else None
+    recent_data = calls[2] if isinstance(calls[2], dict) else None
+    stats_data = calls[3] if isinstance(calls[3], dict) else None
+    summary_list = ((summary_data or {}).get("response") or {}).get("players") or []
+    profile = summary_list[0] if summary_list else {}
+    owned_games = ((owned_data or {}).get("response") or {}).get("games") or []
+    recent_games = ((recent_data or {}).get("response") or {}).get("games") or []
+    owned_cs2 = next((game for game in owned_games if int(game.get("appid", 0) or 0) == STEAM_APP_ID), None)
+    recent_cs2 = next((game for game in recent_games if int(game.get("appid", 0) or 0) == STEAM_APP_ID), None)
+    player_stats = (stats_data or {}).get("playerstats") or {}
+    stats = player_stats.get("stats") if player_stats.get("success") else None
+    stats = [{"name": str(item.get("name", "")), "value": item.get("value")} for item in (stats or []) if isinstance(item, dict) and item.get("name") and isinstance(item.get("value"), (int, float, str))]
+    playtime = owned_cs2.get("playtime_forever") if owned_cs2 else None
+    recent_playtime = recent_cs2.get("playtime_2weeks") if recent_cs2 else None
+    failures = ["profile" if not isinstance(calls[0], dict) else None, "owned_games" if not isinstance(calls[1], dict) else None, "recent_playtime" if not isinstance(calls[2], dict) else None, "stats" if not isinstance(calls[3], dict) else None]
+    return {
+        "steam": {
+            "steam_id": steam_id,
+            "persona_name": profile.get("personaname") or user.get("steam_persona_name") or user["username"],
+            "avatar_url": profile.get("avatarfull") or user.get("steam_avatar_url"),
+            "profile_url": profile.get("profileurl") or f"https://steamcommunity.com/profiles/{steam_id}/",
+            "visibility_state": profile.get("communityvisibilitystate"),
+            "profile_state": profile.get("profilestate"),
+        },
+        "cs2": {
+            "app_id": STEAM_APP_ID,
+            "playtime_minutes": playtime,
+            "recent_playtime_minutes": recent_playtime,
+            "stats": stats,
+            "stats_available": bool(stats),
+            "match_history": {"available": False, "message": "Steam Web API kişisel CS2 maç maç geçmişi sunmuyor. Bu bölüm ELO veya sonuç uydurmaz; FACEIT maçları FACEIT sekmesinde gösterilir."},
+        },
+        "unavailable_sources": [item for item in failures if item],
+        "source": "Steam Web API · CS2 AppID 730",
+        "privacy_note": "Steam profilin veya oyun ayrıntıların gizliyse oyun süresi ve istatistikler eksik dönebilir.",
+    }
+
 @app.get("/api/health")
 async def health():
-    return {"ok": True, "faceit_key_configured": bool(FACEIT_API_KEY), "game_id": FACEIT_GAME_ID}
+    return {"ok": True, "faceit_key_configured": bool(FACEIT_API_KEY), "steam_api_key_configured": bool(STEAM_API_KEY), "game_id": FACEIT_GAME_ID}
 
 
 @app.get("/api/account")
@@ -165,7 +360,7 @@ async def account(request: Request):
     user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
     if not user:
         return {"authenticated": False, "persistent_storage": persistent_storage_configured()}
-    return {"authenticated": True, "username": user["username"], "faceit_nickname": user.get("faceit_nickname"), "persistent_storage": persistent_storage_configured()}
+    return {"authenticated": True, "username": user.get("steam_persona_name") or user["username"], "faceit_nickname": user.get("faceit_nickname"), "steam_id": user.get("steam_id"), "steam_persona_name": user.get("steam_persona_name"), "steam_avatar_url": user.get("steam_avatar_url"), "persistent_storage": persistent_storage_configured()}
 
 
 def set_session_cookie(response: Response, token: str) -> None:
@@ -204,7 +399,7 @@ async def login_account(payload: dict[str, Any], request: Request, response: Res
     await asyncio.to_thread(delete_session, request.cookies.get("cs2coach_session"))
     token = await asyncio.to_thread(create_session, user["user_id"])
     set_session_cookie(response, token)
-    return {"authenticated": True, "username": user["username"], "faceit_nickname": user.get("faceit_nickname"), "persistent_storage": persistent_storage_configured()}
+    return {"authenticated": True, "username": user.get("steam_persona_name") or user["username"], "faceit_nickname": user.get("faceit_nickname"), "steam_id": user.get("steam_id"), "steam_persona_name": user.get("steam_persona_name"), "steam_avatar_url": user.get("steam_avatar_url"), "persistent_storage": persistent_storage_configured()}
 
 
 @app.post("/api/account/logout")

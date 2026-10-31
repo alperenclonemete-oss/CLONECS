@@ -162,3 +162,12 @@ Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık k
 
 ### Yayınlama
 GitHub'daki `main` dalına gönder. Render bu dala bağlı otomatik deploy ediyorsa sürüm otomatik yayınlanır; değilse Render panelinden **Manual Deploy → Deploy latest commit** seç. `FACEIT_API_KEY` mevcut Render secret'ı olarak kalır; bu güncelleme yeni bir anahtar gerektirmez.
+
+## Steam ile giriş ve CS2 verileri
+
+- Giriş penceresindeki **Steam ile devam et** seçeneği Steam OpenID ile çalışır. Steam parolası Clone Lab’e girilmez. Yeni hesap SteamID ile oluşturulur; var olan Clone Lab hesabı, profil menüsündeki hesap ayarlarından Steam’e bağlanabilir.
+- Steam oturumu, API anahtarından bağımsızdır. Profil ve oyun verileri için `.env` dosyasına `STEAM_API_KEY` ekle; Render Environment bölümüne aynı adıyla gizli değişken olarak ekle. Anahtar HTML/JavaScript’e veya Git’e yazılmaz.
+- Render’da `PUBLIC_BASE_URL` değişkenini sitenin tam HTTPS adresine ayarla (ör. `https://clonecs.onrender.com`). Yerelde `.env.example` içindeki `http://127.0.0.1:8000` adresini kullan.
+- **Steam / CS2** sekmesi Steam’in API’de görünür kıldığı profili, CS2 toplam ve son iki haftalık oyun süresini ve `GetUserStatsForGame` tarafından gerçekten döndürülen istatistikleri gösterir. Profil/oyun gizliliği bu alanları sınırlayabilir.
+- Steam Web API tam kişisel CS2 maç geçmişi sunmadığı için Steam sekmesi maç sonucu, K/D veya ELO uydurmaz. FACEIT maçları FACEIT sekmesinde kalır; Valve eşleştirme maçlarını detaylı analiz etmek için ileride oyun demosu veya kullanıcı tarafından sağlanan maç paylaşım verisi gerekir.
+- Steam API ayarları: `STEAM_API_KEY`, `PUBLIC_BASE_URL`. Steam API profili için `GET /api/steam/profile`; OpenID başlatma ve callback uçları `/api/auth/steam` ile `/api/auth/steam/callback`.

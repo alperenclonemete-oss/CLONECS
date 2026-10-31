@@ -9,6 +9,10 @@ services:
     envVars:
       - key: FACEIT_API_KEY
         sync: false
+      - key: STEAM_API_KEY
+        sync: false
+      - key: PUBLIC_BASE_URL
+        sync: false
       - key: FACEIT_GAME_ID
         value: cs2
       - key: COOKIE_SECURE
