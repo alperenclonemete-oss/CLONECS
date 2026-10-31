@@ -459,7 +459,7 @@ if('IntersectionObserver' in window){
   document.querySelectorAll('.reveal-on-scroll').forEach(element=>revealObserver.observe(element));
 }else document.querySelectorAll('.reveal-on-scroll').forEach(element=>element.classList.add('is-visible'));
 restoreAccount();
-$('faceitInlineForm').addEventListener('submit',e=>{e.preventDefault();let value=$('faceitInlineInput').value.trim();try{if(/^https?:/i.test(value))value=new URL(value).pathname.split('/').filter(Boolean).pop()||'';}catch{}$('savedFaceitNickname').value=value;$('faceitInlineMessage').textContent='';$('faceitLinkForm').requestSubmit();});
+$('faceitInlineForm').addEventListener('submit',e=>{e.preventDefault();let value=$('faceitInlineInput').value.trim();try{if(/^https?:/i.test(value))value=new URL(value).pathname.split('/').filter(Boolean).slice(-2)[0]||'';}catch{}$('savedFaceitNickname').value=value;$('faceitInlineMessage').textContent='';$('faceitLinkForm').requestSubmit();});
 $('bannerRefresh').addEventListener('click',()=>loadSteamProfile());
 /* Portal-only presentation sync; all provider data and tab logic remain unchanged. */
 const renderAccountState=setAccountState;
