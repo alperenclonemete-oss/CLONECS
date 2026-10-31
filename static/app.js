@@ -356,7 +356,7 @@ function fitSmokeArtwork(){
   smokeContext.drawImage(smokeArtwork,(bounds.width-width)/2,(bounds.height-height)/2,width,height);
 }
 smokeArtwork.addEventListener('load',fitSmokeArtwork);
-smokeArtwork.src='/static/lineup/smoke-cloud.svg';
+smokeArtwork.src='/static/lineup/smoke-cloud.png';
 window.addEventListener('resize',fitSmokeArtwork,{passive:true});
 if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
   if(window.gsap&&window.ScrollTrigger&&window.MotionPathPlugin&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){

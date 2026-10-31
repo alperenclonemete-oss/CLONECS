@@ -1476,14 +1476,14 @@ body{background:#090a0c}
 .scene-map-label{position:absolute;z-index:1;color:#c2c4c8;font-size:8px;letter-spacing:.12em}.scene-map-label span{display:block;margin-top:4px;color:#747880;font-size:8px}
 .map-label-a{top:25%;left:17%}.map-label-b{top:60%;right:18%}.map-label-c{top:40%;left:56%;color:#ff8551}
 .trajectory{position:absolute;z-index:2;inset:0;width:100%;height:100%;overflow:visible;shape-rendering:geometricPrecision}.trajectory path{fill:none;stroke:rgba(72,220,255,.66);stroke-width:2.4;stroke-dasharray:7 13;filter:drop-shadow(0 0 8px rgba(72,220,255,.6));shape-rendering:geometricPrecision}
-.lineup-hand{position:absolute;z-index:4;left:0;bottom:-5%;width:clamp(180px,20vw,320px);transform-origin:24% 88%;pointer-events:none}
+.lineup-hand{position:absolute;z-index:4;left:0;bottom:-5%;width:clamp(180px,20vw,320px);transform-origin:24% 88%;mix-blend-mode:screen;pointer-events:none}
 .lineup-hand img{display:block;width:100%;height:auto;image-rendering:auto;user-select:none}
-.lineup-grenade{position:absolute;z-index:4;left:0;top:0;width:clamp(62px,7.5vw,112px);height:auto;transform-origin:50% 50%;pointer-events:none}
+.lineup-grenade{position:absolute;z-index:4;left:0;top:0;width:clamp(62px,7.5vw,112px);height:auto;transform-origin:50% 50%;mix-blend-mode:screen;pointer-events:none}
 .lineup-grenade img{display:block;width:100%;height:auto;image-rendering:auto;transform-origin:50% 50%;user-select:none}
 .grenade-body{position:absolute;inset:3px 4px 3px 7px;border-radius:6px 8px 8px 6px;background:linear-gradient(90deg,#777d78,#424b43 48%,#737d73);border:1px solid #9da59d}
 .grenade-cap{position:absolute;right:0;top:7px;width:8px;height:11px;background:#9a6c45;border-radius:2px}
 .grenade-pin{position:absolute;left:3px;top:1px;width:10px;height:8px;border:2px solid #b8beb8;border-radius:50%}
-.smoke-cloud{position:absolute;z-index:0;left:50%;top:65%;width:min(64vw,1000px);height:min(76vh,760px);transform:translate(-50%,-50%);opacity:0;image-rendering:auto;pointer-events:none}
+.smoke-cloud{position:absolute;z-index:0;left:50%;top:65%;width:min(64vw,1000px);height:min(76vh,760px);transform:translate(-50%,-50%);opacity:0;mix-blend-mode:screen;image-rendering:auto;pointer-events:none}
 .smoke-cloud i{position:absolute;display:block;width:44%;height:45%;border-radius:50%;background:radial-gradient(circle at 40% 40%,rgba(226,230,228,.47),rgba(117,126,125,.3) 52%,rgba(64,70,72,0) 75%);animation:smoke-drift 4.4s ease-in-out infinite alternate}
 .smoke-cloud i:nth-child(1){left:8%;top:32%}.smoke-cloud i:nth-child(2){left:29%;top:11%;animation-delay:-1s}.smoke-cloud i:nth-child(3){left:48%;top:27%;animation-delay:-2.2s}.smoke-cloud i:nth-child(4){left:20%;top:49%;animation-delay:-.6s}.smoke-cloud i:nth-child(5){left:52%;top:50%;animation-delay:-1.8s}.smoke-cloud i:nth-child(6){left:39%;top:5%;animation-delay:-2.7s}.smoke-cloud i:nth-child(7){left:4%;top:17%;animation-delay:-3s}.smoke-cloud i:nth-child(8){left:58%;top:18%;animation-delay:-1.4s}
 @keyframes smoke-drift{to{transform:translate(9px,-12px) scale(1.15);opacity:.65}}
