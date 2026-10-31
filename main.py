@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 import re
 from pathlib import Path
@@ -20,7 +21,7 @@ FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
 FACEIT_GAME_ID = os.getenv("FACEIT_GAME_ID", "cs2").strip() or "cs2"
 FACEIT_BASE_URL = "https://open.faceit.com/data/v4"
 
-app = FastAPI(title="CLONE LAB", version="2.4.0")
+app = FastAPI(title="CLONE LAB", version="2.5.0")
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
@@ -60,31 +61,25 @@ async def faceit_get(path: str, params: dict[str, Any] | None = None) -> dict[st
 
 
 
-PRO_CONFIGS_URL = "https://raw.githubusercontent.com/Guewenn/cs2-pro-sensitivity-database/main/data/cs2-pro-players.json"
-_pro_configs_cache: list[dict[str, Any]] = []
-_pro_configs_cached_at = 0.0
+PRO_CONFIG_SNAPSHOT = BASE_DIR / "static" / "pro_players.json"
 
 @app.get("/api/pro-configs")
 async def pro_configs():
-    """Fetch the upstream MIT-licensed public player settings catalogue."""
-    global _pro_configs_cache, _pro_configs_cached_at
-    import time
-    if _pro_configs_cache and time.time() - _pro_configs_cached_at < 3600:
-        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": True, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
+    """Serve the checked-in player settings snapshot; the app stays useful offline."""
     try:
-        async with httpx.AsyncClient(timeout=12.0, follow_redirects=True) as client:
-            response = await client.get(PRO_CONFIGS_URL, headers={"Accept": "application/json"})
-            response.raise_for_status()
-            data = response.json()
-        if not isinstance(data, list):
-            raise ValueError("Config kaynağı beklenen liste biçiminde değil.")
-        _pro_configs_cache = [item for item in data if isinstance(item, dict) and item.get("name") and item.get("team")]
-        _pro_configs_cached_at = time.time()
-        return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": False, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
-    except (httpx.HTTPError, ValueError) as exc:
-        if _pro_configs_cache:
-            return {"items": _pro_configs_cache, "source": "Guewenn/cs2-pro-sensitivity-database", "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database", "cached": True, "cached_at": _pro_configs_cached_at, "directory": {"name": "CSDB Pro Player Settings", "url": "https://csdb.gg/pro-players/", "reported_players": 1011, "reported_teams": 208, "data_as_of": "2026-10-26"}}
-        raise HTTPException(status_code=502, detail=f"Pro config verisi alınamadı: {exc}") from exc
+        snapshot = json.loads(PRO_CONFIG_SNAPSHOT.read_text(encoding="utf-8-sig"))
+        items = snapshot.get("players", []) if isinstance(snapshot, dict) else snapshot
+        if not isinstance(items, list):
+            raise ValueError("Player settings snapshot must contain a players list.")
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        raise HTTPException(status_code=503, detail=f"Yerel oyuncu ayarları okunamadı: {exc}") from exc
+    return {
+        "items": items,
+        "source": "static/pro_players.json",
+        "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database",
+        "generated_at": snapshot.get("generated_at") if isinstance(snapshot, dict) else None,
+        "cached": True,
+    }
 @app.get("/api/health")
 async def health():
     return {"ok": True, "faceit_key_configured": bool(FACEIT_API_KEY), "game_id": FACEIT_GAME_ID}
@@ -405,7 +400,3 @@ async def coach_report(payload: dict[str, Any]):
         "recommendations": report,
         "segments_count": len(segments),
     }
-
-
-
-

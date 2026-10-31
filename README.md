@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance · CloneCS 2.4
+# CLONE LAB · FACEIT Performance · CloneCS 2.5
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -152,3 +152,13 @@ Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık k
 - CFG dosyaları yayımlanmış kaynaklardan derlenmiştir. Kaynakta olmayan ayarlar tahmin edilmez. Üç oyuncunun temel ayar dosyası alternatif açık kaynaklardan hazırlanmıştır ve kaynakları indeks dosyasında görünür.
 - Bulunabilen 93 oyuncu portresi yerel dosya olarak sunulur. Kalan portrelerde dış kaynak denenir; fotoğraf bulunamazsa oyuncu baş harfleri görünür.
 - FaZe, FURIA, Legacy, 3DMAX, HEROIC, 9z, B8, Monte, NiP, HOTU ve Passion UA için daha yüksek çözünürlüklü logolar `static/team-logos/` içine eklendi. Ek M80 logosu Top 30 dışında ayrı gösterilir. Kaynak bağlantıları `static/team-logo-sources.json` dosyasındadır.
+
+## CLONE LAB 2.5 — Yerel oyuncu kataloğu ve portre eşleştirmeleri
+- `GET /api/pro-configs` artık canlı bir GitHub isteği yapmaz; dağıtımla birlikte gelen `static/pro_players.json` dosyasını backend üzerinden döndürür. Oyuncu kataloğu Render'da da açılışta dış API'ye bağlı değildir.
+- `static/pro_players.json` mevcut Top 30 listesindeki 150 oyuncunun kayıtlarını ve yayımlanmış CFG alanlarını bir araya getirir. Guewenn GitHub açık veri seti ve oyuncuların CFG kaynakları kayda alınır; bilinmeyen değerler boş kalır.
+- `static/player-photo-index.json` 93 yerel portreyi ve Liquipedia MediaWiki API ile eşleştirilen 56 portre URL'sini içerir. Fotoğraf bulunmadığında veya açılamadığında isim baş harfleri avatar olarak görünür. Profil sayfasında fotoğraf kaynak bağlantısı yer alır.
+- CFG arayüzü `remote_url` portrelerini kullanır; oyuncu başına tahmini CS Tools fotoğraf adresi üretmez.
+- Bu snapshot'ta 150 oyuncu ve 150 CFG indirme bağlantısı bulunur. Her oyuncunun her ayarı açık kaynaklarda yayınlanmadığı için eksik DPI, crosshair, mouse veya görüntü değerleri doldurulmuş gibi sunulmaz.
+
+### Yayınlama
+GitHub'daki `main` dalına gönder. Render bu dala bağlı otomatik deploy ediyorsa sürüm otomatik yayınlanır; değilse Render panelinden **Manual Deploy → Deploy latest commit** seç. `FACEIT_API_KEY` mevcut Render secret'ı olarak kalır; bu güncelleme yeni bir anahtar gerektirmez.
