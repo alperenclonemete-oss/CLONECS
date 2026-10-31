@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CLONE LAB | FACEIT Performance</title>
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=4.7">
+  <link rel="stylesheet" href="/static/style.css?v=4.9">
 </head>
 <body>
 <div class="wrap">
@@ -77,8 +77,8 @@
       <button type="button" class="app-tab" data-tab="faceit" aria-selected="true">FACEIT Analiz</button>
       <button type="button" class="app-tab" data-tab="steam" aria-selected="false">Steam / CS2</button><button type="button" class="app-tab" data-tab="configs" aria-selected="false">Pro Config</button>
     </nav>
-    <div id="appBranding" class="app-branding" hidden><img src="/static/clone-logo.png" alt="Clone Lab"></div>
-    <section id="faceitTab" class="tab-panel" hidden>
+    <div id="portalWatermark" aria-hidden="true"></div><div id="appBranding" class="app-branding" hidden></div><section id="playerBanner" class="player-banner" hidden><img id="bannerAvatar" alt="" hidden><b id="bannerName">Steam player</b><code id="bannerSteamId"></code><span class="steam-certified">STEAM CERTIFIED</span><button id="bannerRefresh" type="button">Veriyi yenile</button></section>
+    <section id="faceitTab" class="tab-panel" hidden><section id="faceitInlineConnect" class="faceit-inline-connect" hidden><span class="eyebrow">FACEIT // PLAYER LINK</span><h2>FACEIT hesabini bagla</h2><p>FACEIT profil URL veya kullanici adini gir. Analiz bu sayfada acilir.</p><form id="faceitInlineForm"><input id="faceitInlineInput" placeholder="FACEIT Profil URL'nizi veya Kullanici Adinizi Girin" required><button class="button-cta" type="submit">Hesabi Bagla &amp; Analiz Et</button></form><div id="faceitInlineMessage" role="status"></div></section>
     <div id="steamFaceitPrompt" class="provider-prompt" hidden><div><b>FACEIT profilin de var mı?</b><span>Herkese açık FACEIT kullanıcı adını ekleyebilirsin; FACEIT analizin ayrı sekmede görünür.</span></div><button id="connectFaceitPrompt" type="button" class="secondary">FACEIT ekle ↗</button></div><div id="status" class="notice">Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.</div>
     <div id="results" class="grid" style="margin-top:22px"></div>
     <div id="error" class="error" role="alert"></div>
@@ -103,7 +103,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js" defer></script>
-<script src="/static/app.js?v=4.7" defer></script>
+<script src="/static/app.js?v=4.8" defer></script>
 <script src="/static/ui-motion.js?v=4.7" defer></script>
 </body>
 </html>

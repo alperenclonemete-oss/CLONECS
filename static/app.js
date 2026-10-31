@@ -459,3 +459,8 @@ if('IntersectionObserver' in window){
   document.querySelectorAll('.reveal-on-scroll').forEach(element=>revealObserver.observe(element));
 }else document.querySelectorAll('.reveal-on-scroll').forEach(element=>element.classList.add('is-visible'));
 restoreAccount();
+$('faceitInlineForm').addEventListener('submit',e=>{e.preventDefault();let value=$('faceitInlineInput').value.trim();try{if(/^https?:/i.test(value))value=new URL(value).pathname.split('/').filter(Boolean).pop()||'';}catch{}$('savedFaceitNickname').value=value;$('faceitInlineMessage').textContent='';$('faceitLinkForm').requestSubmit();});
+$('bannerRefresh').addEventListener('click',()=>loadSteamProfile());
+/* Portal-only presentation sync; all provider data and tab logic remain unchanged. */
+const renderAccountState=setAccountState;
+setAccountState=async function(data,openSavedProfile=false){await renderAccountState(data,openSavedProfile);const active=Boolean(data&&data.authenticated);$('playerBanner').hidden=!active;$('portalWatermark').hidden=!active;$('faceitInlineConnect').hidden=!active||Boolean(activeAccountData.faceit_nickname);if(active){$('bannerName').textContent=activeAccountData.steam_persona_name||activeAccountData.username||'Player';$('bannerSteamId').textContent=activeAccountData.steam_id||'Steam ID not connected';document.querySelector('.steam-certified').hidden=!activeAccountData.steam_id;if(activeAccountData.steam_avatar_url){$('bannerAvatar').src=activeAccountData.steam_avatar_url;$('bannerAvatar').hidden=false;}else $('bannerAvatar').hidden=true;}};
