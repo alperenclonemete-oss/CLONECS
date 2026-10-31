@@ -227,14 +227,14 @@
     "team": "Eternal Fire",
     "rank": 30,
     "player": "soulfly",
-    "source_url": "https://confighub.gg/cs2/soulfly",
+    "source_url": "https://csdb.gg/player/soulfly/",
     "file": "/static/configs/07-soulfly.cfg"
   },
   {
     "team": "The MongolZ",
     "rank": 16,
     "player": "cobrazera",
-    "source_url": "https://confighub.gg/cs2/cobrazera",
+    "source_url": "https://csdb.gg/team/the-mongolz/",
     "file": "/static/configs/08-cobrazera.cfg"
   },
   {
@@ -248,7 +248,7 @@
     "team": "The MongolZ",
     "rank": 16,
     "player": "bLitz",
-    "source_url": "https://confighub.gg/cs2/blitz",
+    "source_url": "https://csdb.gg/player/blitz/",
     "file": "/static/configs/08-blitz.cfg"
   },
   {
@@ -486,35 +486,35 @@
     "team": "9z",
     "rank": 15,
     "player": "dgt",
-    "source_url": "https://confighub.gg/cs2/dgt",
+    "source_url": "https://csdb.gg/player/dgt/",
     "file": "/static/configs/17-dgt.cfg"
   },
   {
     "team": "9z",
     "rank": 15,
     "player": "max",
-    "source_url": "https://confighub.gg/cs2/max",
+    "source_url": "https://csdb.gg/player/max/",
     "file": "/static/configs/17-max.cfg"
   },
   {
     "team": "9z",
     "rank": 15,
     "player": "meyern",
-    "source_url": "https://confighub.gg/cs2/meyern",
+    "source_url": "https://csdb.gg/player/meyern/",
     "file": "/static/configs/17-meyern.cfg"
   },
   {
     "team": "9z",
     "rank": 15,
     "player": "luchov",
-    "source_url": "https://confighub.gg/cs2/luchov",
+    "source_url": "https://csdb.gg/player/luchov/",
     "file": "/static/configs/17-luchov.cfg"
   },
   {
     "team": "9z",
     "rank": 15,
     "player": "HUASOPEEK",
-    "source_url": "https://confighub.gg/cs2/huasopeek",
+    "source_url": "https://csdb.gg/player/huasopeek/",
     "file": "/static/configs/17-huasopeek.cfg"
   },
   {
@@ -717,7 +717,7 @@
     "team": "The MongolZ",
     "rank": 16,
     "player": "Techno",
-    "source_url": "https://dropguidecs2.com/en/players/techno/",
+    "source_url": "https://csdb.gg/player/techno4k/",
     "file": "/static/configs/08-techno.cfg"
   },
   {
@@ -726,5 +726,33 @@
     "player": "MartinezSa",
     "source_url": "https://dropguidecs2.com/en/players/martinezsa/",
     "file": "/static/configs/26-martinezsa.cfg"
+  },
+  {
+    "player": "nin9",
+    "source_url": "https://csdb.gg/player/nin9/",
+    "rank": 16,
+    "file": "/static/configs/16-nin9.cfg",
+    "team": "The MongolZ"
+  },
+  {
+    "player": "jottAAA",
+    "source_url": "https://csdb.gg/player/jottaaa/",
+    "rank": 30,
+    "file": "/static/configs/30-jottaaa.cfg",
+    "team": "Eternal Fire"
+  },
+  {
+    "player": "MisteM",
+    "source_url": "https://cs2settings.com/players/mistem",
+    "rank": 30,
+    "file": "/static/configs/30-mistem.cfg",
+    "team": "Eternal Fire"
+  },
+  {
+    "player": "regali",
+    "source_url": "https://csdb.gg/player/regali/",
+    "rank": 30,
+    "file": "/static/configs/30-regali.cfg",
+    "team": "Eternal Fire"
   }
 ]

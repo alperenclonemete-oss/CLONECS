@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CLONE LAB | FACEIT Performance</title>
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=2.9">
+  <link rel="stylesheet" href="/static/style.css?v=3.2">
 </head>
 <body>
 <div class="wrap">
@@ -14,7 +14,7 @@
     <div class="pill">FACEIT · PERFORMANCE SYSTEM</div>
     <div id="profileWidget" class="profile-widget" hidden>
       <button id="profileMenuButton" class="profile-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profileDropdown">
-        <span class="profile-avatar"><img id="profileWidgetAvatar" alt="" hidden><span id="profileWidgetInitials">CL</span></span>
+        <span class="profile-avatar"><img id="profileWidgetAvatar" alt="FACEIT profil fotoğrafı" onerror="this.hidden=true;document.getElementById('profileWidgetInitials').hidden=false" hidden><span id="profileWidgetInitials">CL</span></span>
         <span id="profileWidgetName" class="profile-widget-name"></span><span class="profile-menu-chevron" aria-hidden="true">⌄</span>
       </button>
       <div id="profileDropdown" class="profile-dropdown" role="menu" hidden>
@@ -33,6 +33,7 @@
   </header>
   <main>
     <section id="guestWelcome" class="guest-welcome">
+      <img class="welcome-logo" src="/static/clone-logo.png" alt="Clone Lab">
       <div class="eyebrow">CLONE LAB <span>// PLAYER INTELLIGENCE</span></div>
       <h1>FACEIT verini gör.<br><span class="accent">Gelişimini yönlendir.</span></h1>
       <p class="sub">Gerçek maç istatistiklerini incele, performansındaki değişimi gör ve sonraki adımına daha net karar ver.</p>
@@ -51,7 +52,9 @@
     <nav id="appTabs" class="app-tabs" aria-label="Uygulama sekmeleri" hidden>
       <button type="button" class="app-tab" data-tab="faceit" aria-selected="true">FACEIT Analiz</button>
       <button type="button" class="app-tab" data-tab="configs" aria-selected="false">Pro Config</button>
-    </nav>    <section id="faceitTab" class="tab-panel">
+    </nav>
+    <div id="appBranding" class="app-branding" hidden><img src="/static/clone-logo.png" alt="Clone Lab"></div>
+    <section id="faceitTab" class="tab-panel">
     <div id="status" class="notice">Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.</div>
     <div id="results" class="grid" style="margin-top:22px"></div>
     <div id="error" class="error" role="alert"></div>
@@ -72,7 +75,7 @@
   <footer>CLONE LAB kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Maç demosu incelenmeden kesin nişan, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
 </div>
 
-<script src="/static/app.js?v=2.9" defer></script>
-<script src="/static/ui-motion.js?v=2.9" defer></script>
+<script src="/static/app.js?v=3.2" defer></script>
+<script src="/static/ui-motion.js?v=3.2" defer></script>
 </body>
 </html>

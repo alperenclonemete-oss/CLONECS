@@ -790,5 +790,53 @@
     "attribution_url": "https://liquipedia.net/commons/File:Luchov_at_BLAST_Open_Spring_2026.jpg",
     "license": null,
     "artist": null
+  },
+  {
+    "player": "nin9",
+    "remote_url": "https://csdb.gg/images/players/nin9.webp",
+    "license": null,
+    "source_page": "https://csdb.gg/player/nin9/",
+    "artist": null,
+    "source": "CSDB.gg",
+    "attribution_url": "https://csdb.gg/player/nin9/",
+    "file": null,
+    "team": "The MongolZ",
+    "rank": 16
+  },
+  {
+    "player": "jottAAA",
+    "remote_url": "https://csdb.gg/images/players/jottaaa.webp",
+    "license": null,
+    "source_page": "https://csdb.gg/player/jottaaa/",
+    "artist": null,
+    "source": "CSDB.gg",
+    "attribution_url": "https://csdb.gg/player/jottaaa/",
+    "file": null,
+    "team": "Eternal Fire",
+    "rank": 30
+  },
+  {
+    "player": "MisteM",
+    "remote_url": "https://csdb.gg/images/players/mistem.webp",
+    "license": null,
+    "source_page": "https://csdb.gg/player/mistem/",
+    "artist": null,
+    "source": "CSDB.gg",
+    "attribution_url": "https://csdb.gg/player/mistem/",
+    "file": null,
+    "team": "Eternal Fire",
+    "rank": 30
+  },
+  {
+    "player": "regali",
+    "remote_url": "https://csdb.gg/images/players/regali.webp",
+    "license": null,
+    "source_page": "https://csdb.gg/player/regali/",
+    "artist": null,
+    "source": "CSDB.gg",
+    "attribution_url": "https://csdb.gg/player/regali/",
+    "file": null,
+    "team": "Eternal Fire",
+    "rank": 30
   }
 ]

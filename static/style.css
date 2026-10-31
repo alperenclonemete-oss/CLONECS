@@ -1078,14 +1078,33 @@ button.secondary:hover:not(:disabled),.secondary:hover:not(:disabled){
 .guest-welcome::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:-130px;top:-108px;width:min(760px,83vw);height:430px;background:url('/static/clone-logo.png') left center/contain no-repeat;opacity:.065;filter:drop-shadow(0 0 56px rgba(255,85,0,.1));mask-image:linear-gradient(90deg,#000 35%,transparent 100%)}
 .guest-welcome>*{position:relative}
 
+/* The complete brand lockup is the primary visual on the signed-out screen. */
+.guest-welcome{display:flex;max-width:100%;margin:32px auto 20px;flex-direction:column;align-items:center;text-align:center}
+.welcome-logo{display:block;width:min(78vw,760px);max-height:400px;object-fit:contain;margin:0 auto 10px;filter:drop-shadow(0 14px 42px rgba(0,0,0,.44))}
+.guest-welcome::before{left:50%;top:0;width:min(920px,95vw);height:500px;transform:translateX(-50%);background-position:center;opacity:.025;mask-image:radial-gradient(ellipse at center,#000 10%,transparent 72%)}
+.guest-welcome .eyebrow{margin:8px 0 14px}
+.guest-welcome h1{max-width:900px}
+.guest-welcome .sub{max-width:700px}
+.app-branding{display:flex;justify-content:center;align-items:center;margin:6px auto 20px;max-width:100%;}
+.app-branding img{display:block;width:min(58vw,620px);max-height:270px;object-fit:contain;filter:drop-shadow(0 12px 36px rgba(0,0,0,.38))}
+
 /* Stable dashboard and config directory alignment */
 .dashboard,.dashboard>*{min-width:0;max-width:100%}
+#results.grid{grid-template-columns:repeat(12,minmax(0,1fr));align-items:start;gap:14px}
+#results>.profile,#results>.metrics,#results>.dashboard,#results>#dashboardLoading{grid-column:1/-1}
+#results>.section{grid-column:span 6}
+#results>.card[style*="grid-column"]{grid-column:1/-1!important}
 .dashboard-chart{width:100%;overflow:hidden}
 .dashboard-chart .chart-card{width:100%;margin:0}
 .dashboard-metrics{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
 .dashboard-metrics .metric{display:flex;min-height:76px;flex-direction:column;justify-content:space-between}
 .radar-card{width:calc(100% - 40px);overflow:hidden}
 .radar-card svg{display:block;max-width:100%;overflow:visible}
+.profile-avatar{width:44px;height:44px;flex-basis:44px}
+.profile-menu-trigger{min-height:58px}
+.config-team-logo{border-color:transparent;background:transparent}
+.config-team-logo img{padding:2%;filter:drop-shadow(0 4px 12px rgba(0,0,0,.32))}
+.config-avatar-wrap.team-avatar img{object-fit:contain;padding:3%;background:rgba(10,10,12,.92)}
 .config-team-card,.config-player-card{min-width:0;color:#f3f4f6}
 .config-team-card b,.config-player-card b,.config-player-card small{color:#f3f4f6;text-shadow:0 1px 8px rgba(0,0,0,.8)}
 .config-player-card small{color:#c4c4cb}
@@ -1103,6 +1122,12 @@ button.secondary:hover:not(:disabled),.secondary:hover:not(:disabled){
   .profile-avatar{width:32px;height:32px;flex-basis:32px}
   .pill{display:none}
   .guest-welcome::before{left:-115px;top:-40px;width:130vw;height:340px;opacity:.05}
+  .guest-welcome{margin:18px auto 16px}
+  .welcome-logo{width:min(90vw,560px);max-height:320px;margin-bottom:6px}
+  .app-branding{margin:0 auto 12px}
+  .app-branding img{width:min(88vw,520px);max-height:230px}
+  .guest-welcome::before{left:50%;top:0;width:110vw;transform:translateX(-50%);opacity:.022}
+  #results>.section{grid-column:1/-1}
   .dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
   .radar-card{width:calc(100% - 20px);margin:8px 10px 14px}
   .radar-card svg{max-height:none}
