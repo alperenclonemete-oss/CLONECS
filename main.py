@@ -62,23 +62,98 @@ async def faceit_get(path: str, params: dict[str, Any] | None = None) -> dict[st
 
 
 PRO_CONFIG_SNAPSHOT = BASE_DIR / "static" / "pro_players.json"
+PRO_CONFIG_INDEX = BASE_DIR / "static" / "player-config-index.json"
+PRO_ROSTER_SNAPSHOT = BASE_DIR / "static" / "hltv-top30.json"
+
+
+def _read_local_json(path: Path) -> Any | None:
+    try:
+        return json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+
+
+def _local_pro_config_fallback() -> list[dict[str, Any]]:
+    """Build truthful player entries from the checked-in config index and roster."""
+    config_data = _read_local_json(PRO_CONFIG_INDEX)
+    roster_data = _read_local_json(PRO_ROSTER_SNAPSHOT)
+    config_items = config_data if isinstance(config_data, list) else []
+    by_name: dict[tuple[str, str], dict[str, Any]] = {}
+
+    for entry in config_items:
+        if not isinstance(entry, dict):
+            continue
+        name = str(entry.get("player") or entry.get("name") or "").strip()
+        team = str(entry.get("team") or "").strip()
+        if not name or not team:
+            continue
+        player = dict(entry)
+        player["name"] = name
+        player["team"] = team
+        player.setdefault("config_file", player.get("file"))
+        by_name[(name.casefold(), team.casefold())] = player
+
+    teams = roster_data.get("teams", []) if isinstance(roster_data, dict) else []
+    result: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    if isinstance(teams, list):
+        for team_entry in teams:
+            if not isinstance(team_entry, dict):
+                continue
+            team = str(team_entry.get("name") or "").strip()
+            rank = team_entry.get("rank")
+            players = team_entry.get("players", [])
+            if not team or not isinstance(players, list):
+                continue
+            for roster_name in players:
+                name = str(roster_name or "").strip()
+                key = (name.casefold(), team.casefold())
+                if not name or key in seen:
+                    continue
+                record = dict(by_name.get(key, {}))
+                record.update({"name": name, "team": team, "rank": rank})
+                result.append(record)
+                seen.add(key)
+
+    # If the roster snapshot is unavailable, the config index still provides
+    # real player/team/config links without inventing setting values.
+    if not result:
+        result = list(by_name.values())
+    return result
+
 
 @app.get("/api/pro-configs")
 async def pro_configs():
-    """Serve the checked-in player settings snapshot; the app stays useful offline."""
+    """Serve the bundled snapshot, then fall back to bundled index/roster files."""
     try:
-        snapshot = json.loads(PRO_CONFIG_SNAPSHOT.read_text(encoding="utf-8-sig"))
+        snapshot = _read_local_json(PRO_CONFIG_SNAPSHOT)
         items = snapshot.get("players", []) if isinstance(snapshot, dict) else snapshot
-        if not isinstance(items, list):
-            raise ValueError("Player settings snapshot must contain a players list.")
-    except (OSError, json.JSONDecodeError, ValueError) as exc:
-        raise HTTPException(status_code=503, detail=f"Yerel oyuncu ayarları okunamadı: {exc}") from exc
+        if isinstance(items, list):
+            valid_items = [
+                item for item in items
+                if isinstance(item, dict) and item.get("name") and item.get("team")
+            ]
+            if valid_items:
+                return {
+                    "items": valid_items,
+                    "source": "static/pro_players.json",
+                    "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database",
+                    "generated_at": snapshot.get("generated_at") if isinstance(snapshot, dict) else None,
+                    "cached": True,
+                    "fallback": False,
+                }
+    except (OSError, ValueError, httpx.HTTPError):
+        # The checked-in index and roster below are independent local backups.
+        pass
+
+    fallback_items = _local_pro_config_fallback()
     return {
-        "items": items,
-        "source": "static/pro_players.json",
-        "source_url": "https://github.com/Guewenn/cs2-pro-sensitivity-database",
-        "generated_at": snapshot.get("generated_at") if isinstance(snapshot, dict) else None,
+        "items": fallback_items,
+        "source": "static/player-config-index.json + static/hltv-top30.json",
+        "generated_at": None,
         "cached": True,
+        "fallback": True,
+        "notice": "Ayar snapshot'ı okunamadı; yerel oyuncu/CFG dizini ve kadro yedeği kullanılıyor.",
     }
 @app.get("/api/health")
 async def health():

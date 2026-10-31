@@ -35,27 +35,31 @@ if not DATABASE_URL:
 
 @contextmanager
 def connection() -> Iterator[Any]:
+    """Yield one transactional connection and always release it on exit."""
     if DATABASE_URL:
         try:
             import psycopg
             from psycopg.rows import dict_row
         except ImportError as exc:
             raise RuntimeError("DATABASE_URL is set but psycopg is not installed") from exc
-        with psycopg.connect(DATABASE_URL, row_factory=dict_row) as conn:
-            yield conn
+        conn = psycopg.connect(DATABASE_URL, row_factory=dict_row)
     else:
         conn = sqlite3.connect(DB_PATH, timeout=10)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys = ON")
-        try:
-            yield conn
-            conn.commit()
-        except Exception:
-            conn.rollback()
-            raise
-        finally:
-            conn.close()
 
+    try:
+        if not DATABASE_URL:
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys = ON")
+        yield conn
+        conn.commit()
+    except BaseException:
+        try:
+            conn.rollback()
+        except Exception:
+            pass
+        raise
+    finally:
+        conn.close()
 
 @contextmanager
 def db_cursor(conn: Any) -> Iterator[Any]:
@@ -66,8 +70,12 @@ def db_cursor(conn: Any) -> Iterator[Any]:
         cur.close()
 
 def init_database() -> None:
+    """Create the account schema and its indexes as one transaction."""
     with connection() as conn:
         with db_cursor(conn) as cur:
+            # SQLite needs an explicit write transaction for atomic DDL; PostgreSQL
+            # accepts BEGIN and rolls the complete schema change back on failure.
+            cur.execute("BEGIN" if DATABASE_URL else "BEGIN IMMEDIATE")
             cur.execute("""CREATE TABLE IF NOT EXISTS coach_users (
                 user_id TEXT PRIMARY KEY,
                 username TEXT NOT NULL UNIQUE,
@@ -81,7 +89,6 @@ def init_database() -> None:
                 expires_at BIGINT NOT NULL
             )""")
             cur.execute("CREATE INDEX IF NOT EXISTS coach_sessions_expiry ON coach_sessions(expires_at)")
-
 
 def hash_password(password: str) -> str:
     salt = secrets.token_bytes(16)
