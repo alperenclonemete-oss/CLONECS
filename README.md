@@ -1,4 +1,4 @@
-# CLONE LAB · FACEIT Performance · CloneCS 2.1
+# CLONE LAB · FACEIT Performance · CloneCS 2.2
 
 En kolay dağıtım: Render üzerinde tek web servisi. Frontend ve API aynı uygulamada sunulur; ayrı veritabanı veya ayrı frontend servisi gerekmez.
 
@@ -139,4 +139,10 @@ Maç listesi ilk oluştuğunda henüz DOM’da yoktur. Olay dinleyicisi artık k
 - Takım/oyuncu kartları bu Top 30 listesinden oluşturulur; liste artık 14 takımlı config kaynağıyla sınırlı değildir.
 - Mevcut açık config kaynağında eşleşen oyuncunun gerçek ayarları açılır. Kadroda olup config kaynağında bulunmayan oyuncuların ayarları uydurulmaz; profil bağlantısı ve veri eksikliği notu gösterilir.
 - HLTV sıralaması ve takım kadroları değişebilir. Listeyi güncellemek için yeni tarihli kaynak snapshot'ı `static/hltv-top30.json` dosyasına aktar.
+
+## CLONE LAB 2.2 — Logo görünümü ve sabit arşiv notu
+- Takım logolarının içindeki baş harf/fallback yazısı ve logo çerçevesi kaldırıldı; kartlarda şeffaf logo odaklı görünüm kullanılır.
+- Bulunabilen 14 HLTV Top 30 takım logosu `static/team-logos/` içine yerel PNG olarak alındı. Diğer logolar HLTV'nin güncel sıralama sayfasındaki görsel bağlantısından yüklenir; kaynağın bazı dosyaları bu ortamda yerel indirmeye 403 verdi.
+- Kadro listesi tarihli statik dosyadır; açılışta HLTV'den güncelleme çekmez.
+- Oyuncu ayarları halen açık kaynak profillerinden gelen alanlarla sınırlıdır. Bazı top 30 oyuncular için uygulamada ayrıntılı CFG bulunmayabilir; eksik alanlar gerçekmiş gibi doldurulmaz.
 
