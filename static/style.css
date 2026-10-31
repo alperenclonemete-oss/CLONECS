@@ -1688,3 +1688,20 @@ body:has(#appTabs:not([hidden])) .app-tab[aria-selected=true]{color:#6ce8d8;back
 .app-tab:focus-visible{outline:2px solid #6ce8d8;outline-offset:3px}
 .player-banner{flex-wrap:wrap}.player-banner code{overflow-wrap:anywhere}
 @media(max-width:760px){body:has(#appTabs:not([hidden])) main{grid-template-columns:76px minmax(0,1fr);gap:12px}body:has(#appTabs:not([hidden])) .app-tabs{padding:12px 6px;top:12px;overflow:visible}.workspace-nav-title{font-size:10px;padding:8px 0 18px;text-align:center;letter-spacing:0}.workspace-nav-title span{display:none}body:has(#appTabs:not([hidden])) .app-tab{flex-direction:column;justify-content:center;gap:8px;padding:12px 2px;font-size:10px;white-space:normal;text-align:center}.faceit-inline-connect{padding:18px 12px}.faceit-inline-connect form{flex-direction:column}.player-banner{padding:14px;gap:10px}.steam-certified{margin-left:0}}
+
+/* Full-height, collapsible navigation in the main orange palette. */
+body:has(#appTabs:not([hidden])){--sidebar-width:244px}
+body:has(#appTabs:not([hidden])) .wrap{width:auto;max-width:none;margin-left:var(--sidebar-width);margin-right:0;padding:24px 36px}
+body:has(#appTabs:not([hidden])) main{display:block}
+body:has(#appTabs:not([hidden])) .app-tabs{position:fixed;inset:0 auto 0 0;width:var(--sidebar-width);height:100dvh;min-height:0;overflow-y:auto;box-sizing:border-box;margin:0;padding:24px 14px;border:0;border-right:1px solid #ffffff12;border-radius:0;background:linear-gradient(180deg,#171310,#0b0b0d 65%);z-index:40;gap:10px}
+.workspace-nav-title{color:#faf7f4}.workspace-nav-title span{color:#998b81}
+body:has(#appTabs:not([hidden])) .app-tab{color:#a89e97}
+body:has(#appTabs:not([hidden])) .app-tab:hover{color:#fff7ef;background:#ffffff08}
+body:has(#appTabs:not([hidden])) .app-tab[aria-selected=true]{color:#ff9359;background:#ff660014;border-color:#ff793b30;box-shadow:inset 3px 0 #ff793b}
+.app-tab:focus-visible,.sidebar-toggle:focus-visible{outline:2px solid #ff793b;outline-offset:3px}
+.sidebar-toggle{align-self:flex-end;display:grid;place-items:center;width:40px;min-height:40px;padding:8px;background:#ffffff06;border:1px solid #ffffff16;color:#e5d6cb;border-radius:4px;font-size:20px;cursor:pointer}
+body.sidebar-collapsed:has(#appTabs:not([hidden])){--sidebar-width:88px}
+body.sidebar-collapsed .workspace-nav-title{display:none}
+body.sidebar-collapsed:has(#appTabs:not([hidden])) .app-tab{flex-direction:column;gap:8px;padding:14px 2px;font-size:10px;white-space:normal;text-align:center}
+body.sidebar-collapsed .sidebar-toggle{align-self:center}
+@media(max-width:760px){body:has(#appTabs:not([hidden])){--sidebar-width:184px}body:has(#appTabs:not([hidden])) .wrap{padding:16px 12px}body:has(#appTabs:not([hidden])) .app-tabs{padding:16px 8px}body:has(#appTabs:not([hidden])) .app-tab{flex-direction:row;font-size:12px;text-align:left;padding:14px 10px}.workspace-nav-title{font-size:13px;text-align:left;padding:16px 10px}.workspace-nav-title span{display:block}body.sidebar-collapsed:has(#appTabs:not([hidden])){--sidebar-width:72px}}

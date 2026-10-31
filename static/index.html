@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CLONE LAB | FACEIT Performance</title>
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=5.2">
+  <link rel="stylesheet" href="/static/style.css?v=5.3">
 </head>
 <body>
 <div class="wrap">
@@ -73,7 +73,7 @@
         <div class="feature-grid feature-grid-bottom"><article class="feature-card feature-server reveal-on-scroll"><div class="feature-card-head"><span class="feature-number">04 / QUICK CONNECT</span><span class="feature-status feature-status-preview">SERVER TOOL</span></div><h3>1-Click Server<br>Browser</h3><p>Aim, DM, Retake veya Xplay sunucu adresini gir; Steam bağlantısını tek tıkla aç. Sunucu IP’lerini kendin ekle.</p><div class="server-mock"><label for="serverMode">MOD</label><select id="serverMode"><option>Aim</option><option>Deathmatch</option><option>Retake</option><option>Xplay</option></select><label for="serverAddress">SUNUCU ADRESİ</label><div class="server-connect-row"><input id="serverAddress" type="text" inputmode="url" placeholder="IP:PORT · ör. 1.2.3.4:27015" autocomplete="off"><button id="serverConnect" type="button">BAĞLAN ↗</button></div><div id="serverMessage" class="server-message" aria-live="polite">Gerçek sunucu adresini gir; örnek IP kullanılmıyor.</div></div></article><article class="feature-card feature-warmup reveal-on-scroll"><div class="feature-card-head"><span class="feature-number">05 / PRE-MATCH</span><span class="feature-status feature-status-preview">ROUTINE BUILDER</span></div><h3>Warm-up Routines<br>& Coach Notes</h3><p>15 dakikalık maç önü rutinini oluştur. Koçluk notları mevcut FACEIT istatistiklerinden gelir; otomatik AI teşhisi değildir.</p><div class="warmup-mock"><div class="warmup-head"><span>15 MIN PRE-MATCH</span><button id="newRoutine" type="button" aria-label="Başka rutin göster">↻</button></div><ol id="warmupRoutine"><li><time>05:00</time><span>Bot aim · kısa ısınma</span></li><li><time>05:00</time><span>DM · crosshair yerleşimi</span></li><li><time>05:00</time><span>Recoil & ilk mermi kontrolü</span></li></ol><div class="warmup-foot">ROUTINE PREVIEW <span id="routineIndex">01 / 03</span></div></div></article></div>
         <div class="landing-endcap"><span class="endcap-orb">CL</span><div><div class="eyebrow">YOUR NEXT MATCH STARTS HERE</div><h2>Hazır olduğunda,<br><span class="accent">verin seni bekliyor.</span></h2></div><button class="button-cta" type="button" data-auth-open="register">Hesabını oluştur ↗</button></div>
       </section>
-    </div>    <nav id="appTabs" class="app-tabs" aria-label="Uygulama sekmeleri" hidden><div class="workspace-nav-title">CLONE LAB<span>OYUNCU ALANI</span></div>
+    </div>    <nav id="appTabs" class="app-tabs" aria-label="Uygulama sekmeleri" hidden><button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Menüyü daralt" aria-expanded="true" aria-controls="appTabs">☰</button><div class="workspace-nav-title">CLONE LAB<span>OYUNCU ALANI</span></div>
       <button type="button" class="app-tab" data-tab="faceit" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 18V10m8 8V4m8 14v-6"/></svg>FACEIT Analiz</button>
       <button type="button" class="app-tab" data-tab="steam" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="8" r="4"/><path d="m13 11-5 6-5-2m6 4 7-7"/></svg>Steam / CS2</button><button type="button" class="app-tab" data-tab="configs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg>Pro Config</button>
     </nav>
@@ -103,7 +103,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js" defer></script>
-<script src="/static/app.js?v=5.2" defer></script>
+<script src="/static/app.js?v=5.3" defer></script>
 <script src="/static/ui-motion.js?v=4.7" defer></script>
 </body>
 </html>
