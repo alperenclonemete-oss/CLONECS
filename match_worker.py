@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import urlsplit
 import httpx
 from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent / ".env.worker")
 load_dotenv()
 from account_store import connection, db_cursor, init_database
 from match_tracking import cipher, sql, init_tracking, enqueue, SHARE

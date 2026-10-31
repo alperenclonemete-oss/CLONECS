@@ -9,3 +9,4 @@ data/
 worker/node_modules/
 *.dem
 *.dem.bz2
+.venv-worker/
