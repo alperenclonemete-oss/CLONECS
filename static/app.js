@@ -439,12 +439,12 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
     lineupTimeline
       .to(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4,autoAlpha:1,duration:.2,ease:'power1.out'},0)
       .to(lineupHand,{xPercent:-95,yPercent:45,rotation:24,autoAlpha:.12,duration:.2,ease:'power2.in'},.2)
-      .set(lineupGrenade,{autoAlpha:1},.4)
+      .set(lineupGrenade,{autoAlpha:1},.2)
       .to(lineupGrenade,{
         motionPath:{path:'#smoke-trajectory',align:'#smoke-trajectory',alignOrigin:[.5,.5],autoRotate:false,start:0,end:1},
-        duration:.34,ease:'none'
-      },.4)
-      .to(grenadeArtwork,{rotation:360,duration:.34,ease:'none',transformOrigin:'50% 50%'},.4)
+        duration:.54,ease:'none'
+      },.2)
+      .to(grenadeArtwork,{rotation:360,duration:.54,ease:'none',transformOrigin:'50% 50%'},.2)
       .to(lineupGrenade,{y:-18,duration:.025,ease:'power2.out'},.74)
       .to(lineupGrenade,{y:0,duration:.035,ease:'bounce.out'},.765)
       .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.8)
