@@ -830,7 +830,7 @@
     },
     {
       "name": "kyxsan",
-      "team": "Falcons",
+      "team": "Aurora",
       "rank": 4,
       "role": null,
       "country": null,
@@ -967,7 +967,7 @@
     },
     {
       "name": "BELCHONOKK",
-      "team": "PARIVISION",
+      "team": "1win",
       "rank": 5,
       "role": null,
       "country": null,
@@ -1231,7 +1231,7 @@
     },
     {
       "name": "Brollan",
-      "team": "MOUZ",
+      "team": "HEROIC",
       "rank": 6,
       "role": "Entry",
       "country": "SE",
@@ -1325,7 +1325,7 @@
     },
     {
       "name": "Jimpphat",
-      "team": "MOUZ",
+      "team": "Aurora",
       "rank": 6,
       "role": "Anchor",
       "country": "FI",
@@ -1535,7 +1535,7 @@
     },
     {
       "name": "soulfly",
-      "team": "Aurora",
+      "team": "Eternal Fire",
       "rank": 7,
       "role": null,
       "country": null,
@@ -2119,7 +2119,7 @@
     },
     {
       "name": "karrigan",
-      "team": "FaZe",
+      "team": "Falcons",
       "rank": 11,
       "role": "IGL",
       "country": "DK",
@@ -2389,7 +2389,7 @@
     },
     {
       "name": "SunPayus",
-      "team": "G2",
+      "team": "FUT",
       "rank": 12,
       "role": "AWPer",
       "country": "ES",
@@ -2582,7 +2582,7 @@
     },
     {
       "name": "cmtry",
-      "team": "FUT",
+      "team": "Astralis",
       "rank": 13,
       "role": null,
       "country": null,
@@ -2988,7 +2988,7 @@
     },
     {
       "name": "Maka",
-      "team": "3DMAX",
+      "team": "Envy",
       "rank": 15,
       "role": null,
       "country": null,
@@ -3062,7 +3062,7 @@
     },
     {
       "name": "Lucky",
-      "team": "3DMAX",
+      "team": "Envy",
       "rank": 15,
       "role": null,
       "country": null,
@@ -3090,7 +3090,7 @@
     },
     {
       "name": "Graviti",
-      "team": "3DMAX",
+      "team": "Envy",
       "rank": 15,
       "role": null,
       "country": null,
@@ -3127,7 +3127,7 @@
     },
     {
       "name": "misutaaa",
-      "team": "3DMAX",
+      "team": "Envy",
       "rank": 15,
       "role": null,
       "country": null,
@@ -3226,7 +3226,7 @@
     },
     {
       "name": "xfl0ud",
-      "team": "HEROIC",
+      "team": "FUT",
       "rank": 16,
       "role": null,
       "country": null,
@@ -3636,7 +3636,7 @@
     },
     {
       "name": "siuhy",
-      "team": "Liquid",
+      "team": "Astralis",
       "rank": 18,
       "role": "IGL",
       "country": "PL",
@@ -3772,7 +3772,7 @@
     },
     {
       "name": "nqz",
-      "team": "paiN",
+      "team": "MIBR",
       "rank": 19,
       "role": null,
       "country": null,
@@ -4436,7 +4436,7 @@
     },
     {
       "name": "PR",
-      "team": "GamerLegion",
+      "team": "MOUZ",
       "rank": 22,
       "role": null,
       "country": null,
@@ -4510,7 +4510,7 @@
     },
     {
       "name": "afro",
-      "team": "Monte",
+      "team": "Luminosity",
       "rank": 23,
       "role": null,
       "country": null,
@@ -4592,7 +4592,7 @@
     },
     {
       "name": "AZUWU",
-      "team": "Monte",
+      "team": "Luminosity",
       "rank": 23,
       "role": null,
       "country": null,
@@ -4629,7 +4629,7 @@
     },
     {
       "name": "Rainwaker",
-      "team": "Monte",
+      "team": "Luminosity",
       "rank": 23,
       "role": null,
       "country": null,
@@ -4701,7 +4701,7 @@
     },
     {
       "name": "r1nkle",
-      "team": "Ninjas in Pyjamas",
+      "team": "G2",
       "rank": 24,
       "role": null,
       "country": null,
@@ -5355,7 +5355,7 @@
     },
     {
       "name": "FL4MUS",
-      "team": "BetBoom",
+      "team": "GamerLegion",
       "rank": 28,
       "role": null,
       "country": null,
@@ -5784,7 +5784,7 @@
     },
     {
       "name": "try",
-      "team": "Passion UA",
+      "team": "Legacy",
       "rank": 30,
       "role": null,
       "country": null,
@@ -5821,7 +5821,7 @@
     },
     {
       "name": "JT",
-      "team": "Passion UA",
+      "team": "Liquid",
       "rank": 30,
       "role": null,
       "country": null,
@@ -5858,7 +5858,7 @@
     },
     {
       "name": "Kvem",
-      "team": "Passion UA",
+      "team": "Eternal Fire",
       "rank": 30,
       "role": null,
       "country": null,
@@ -6010,7 +6010,7 @@
     },
     {
       "name": "MartinezSa",
-      "team": "Gentle Mates",
+      "team": "HEROIC",
       "rank": 26,
       "role": null,
       "country": null,

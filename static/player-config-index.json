@@ -1,1050 +1,728 @@
 [
   {
     "team": "Vitality",
-    "rank": 1,
+    "rank": 2,
     "player": "mezii",
     "source_url": "https://confighub.gg/cs2/mezii",
     "file": "/static/configs/01-mezii.cfg"
   },
   {
     "team": "Vitality",
-    "rank": 1,
+    "rank": 2,
     "player": "apEX",
     "source_url": "https://confighub.gg/cs2/apex",
     "file": "/static/configs/01-apex.cfg"
   },
   {
     "team": "Vitality",
-    "rank": 1,
+    "rank": 2,
     "player": "ropz",
     "source_url": "https://confighub.gg/cs2/ropz",
     "file": "/static/configs/01-ropz.cfg"
   },
   {
     "team": "Vitality",
-    "rank": 1,
+    "rank": 2,
     "player": "flameZ",
     "source_url": "https://confighub.gg/cs2/flamez",
     "file": "/static/configs/01-flamez.cfg"
   },
   {
     "team": "Vitality",
-    "rank": 1,
+    "rank": 2,
     "player": "ZywOo",
     "source_url": "https://confighub.gg/cs2/zywoo",
     "file": "/static/configs/01-zywoo.cfg"
   },
   {
     "team": "FURIA",
-    "rank": 2,
+    "rank": 3,
     "player": "YEKINDAR",
     "source_url": "https://confighub.gg/cs2/yekindar",
     "file": "/static/configs/02-yekindar.cfg"
   },
   {
     "team": "FURIA",
-    "rank": 2,
+    "rank": 3,
     "player": "molodoy",
     "source_url": "https://confighub.gg/cs2/molodoy",
     "file": "/static/configs/02-molodoy.cfg"
   },
   {
     "team": "FURIA",
-    "rank": 2,
+    "rank": 3,
     "player": "yuurih",
     "source_url": "https://confighub.gg/cs2/yuurih",
     "file": "/static/configs/02-yuurih.cfg"
   },
   {
     "team": "FURIA",
-    "rank": 2,
+    "rank": 3,
     "player": "FalleN",
     "source_url": "https://confighub.gg/cs2/fallen",
     "file": "/static/configs/02-fallen.cfg"
   },
   {
     "team": "FURIA",
-    "rank": 2,
+    "rank": 3,
     "player": "KSCERATO",
     "source_url": "https://confighub.gg/cs2/kscerato",
     "file": "/static/configs/02-kscerato.cfg"
   },
   {
     "team": "Natus Vincere",
-    "rank": 3,
+    "rank": 11,
     "player": "iM",
     "source_url": "https://confighub.gg/cs2/im",
     "file": "/static/configs/03-im.cfg"
   },
   {
     "team": "Natus Vincere",
-    "rank": 3,
+    "rank": 11,
     "player": "makazze",
     "source_url": "https://confighub.gg/cs2/makazze",
     "file": "/static/configs/03-makazze.cfg"
   },
   {
     "team": "Natus Vincere",
-    "rank": 3,
+    "rank": 11,
     "player": "b1t",
     "source_url": "https://confighub.gg/cs2/b1t",
     "file": "/static/configs/03-b1t.cfg"
   },
   {
     "team": "Natus Vincere",
-    "rank": 3,
+    "rank": 11,
     "player": "w0nderful",
     "source_url": "https://confighub.gg/cs2/w0nderful",
     "file": "/static/configs/03-w0nderful.cfg"
   },
   {
     "team": "Natus Vincere",
-    "rank": 3,
+    "rank": 11,
     "player": "Aleksib",
     "source_url": "https://confighub.gg/cs2/aleksib",
     "file": "/static/configs/03-aleksib.cfg"
   },
   {
     "team": "Falcons",
-    "rank": 4,
+    "rank": 6,
     "player": "m0NESY",
     "source_url": "https://confighub.gg/cs2/m0nesy",
     "file": "/static/configs/04-m0nesy.cfg"
   },
   {
     "team": "Falcons",
-    "rank": 4,
+    "rank": 6,
     "player": "NiKo",
     "source_url": "https://confighub.gg/cs2/niko",
     "file": "/static/configs/04-niko.cfg"
   },
   {
     "team": "Falcons",
-    "rank": 4,
+    "rank": 6,
     "player": "TeSeS",
     "source_url": "https://confighub.gg/cs2/teses",
     "file": "/static/configs/04-teses.cfg"
   },
   {
-    "team": "Falcons",
-    "rank": 4,
+    "team": "Aurora",
+    "rank": 5,
     "player": "kyxsan",
     "source_url": "https://confighub.gg/cs2/kyxsan",
     "file": "/static/configs/04-kyxsan.cfg"
   },
   {
     "team": "Falcons",
-    "rank": 4,
+    "rank": 6,
     "player": "kyousuke",
     "source_url": "https://confighub.gg/cs2/kyousuke",
     "file": "/static/configs/04-kyousuke.cfg"
   },
   {
     "team": "PARIVISION",
-    "rank": 5,
+    "rank": 12,
     "player": "xiELO",
     "source_url": "https://confighub.gg/cs2/xielo",
     "file": "/static/configs/05-xielo.cfg"
   },
   {
-    "team": "PARIVISION",
-    "rank": 5,
+    "team": "1win",
+    "rank": 14,
     "player": "BELCHONOKK",
     "source_url": "https://confighub.gg/cs2/belchonokk",
     "file": "/static/configs/05-belchonokk.cfg"
   },
   {
     "team": "PARIVISION",
-    "rank": 5,
+    "rank": 12,
     "player": "Jame",
     "source_url": "https://confighub.gg/cs2/jame",
     "file": "/static/configs/05-jame.cfg"
   },
   {
     "team": "PARIVISION",
-    "rank": 5,
-    "player": "nota",
-    "source_url": "https://confighub.gg/cs2/nota",
-    "file": "/static/configs/05-nota.cfg"
-  },
-  {
-    "team": "PARIVISION",
-    "rank": 5,
+    "rank": 12,
     "player": "zweih",
     "source_url": "https://confighub.gg/cs2/zweih",
     "file": "/static/configs/05-zweih.cfg"
   },
   {
     "team": "MOUZ",
-    "rank": 6,
+    "rank": 4,
     "player": "torzsi",
     "source_url": "https://confighub.gg/cs2/torzsi",
     "file": "/static/configs/06-torzsi.cfg"
   },
   {
     "team": "MOUZ",
-    "rank": 6,
+    "rank": 4,
     "player": "Spinx",
     "source_url": "https://confighub.gg/cs2/spinx",
     "file": "/static/configs/06-spinx.cfg"
   },
   {
-    "team": "MOUZ",
-    "rank": 6,
+    "team": "HEROIC",
+    "rank": 24,
     "player": "Brollan",
     "source_url": "https://confighub.gg/cs2/brollan",
     "file": "/static/configs/06-brollan.cfg"
   },
   {
     "team": "MOUZ",
-    "rank": 6,
+    "rank": 4,
     "player": "xertioN",
     "source_url": "https://confighub.gg/cs2/xertion",
     "file": "/static/configs/06-xertion.cfg"
   },
   {
-    "team": "MOUZ",
-    "rank": 6,
+    "team": "Aurora",
+    "rank": 5,
     "player": "Jimpphat",
     "source_url": "https://confighub.gg/cs2/jimpphat",
     "file": "/static/configs/06-jimpphat.cfg"
   },
   {
     "team": "Aurora",
-    "rank": 7,
-    "player": "MAJ3R",
-    "source_url": "https://confighub.gg/cs2/maj3r",
-    "file": "/static/configs/07-maj3r.cfg"
-  },
-  {
-    "team": "Aurora",
-    "rank": 7,
+    "rank": 5,
     "player": "XANTARES",
     "source_url": "https://confighub.gg/cs2/xantares",
     "file": "/static/configs/07-xantares.cfg"
   },
   {
     "team": "Aurora",
-    "rank": 7,
+    "rank": 5,
     "player": "woxic",
     "source_url": "https://confighub.gg/cs2/woxic",
     "file": "/static/configs/07-woxic.cfg"
   },
   {
     "team": "Aurora",
-    "rank": 7,
+    "rank": 5,
     "player": "Wicadia",
     "source_url": "https://confighub.gg/cs2/wicadia",
     "file": "/static/configs/07-wicadia.cfg"
   },
   {
-    "team": "Aurora",
-    "rank": 7,
+    "team": "Eternal Fire",
+    "rank": 30,
     "player": "soulfly",
     "source_url": "https://confighub.gg/cs2/soulfly",
     "file": "/static/configs/07-soulfly.cfg"
   },
   {
     "team": "The MongolZ",
-    "rank": 8,
+    "rank": 16,
     "player": "cobrazera",
     "source_url": "https://confighub.gg/cs2/cobrazera",
     "file": "/static/configs/08-cobrazera.cfg"
   },
   {
     "team": "The MongolZ",
-    "rank": 8,
+    "rank": 16,
     "player": "910",
     "source_url": "https://confighub.gg/cs2/910",
     "file": "/static/configs/08-910.cfg"
   },
   {
     "team": "The MongolZ",
-    "rank": 8,
-    "player": "mzinho",
-    "source_url": "https://confighub.gg/cs2/mzinho",
-    "file": "/static/configs/08-mzinho.cfg"
-  },
-  {
-    "team": "The MongolZ",
-    "rank": 8,
+    "rank": 16,
     "player": "bLitz",
     "source_url": "https://confighub.gg/cs2/blitz",
     "file": "/static/configs/08-blitz.cfg"
   },
   {
     "team": "Spirit",
-    "rank": 9,
+    "rank": 1,
     "player": "sh1ro",
     "source_url": "https://confighub.gg/cs2/sh1ro",
     "file": "/static/configs/09-sh1ro.cfg"
   },
   {
     "team": "Spirit",
-    "rank": 9,
+    "rank": 1,
     "player": "magixx",
     "source_url": "https://confighub.gg/cs2/magixx",
     "file": "/static/configs/09-magixx.cfg"
   },
   {
     "team": "Spirit",
-    "rank": 9,
+    "rank": 1,
     "player": "tN1R",
     "source_url": "https://confighub.gg/cs2/tn1r",
     "file": "/static/configs/09-tn1r.cfg"
   },
   {
     "team": "Spirit",
-    "rank": 9,
+    "rank": 1,
     "player": "donk",
     "source_url": "https://confighub.gg/cs2/donk",
     "file": "/static/configs/09-donk.cfg"
   },
   {
     "team": "Spirit",
-    "rank": 9,
+    "rank": 1,
     "player": "zont1x",
     "source_url": "https://confighub.gg/cs2/zont1x",
     "file": "/static/configs/09-zont1x.cfg"
   },
   {
     "team": "Astralis",
-    "rank": 10,
-    "player": "jabbi",
-    "source_url": "https://confighub.gg/cs2/jabbi",
-    "file": "/static/configs/10-jabbi.cfg"
-  },
-  {
-    "team": "Astralis",
-    "rank": 10,
+    "rank": 17,
     "player": "phzy",
     "source_url": "https://confighub.gg/cs2/phzy",
     "file": "/static/configs/10-phzy.cfg"
   },
   {
     "team": "Astralis",
-    "rank": 10,
-    "player": "HooXi",
-    "source_url": "https://confighub.gg/cs2/hooxi",
-    "file": "/static/configs/10-hooxi.cfg"
-  },
-  {
-    "team": "Astralis",
-    "rank": 10,
+    "rank": 17,
     "player": "Staehr",
     "source_url": "https://confighub.gg/cs2/staehr",
     "file": "/static/configs/10-staehr.cfg"
   },
   {
     "team": "Astralis",
-    "rank": 10,
+    "rank": 17,
     "player": "ryu",
     "source_url": "https://confighub.gg/cs2/ryu",
     "file": "/static/configs/10-ryu.cfg"
   },
   {
-    "team": "FaZe",
-    "rank": 11,
+    "team": "Falcons",
+    "rank": 6,
     "player": "karrigan",
     "source_url": "https://confighub.gg/cs2/karrigan",
     "file": "/static/configs/11-karrigan.cfg"
   },
   {
     "team": "FaZe",
-    "rank": 11,
-    "player": "broky",
-    "source_url": "https://confighub.gg/cs2/broky",
-    "file": "/static/configs/11-broky.cfg"
-  },
-  {
-    "team": "FaZe",
-    "rank": 11,
+    "rank": 18,
     "player": "Twistzz",
     "source_url": "https://confighub.gg/cs2/twistzz",
     "file": "/static/configs/11-twistzz.cfg"
   },
   {
     "team": "FaZe",
-    "rank": 11,
+    "rank": 18,
     "player": "jcobbb",
     "source_url": "https://confighub.gg/cs2/jcobbb",
     "file": "/static/configs/11-jcobbb.cfg"
   },
   {
     "team": "FaZe",
-    "rank": 11,
+    "rank": 18,
     "player": "frozen",
     "source_url": "https://confighub.gg/cs2/frozen",
     "file": "/static/configs/11-frozen.cfg"
   },
   {
     "team": "G2",
-    "rank": 12,
+    "rank": 10,
     "player": "MATYS",
     "source_url": "https://confighub.gg/cs2/matys",
     "file": "/static/configs/12-matys.cfg"
   },
   {
-    "team": "G2",
-    "rank": 12,
+    "team": "FUT",
+    "rank": 7,
     "player": "SunPayus",
     "source_url": "https://confighub.gg/cs2/sunpayus",
     "file": "/static/configs/12-sunpayus.cfg"
   },
   {
     "team": "G2",
-    "rank": 12,
+    "rank": 10,
     "player": "NertZ",
     "source_url": "https://confighub.gg/cs2/nertz",
     "file": "/static/configs/12-nertz.cfg"
   },
   {
     "team": "G2",
-    "rank": 12,
+    "rank": 10,
     "player": "HeavyGod",
     "source_url": "https://confighub.gg/cs2/heavygod",
     "file": "/static/configs/12-heavygod.cfg"
   },
   {
     "team": "G2",
-    "rank": 12,
+    "rank": 10,
     "player": "huNter-",
     "source_url": "https://confighub.gg/cs2/hunter",
     "file": "/static/configs/12-hunter.cfg"
   },
   {
-    "team": "FUT",
-    "rank": 13,
+    "team": "Astralis",
+    "rank": 17,
     "player": "cmtry",
     "source_url": "https://confighub.gg/cs2/cmtry",
     "file": "/static/configs/13-cmtry.cfg"
   },
   {
     "team": "FUT",
-    "rank": 13,
-    "player": "lauNX",
-    "source_url": "https://confighub.gg/cs2/launx",
-    "file": "/static/configs/13-launx.cfg"
-  },
-  {
-    "team": "FUT",
-    "rank": 13,
+    "rank": 7,
     "player": "dem0n",
     "source_url": "https://confighub.gg/cs2/dem0n",
     "file": "/static/configs/13-dem0n.cfg"
   },
   {
     "team": "FUT",
-    "rank": 13,
+    "rank": 7,
     "player": "dziugss",
     "source_url": "https://confighub.gg/cs2/dziugss",
     "file": "/static/configs/13-dziugss.cfg"
   },
   {
     "team": "FUT",
-    "rank": 13,
+    "rank": 7,
     "player": "Krabeni",
     "source_url": "https://confighub.gg/cs2/krabeni",
     "file": "/static/configs/13-krabeni.cfg"
   },
   {
     "team": "Legacy",
-    "rank": 14,
+    "rank": 8,
     "player": "arT",
     "source_url": "https://confighub.gg/cs2/art",
     "file": "/static/configs/14-art.cfg"
   },
   {
     "team": "Legacy",
-    "rank": 14,
+    "rank": 8,
     "player": "dumau",
     "source_url": "https://confighub.gg/cs2/dumau",
     "file": "/static/configs/14-dumau.cfg"
   },
   {
     "team": "Legacy",
-    "rank": 14,
+    "rank": 8,
     "player": "n1ssim",
     "source_url": "https://confighub.gg/cs2/n1ssim",
     "file": "/static/configs/14-n1ssim.cfg"
   },
   {
     "team": "Legacy",
-    "rank": 14,
+    "rank": 8,
     "player": "latto",
     "source_url": "https://confighub.gg/cs2/latto",
     "file": "/static/configs/14-latto.cfg"
   },
   {
-    "team": "Legacy",
-    "rank": 14,
-    "player": "saadzin",
-    "source_url": "https://confighub.gg/cs2/saadzin",
-    "file": "/static/configs/14-saadzin.cfg"
-  },
-  {
-    "team": "3DMAX",
-    "rank": 15,
+    "team": "Envy",
+    "rank": 26,
     "player": "Maka",
     "source_url": "https://confighub.gg/cs2/maka",
     "file": "/static/configs/15-maka.cfg"
   },
   {
-    "team": "3DMAX",
-    "rank": 15,
-    "player": "Ex3rcice",
-    "source_url": "https://confighub.gg/cs2/ex3rcice",
-    "file": "/static/configs/15-ex3rcice.cfg"
-  },
-  {
-    "team": "3DMAX",
-    "rank": 15,
+    "team": "Envy",
+    "rank": 26,
     "player": "Lucky",
     "source_url": "https://confighub.gg/cs2/lucky",
     "file": "/static/configs/15-lucky.cfg"
   },
   {
-    "team": "3DMAX",
-    "rank": 15,
+    "team": "Envy",
+    "rank": 26,
     "player": "Graviti",
     "source_url": "https://confighub.gg/cs2/graviti",
     "file": "/static/configs/15-graviti.cfg"
   },
   {
-    "team": "3DMAX",
-    "rank": 15,
+    "team": "Envy",
+    "rank": 26,
     "player": "misutaaa",
     "source_url": "https://confighub.gg/cs2/misutaaa",
     "file": "/static/configs/15-misutaaa.cfg"
   },
   {
     "team": "HEROIC",
-    "rank": 16,
-    "player": "Alkaren",
-    "source_url": "https://confighub.gg/cs2/alkaren",
-    "file": "/static/configs/16-alkaren.cfg"
-  },
-  {
-    "team": "HEROIC",
-    "rank": 16,
+    "rank": 24,
     "player": "nilo",
     "source_url": "https://confighub.gg/cs2/nilo",
     "file": "/static/configs/16-nilo.cfg"
   },
   {
-    "team": "HEROIC",
-    "rank": 16,
+    "team": "FUT",
+    "rank": 7,
     "player": "xfl0ud",
     "source_url": "https://confighub.gg/cs2/xfl0ud",
     "file": "/static/configs/16-xfl0ud.cfg"
   },
   {
     "team": "HEROIC",
-    "rank": 16,
+    "rank": 24,
     "player": "Chr1zN",
     "source_url": "https://confighub.gg/cs2/chr1zn",
     "file": "/static/configs/16-chr1zn.cfg"
   },
   {
     "team": "HEROIC",
-    "rank": 16,
+    "rank": 24,
     "player": "susp",
     "source_url": "https://confighub.gg/cs2/susp",
     "file": "/static/configs/16-susp.cfg"
   },
   {
     "team": "9z",
-    "rank": 17,
+    "rank": 15,
     "player": "dgt",
     "source_url": "https://confighub.gg/cs2/dgt",
     "file": "/static/configs/17-dgt.cfg"
   },
   {
     "team": "9z",
-    "rank": 17,
+    "rank": 15,
     "player": "max",
     "source_url": "https://confighub.gg/cs2/max",
     "file": "/static/configs/17-max.cfg"
   },
   {
     "team": "9z",
-    "rank": 17,
+    "rank": 15,
     "player": "meyern",
     "source_url": "https://confighub.gg/cs2/meyern",
     "file": "/static/configs/17-meyern.cfg"
   },
   {
     "team": "9z",
-    "rank": 17,
+    "rank": 15,
     "player": "luchov",
     "source_url": "https://confighub.gg/cs2/luchov",
     "file": "/static/configs/17-luchov.cfg"
   },
   {
     "team": "9z",
-    "rank": 17,
+    "rank": 15,
     "player": "HUASOPEEK",
     "source_url": "https://confighub.gg/cs2/huasopeek",
     "file": "/static/configs/17-huasopeek.cfg"
   },
   {
     "team": "Liquid",
-    "rank": 18,
+    "rank": 23,
     "player": "malbsMd",
     "source_url": "https://confighub.gg/cs2/malbsmd",
     "file": "/static/configs/18-malbsmd.cfg"
   },
   {
-    "team": "Liquid",
-    "rank": 18,
-    "player": "ultimate",
-    "source_url": "https://confighub.gg/cs2/ultimate",
-    "file": "/static/configs/18-ultimate.cfg"
-  },
-  {
-    "team": "Liquid",
-    "rank": 18,
+    "team": "Astralis",
+    "rank": 17,
     "player": "siuhy",
     "source_url": "https://confighub.gg/cs2/siuhy",
     "file": "/static/configs/18-siuhy.cfg"
   },
   {
     "team": "Liquid",
-    "rank": 18,
+    "rank": 23,
     "player": "NAF",
     "source_url": "https://confighub.gg/cs2/naf",
     "file": "/static/configs/18-naf.cfg"
   },
   {
     "team": "Liquid",
-    "rank": 18,
+    "rank": 23,
     "player": "EliGE",
     "source_url": "https://confighub.gg/cs2/elige",
     "file": "/static/configs/18-elige.cfg"
   },
   {
-    "team": "paiN",
-    "rank": 19,
+    "team": "MIBR",
+    "rank": 13,
     "player": "nqz",
     "source_url": "https://confighub.gg/cs2/nqz",
     "file": "/static/configs/19-nqz.cfg"
   },
   {
-    "team": "paiN",
-    "rank": 19,
-    "player": "biguzera",
-    "source_url": "https://confighub.gg/cs2/biguzera",
-    "file": "/static/configs/19-biguzera.cfg"
-  },
-  {
-    "team": "paiN",
-    "rank": 19,
-    "player": "piriajr",
-    "source_url": "https://confighub.gg/cs2/piriajr",
-    "file": "/static/configs/19-piriajr.cfg"
-  },
-  {
-    "team": "paiN",
-    "rank": 19,
-    "player": "snow",
-    "source_url": "https://confighub.gg/cs2/snow",
-    "file": "/static/configs/19-snow.cfg"
-  },
-  {
     "team": "B8",
-    "rank": 20,
+    "rank": 22,
     "player": "npl",
     "source_url": "https://confighub.gg/cs2/npl",
     "file": "/static/configs/20-npl.cfg"
   },
   {
     "team": "B8",
-    "rank": 20,
+    "rank": 22,
     "player": "esenthial",
     "source_url": "https://confighub.gg/cs2/esenthial",
     "file": "/static/configs/20-esenthial.cfg"
   },
   {
     "team": "B8",
-    "rank": 20,
+    "rank": 22,
     "player": "kensizor",
     "source_url": "https://confighub.gg/cs2/kensizor",
     "file": "/static/configs/20-kensizor.cfg"
   },
   {
     "team": "B8",
-    "rank": 20,
+    "rank": 22,
     "player": "alex666",
     "source_url": "https://confighub.gg/cs2/alex666",
     "file": "/static/configs/20-alex666.cfg"
   },
   {
     "team": "B8",
-    "rank": 20,
+    "rank": 22,
     "player": "s1zzi",
     "source_url": "https://confighub.gg/cs2/s1zzi",
     "file": "/static/configs/20-s1zzi.cfg"
   },
   {
-    "team": "TYLOO",
-    "rank": 21,
-    "player": "JamYoung",
-    "source_url": "https://confighub.gg/cs2/jamyoung",
-    "file": "/static/configs/21-jamyoung.cfg"
-  },
-  {
-    "team": "TYLOO",
-    "rank": 21,
-    "player": "Jee",
-    "source_url": "https://confighub.gg/cs2/jee",
-    "file": "/static/configs/21-jee.cfg"
-  },
-  {
-    "team": "TYLOO",
-    "rank": 21,
-    "player": "Mercury",
-    "source_url": "https://confighub.gg/cs2/mercury",
-    "file": "/static/configs/21-mercury.cfg"
-  },
-  {
-    "team": "TYLOO",
-    "rank": 21,
-    "player": "Moseyuh",
-    "source_url": "https://confighub.gg/cs2/moseyuh",
-    "file": "/static/configs/21-moseyuh.cfg"
-  },
-  {
-    "team": "TYLOO",
-    "rank": 21,
-    "player": "Zero",
-    "source_url": "https://confighub.gg/cs2/zero",
-    "file": "/static/configs/21-zero.cfg"
-  },
-  {
     "team": "GamerLegion",
-    "rank": 22,
-    "player": "Snax",
-    "source_url": "https://confighub.gg/cs2/snax",
-    "file": "/static/configs/22-snax.cfg"
-  },
-  {
-    "team": "GamerLegion",
-    "rank": 22,
+    "rank": 27,
     "player": "Tauson",
     "source_url": "https://confighub.gg/cs2/tauson",
     "file": "/static/configs/22-tauson.cfg"
   },
   {
     "team": "GamerLegion",
-    "rank": 22,
+    "rank": 27,
     "player": "hypex",
     "source_url": "https://confighub.gg/cs2/hypex",
     "file": "/static/configs/22-hypex.cfg"
   },
   {
     "team": "GamerLegion",
-    "rank": 22,
+    "rank": 27,
     "player": "REZ",
     "source_url": "https://confighub.gg/cs2/rez",
     "file": "/static/configs/22-rez.cfg"
   },
   {
-    "team": "GamerLegion",
-    "rank": 22,
+    "team": "MOUZ",
+    "rank": 4,
     "player": "PR",
     "source_url": "https://confighub.gg/cs2/pr",
     "file": "/static/configs/22-pr.cfg"
   },
   {
-    "team": "Monte",
-    "rank": 23,
-    "player": "Bymas",
-    "source_url": "https://confighub.gg/cs2/bymas",
-    "file": "/static/configs/23-bymas.cfg"
-  },
-  {
-    "team": "Monte",
-    "rank": 23,
+    "team": "Luminosity",
+    "rank": 28,
     "player": "afro",
     "source_url": "https://confighub.gg/cs2/afro",
     "file": "/static/configs/23-afro.cfg"
   },
   {
-    "team": "Monte",
-    "rank": 23,
-    "player": "Gizmy",
-    "source_url": "https://confighub.gg/cs2/gizmy",
-    "file": "/static/configs/23-gizmy.cfg"
-  },
-  {
-    "team": "Monte",
-    "rank": 23,
+    "team": "Luminosity",
+    "rank": 28,
     "player": "AZUWU",
     "source_url": "https://confighub.gg/cs2/azuwu",
     "file": "/static/configs/23-azuwu.cfg"
   },
   {
-    "team": "Monte",
-    "rank": 23,
+    "team": "Luminosity",
+    "rank": 28,
     "player": "Rainwaker",
     "source_url": "https://confighub.gg/cs2/rainwaker",
     "file": "/static/configs/23-rainwaker.cfg"
   },
   {
-    "team": "Ninjas in Pyjamas",
-    "rank": 24,
-    "player": "Snappi",
-    "source_url": "https://confighub.gg/cs2/snappi",
-    "file": "/static/configs/24-snappi.cfg"
-  },
-  {
-    "team": "Ninjas in Pyjamas",
-    "rank": 24,
+    "team": "G2",
+    "rank": 10,
     "player": "r1nkle",
     "source_url": "https://confighub.gg/cs2/r1nkle",
     "file": "/static/configs/24-r1nkle.cfg"
   },
   {
     "team": "Ninjas in Pyjamas",
-    "rank": 24,
+    "rank": 20,
     "player": "xKacpersky",
     "source_url": "https://confighub.gg/cs2/xkacpersky",
     "file": "/static/configs/24-xkacpersky.cfg"
   },
   {
     "team": "Ninjas in Pyjamas",
-    "rank": 24,
+    "rank": 20,
     "player": "sjuush",
     "source_url": "https://confighub.gg/cs2/sjuush",
     "file": "/static/configs/24-sjuush.cfg"
   },
   {
-    "team": "Ninjas in Pyjamas",
-    "rank": 24,
-    "player": "cairne",
-    "source_url": "https://confighub.gg/cs2/cairne",
-    "file": "/static/configs/24-cairne.cfg"
-  },
-  {
-    "team": "NRG",
-    "rank": 25,
-    "player": "Sonic",
-    "source_url": "https://confighub.gg/cs2/sonic",
-    "file": "/static/configs/25-sonic.cfg"
-  },
-  {
-    "team": "NRG",
-    "rank": 25,
-    "player": "oSee",
-    "source_url": "https://confighub.gg/cs2/osee",
-    "file": "/static/configs/25-osee.cfg"
-  },
-  {
-    "team": "NRG",
-    "rank": 25,
-    "player": "br0",
-    "source_url": "https://confighub.gg/cs2/br0",
-    "file": "/static/configs/25-br0.cfg"
-  },
-  {
-    "team": "NRG",
-    "rank": 25,
-    "player": "nitr0",
-    "source_url": "https://confighub.gg/cs2/nitr0",
-    "file": "/static/configs/25-nitr0.cfg"
-  },
-  {
-    "team": "NRG",
-    "rank": 25,
-    "player": "Grim",
-    "source_url": "https://confighub.gg/cs2/grim",
-    "file": "/static/configs/25-grim.cfg"
-  },
-  {
-    "team": "Gentle Mates",
-    "rank": 26,
-    "player": "alex",
-    "source_url": "https://confighub.gg/cs2/alex",
-    "file": "/static/configs/26-alex.cfg"
-  },
-  {
-    "team": "Gentle Mates",
-    "rank": 26,
-    "player": "mopoz",
-    "source_url": "https://confighub.gg/cs2/mopoz",
-    "file": "/static/configs/26-mopoz.cfg"
-  },
-  {
-    "team": "Gentle Mates",
-    "rank": 26,
-    "player": "dav1g",
-    "source_url": "https://confighub.gg/cs2/dav1g",
-    "file": "/static/configs/26-dav1g.cfg"
-  },
-  {
-    "team": "Gentle Mates",
-    "rank": 26,
-    "player": "sausol",
-    "source_url": "https://confighub.gg/cs2/sausol",
-    "file": "/static/configs/26-sausol.cfg"
-  },
-  {
-    "team": "SINNERS",
+    "team": "GamerLegion",
     "rank": 27,
-    "player": "SHOCK",
-    "source_url": "https://confighub.gg/cs2/shock",
-    "file": "/static/configs/27-shock.cfg"
-  },
-  {
-    "team": "SINNERS",
-    "rank": 27,
-    "player": "MoDo",
-    "source_url": "https://confighub.gg/cs2/modo",
-    "file": "/static/configs/27-modo.cfg"
-  },
-  {
-    "team": "SINNERS",
-    "rank": 27,
-    "player": "kisserek",
-    "source_url": "https://confighub.gg/cs2/kisserek",
-    "file": "/static/configs/27-kisserek.cfg"
-  },
-  {
-    "team": "SINNERS",
-    "rank": 27,
-    "player": "beastik",
-    "source_url": "https://confighub.gg/cs2/beastik",
-    "file": "/static/configs/27-beastik.cfg"
-  },
-  {
-    "team": "SINNERS",
-    "rank": 27,
-    "player": "stressarN",
-    "source_url": "https://confighub.gg/cs2/stressarn",
-    "file": "/static/configs/27-stressarn.cfg"
-  },
-  {
-    "team": "BetBoom",
-    "rank": 28,
     "player": "FL4MUS",
     "source_url": "https://confighub.gg/cs2/fl4mus",
     "file": "/static/configs/28-fl4mus.cfg"
   },
   {
     "team": "BetBoom",
-    "rank": 28,
+    "rank": 9,
     "player": "Magnojez",
     "source_url": "https://confighub.gg/cs2/magnojez",
     "file": "/static/configs/28-magnojez.cfg"
   },
   {
     "team": "BetBoom",
-    "rank": 28,
+    "rank": 9,
     "player": "S1ren",
     "source_url": "https://confighub.gg/cs2/s1ren",
     "file": "/static/configs/28-s1ren.cfg"
   },
   {
     "team": "BetBoom",
-    "rank": 28,
+    "rank": 9,
     "player": "Boombl4",
     "source_url": "https://confighub.gg/cs2/boombl4",
     "file": "/static/configs/28-boombl4.cfg"
   },
   {
     "team": "BetBoom",
-    "rank": 28,
+    "rank": 9,
     "player": "zorte",
     "source_url": "https://confighub.gg/cs2/zorte",
     "file": "/static/configs/28-zorte.cfg"
   },
   {
-    "team": "HOTU",
-    "rank": 29,
-    "player": "kAlash",
-    "source_url": "https://confighub.gg/cs2/kalash",
-    "file": "/static/configs/29-kalash.cfg"
-  },
-  {
-    "team": "HOTU",
-    "rank": 29,
-    "player": "dukefissura",
-    "source_url": "https://confighub.gg/cs2/dukefissura",
-    "file": "/static/configs/29-dukefissura.cfg"
-  },
-  {
-    "team": "HOTU",
-    "rank": 29,
-    "player": "mizu",
-    "source_url": "https://confighub.gg/cs2/mizu",
-    "file": "/static/configs/29-mizu.cfg"
-  },
-  {
-    "team": "HOTU",
-    "rank": 29,
-    "player": "frontales",
-    "source_url": "https://confighub.gg/cs2/frontales",
-    "file": "/static/configs/29-frontales.cfg"
-  },
-  {
-    "team": "HOTU",
-    "rank": 29,
-    "player": "n0rb3r7",
-    "source_url": "https://confighub.gg/cs2/n0rb3r7",
-    "file": "/static/configs/29-n0rb3r7.cfg"
-  },
-  {
-    "team": "Passion UA",
-    "rank": 30,
-    "player": "Senzu",
-    "source_url": "https://confighub.gg/cs2/senzu",
-    "file": "/static/configs/30-senzu.cfg"
-  },
-  {
-    "team": "Passion UA",
-    "rank": 30,
+    "team": "Legacy",
+    "rank": 8,
     "player": "try",
     "source_url": "https://confighub.gg/cs2/try",
     "file": "/static/configs/30-try.cfg"
   },
   {
-    "team": "Passion UA",
-    "rank": 30,
+    "team": "Liquid",
+    "rank": 23,
     "player": "JT",
     "source_url": "https://confighub.gg/cs2/jt",
     "file": "/static/configs/30-jt.cfg"
   },
   {
-    "team": "Passion UA",
+    "team": "Eternal Fire",
     "rank": 30,
     "player": "Kvem",
     "source_url": "https://confighub.gg/cs2/kvem",
     "file": "/static/configs/30-kvem.cfg"
   },
   {
-    "team": "Passion UA",
-    "rank": 30,
-    "player": "nicx",
-    "source_url": "https://confighub.gg/cs2/nicx",
-    "file": "/static/configs/30-nicx.cfg"
-  },
-  {
     "team": "The MongolZ",
-    "rank": 8,
+    "rank": 16,
     "player": "Techno",
     "source_url": "https://dropguidecs2.com/en/players/techno/",
     "file": "/static/configs/08-techno.cfg"
   },
   {
-    "team": "paiN",
-    "rank": 19,
-    "player": "vsm",
-    "source_url": "https://prosettings.net/players/vsm/",
-    "file": "/static/configs/19-vsm.cfg"
-  },
-  {
-    "team": "Gentle Mates",
-    "rank": 26,
+    "team": "HEROIC",
+    "rank": 24,
     "player": "MartinezSa",
     "source_url": "https://dropguidecs2.com/en/players/martinezsa/",
     "file": "/static/configs/26-martinezsa.cfg"

@@ -1,93 +1,205 @@
 [
   {
-    "team": "FaZe",
-    "file": "11.png",
-    "source": "https://liquipedia.net/commons/images/3/3d/FaZe_Clan_2025_allmode.png",
-    "bytes": 23883,
-    "ok": true
+    "team": "Spirit",
+    "logo": "spirit",
+    "rank": 1,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Vitality",
+    "logo": "vitality",
+    "rank": 2,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
     "team": "FURIA",
-    "file": "02.png",
-    "source": "https://liquipedia.net/commons/images/a/aa/FURIA_Esports_allmode.png",
-    "bytes": 1540497,
-    "ok": true
+    "logo": "furia",
+    "rank": 3,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
-    "team": "Legacy",
-    "file": "14.png",
-    "source": "https://liquipedia.net/commons/images/thumb/1/13/Legacy_full_darkmode.png/600px-Legacy_full_darkmode.png",
-    "bytes": 42441,
-    "ok": true
+    "team": "MOUZ",
+    "logo": "mouz",
+    "rank": 4,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
-    "team": "3DMAX",
-    "file": "15.png",
-    "source": "https://liquipedia.net/commons/images/f/fd/3DMAX_nov_2023_full_lightmode.png",
-    "bytes": 240481,
-    "ok": true
+    "team": "Aurora",
+    "logo": "aurora",
+    "rank": 5,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
-    "team": "HEROIC",
-    "file": "16.png",
-    "source": "https://liquipedia.net/commons/images/0/03/Heroic_2023_allmode.png",
-    "bytes": 321063,
-    "ok": true
-  },
-  {
-    "team": "9z",
-    "file": "17.png",
-    "source": "https://liquipedia.net/commons/images/7/7f/9z_Team_2024_lightmode.png",
-    "bytes": 12321,
-    "ok": true
-  },
-  {
-    "team": "B8",
-    "file": "20.png",
-    "source": "https://liquipedia.net/commons/images/c/c6/B8_lightmode.png",
-    "bytes": 8087,
-    "ok": true
-  },
-  {
-    "team": "Monte",
-    "file": "23.png",
-    "source": "https://media.jumpthrow.gg/images/teams/logo/monte-dark.png",
-    "bytes": 1048535,
-    "ok": true
-  },
-  {
-    "team": "Ninjas in Pyjamas",
-    "file": "24.png",
-    "source": "https://liquipedia.net/commons/images/b/b7/Ninjas_in_Pyjamas_2021_darkmode.png",
-    "bytes": 59367,
-    "ok": true
-  },
-  {
-    "team": "HOTU",
-    "file": "29.png",
-    "source": "https://cloud.cybershoke.net/img/teams/logos/hotu.png",
-    "bytes": 49525,
-    "ok": true
-  },
-  {
-    "team": "Passion UA",
-    "file": "30.png",
-    "source": "https://liquipedia.net/commons/images/1/17/Passion_UA_2025_darkmode.png",
-    "bytes": 69977,
-    "ok": true
+    "team": "Falcons",
+    "logo": "falcons",
+    "rank": 6,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
     "team": "FUT",
-    "file": "fut.png",
-    "source": "https://liquipedia.net/commons/images/9/90/Futbolist_2021_lightmode.png",
-    "bytes": 175386,
-    "ok": true
+    "logo": "fut",
+    "rank": 7,
+    "source": "Existing local logo asset",
+    "local": true
   },
   {
-    "team": "Gentle Mates",
-    "file": "gentlemates.png",
-    "source": "https://liquipedia.net/commons/images/4/42/Gentle_Mates_2024_darkmode.png",
-    "bytes": 342518,
-    "ok": true
+    "team": "Legacy",
+    "logo": "legacy",
+    "rank": 8,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "BetBoom",
+    "logo": "betboom",
+    "rank": 9,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "G2",
+    "logo": "g2",
+    "rank": 10,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Natus Vincere",
+    "logo": "navi",
+    "rank": 11,
+    "source": "https://img-cdn.hltv.org/teamlogo/9iMirAi7ArBLNU8p3kqUTZ.svg?ixlib=java-2.1.0&s=4dd8635be16122656093ae9884675d0c",
+    "local": false
+  },
+  {
+    "team": "PARIVISION",
+    "logo": "parivision",
+    "rank": 12,
+    "source": "https://img-cdn.hltv.org/teamlogo/MFcDe-M8wfGOUU6x4sRELR.png?ixlib=java-2.1.0&s=1d91076a58b354d8c3eaeda3162c292e&w=50",
+    "local": false
+  },
+  {
+    "team": "MIBR",
+    "logo": "mibr",
+    "rank": 13,
+    "source": "https://img-cdn.hltv.org/teamlogo/sVnH-oAf1J5TnMwoY4cxUC.png?ixlib=java-2.1.0&s=b0ef463fa0f1638bce72a89590fbaddf&w=50",
+    "local": false
+  },
+  {
+    "team": "1win",
+    "logo": "1win",
+    "rank": 14,
+    "source": "https://img-cdn.hltv.org/teamlogo/zbmzI2IMFNwHUvTO4EHaTZ.png?ixlib=java-2.1.0&s=fd29838f5b22b76075de4c80c2e04c0b&w=50",
+    "local": false
+  },
+  {
+    "team": "9z",
+    "logo": "9z",
+    "rank": 15,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "The MongolZ",
+    "logo": "mongolz",
+    "rank": 16,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Astralis",
+    "logo": "astralis",
+    "rank": 17,
+    "source": "https://img-cdn.hltv.org/teamlogo/9bgXHp-oh1oaXr7F0mTGmd.svg?ixlib=java-2.1.0&s=f567161ab183001be33948b98c4b2067",
+    "local": false
+  },
+  {
+    "team": "FaZe",
+    "logo": "faze",
+    "rank": 18,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Ninjas in Pyjamas",
+    "logo": "nip",
+    "rank": 20,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Nemiga",
+    "logo": "nemiga",
+    "rank": 21,
+    "source": "https://img-cdn.hltv.org/teamlogo/6ZPCm5r3XyGByXkFGiRnLh.png?ixlib=java-2.1.0&s=daa0328ebd0143763544b564610721e9&w=50",
+    "local": false
+  },
+  {
+    "team": "B8",
+    "logo": "b8",
+    "rank": 22,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Liquid",
+    "logo": "liquid",
+    "rank": 23,
+    "source": "https://img-cdn.hltv.org/teamlogo/JMeLLbWKCIEJrmfPaqOz4O.svg?ixlib=java-2.1.0&s=c02caf90234d3a3ebac074c84ba1ea62",
+    "local": false
+  },
+  {
+    "team": "HEROIC",
+    "logo": "heroic",
+    "rank": 24,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "magic",
+    "logo": "magic",
+    "rank": 25,
+    "source": "https://img-cdn.hltv.org/teamlogo/KYi27Dm-DVyEUj0WIG5Bdx.png?ixlib=java-2.1.0&s=d490c0b14e24cbc6ddd70f0534ff3651&w=50",
+    "local": false
+  },
+  {
+    "team": "Envy",
+    "logo": "envy",
+    "rank": 26,
+    "source": "https://img-cdn.hltv.org/teamlogo/caSZsIlWR3MQuSWMCJDj8V.svg?ixlib=java-2.1.0&s=52dab8f2955522087be3c5d43013bea8",
+    "local": false
+  },
+  {
+    "team": "GamerLegion",
+    "logo": "gamerlegion",
+    "rank": 27,
+    "source": "Existing local logo asset",
+    "local": true
+  },
+  {
+    "team": "Luminosity",
+    "logo": "luminosity",
+    "rank": 28,
+    "source": "https://img-cdn.hltv.org/teamlogo/HRSwDY9X42P2TiJqy1oeEJ.png?ixlib=java-2.1.0&s=987bcf053f274f928cf18f57f50076a6&w=50",
+    "local": false
+  },
+  {
+    "team": "Alliance",
+    "logo": "alliance",
+    "rank": 29,
+    "source": "https://img-cdn.hltv.org/teamlogo/xsWK0BtR26rN776qdnWFC1.png?ixlib=java-2.1.0&s=4aaf659c3855ebf08c78c157a0653352&w=50",
+    "local": false
+  },
+  {
+    "team": "Eternal Fire",
+    "logo": "eternalfire",
+    "rank": 30,
+    "source": "https://img-cdn.hltv.org/teamlogo/Tafdq71X3B_-73b73bAixr.png?ixlib=java-2.1.0&s=f1505e0f7e03bed0d0d2b4c809768198&w=50",
+    "local": false
   }
 ]

@@ -5,11 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>CLONE LAB | FACEIT Performance</title>
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=2.7">
+  <link rel="stylesheet" href="/static/style.css?v=2.9">
 </head>
 <body>
 <div class="wrap">
-  <header><a class="brand" href="/" aria-label="Clone Lab ana sayfa"><img src="/static/clone-logo.png" alt="Clone Lab" class="site-logo"></a><div class="pill">FACEIT · PERFORMANCE SYSTEM</div></header>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Clone Lab ana sayfa"><img src="/static/clone-logo.png" alt="Clone Lab" class="site-logo"></a>
+    <div class="pill">FACEIT · PERFORMANCE SYSTEM</div>
+    <div id="profileWidget" class="profile-widget" hidden>
+      <button id="profileMenuButton" class="profile-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profileDropdown">
+        <span class="profile-avatar"><img id="profileWidgetAvatar" alt="" hidden><span id="profileWidgetInitials">CL</span></span>
+        <span id="profileWidgetName" class="profile-widget-name"></span><span class="profile-menu-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div id="profileDropdown" class="profile-dropdown" role="menu" hidden>
+        <div class="profile-dropdown-head"><strong id="profileMenuAccount"></strong><span id="profileMenuFaceit">FACEIT profili bağlanmadı</span></div>
+        <button type="button" role="menuitem" data-profile-menu="profile"><span>👤</span> Profilimi incele</button>
+        <button type="button" role="menuitem" data-profile-menu="favorites"><span>🔖</span> Kaydettiklerim / Favori CFG’lerim</button>
+        <button type="button" role="menuitem" data-profile-menu="settings"><span>⚙️</span> Hesap ayarları & FACEIT nick değiştir</button>
+        <button type="button" role="menuitem" id="logoutButton" class="profile-logout"><span>🚪</span> Çıkış yap</button>
+        <div id="profileSettingsPanel" class="profile-settings-panel" hidden>
+          <form id="faceitLinkForm" class="faceit-link-form"><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet</button></div></form>
+          <p id="accountPersistenceNote" class="account-copy"></p>
+        </div>
+        <div id="profileMessage" class="profile-message" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </header>
   <main>
     <section id="guestWelcome" class="guest-welcome">
       <div class="eyebrow">CLONE LAB <span>// PLAYER INTELLIGENCE</span></div>
@@ -25,12 +46,6 @@
           <form id="registerForm" class="auth-form"><strong>Yeni hesap oluştur</strong><input name="username" placeholder="Kullanıcı adı (3-32 karakter)" minlength="3" maxlength="32" autocomplete="username" required><input name="password" type="password" placeholder="Parola (en az 8 karakter)" minlength="8" maxlength="128" autocomplete="new-password" required><button type="submit">Yeni hesap oluştur</button></form>
         </div>
       </div>
-      <div id="authLoggedIn" hidden>
-        <div class="account-header"><div>Oturum açık · <strong id="accountUsername"></strong></div><div class="account-actions"><button type="button" class="secondary" id="changeFaceitButton" hidden>FACEIT profilini değiştir</button><button type="button" class="secondary" id="logoutButton">Çıkış yap</button></div></div>
-        <form id="faceitLinkForm" class="faceit-link-form" hidden><label for="savedFaceitNickname">Kaydedilecek FACEIT kullanıcı adı</label><div><input id="savedFaceitNickname" name="nickname" placeholder="FACEIT kullanıcı adın" minlength="2" maxlength="40" required><button type="submit">Profili kaydet ve aç</button></div></form>
-        <p class="account-copy">Bu işlem FACEIT’e giriş yapmaz ve profil sahipliğini doğrulamaz; yalnızca herkese açık FACEIT profilini Clone Lab hesabına kaydeder.</p>
-      </div>
-      <p id="accountPersistenceNote" class="account-copy">Hesap kalıcılık durumu kontrol ediliyor…</p>
       <div id="authMessage" class="account-message" role="status" aria-live="polite"></div>
     </section>
     <nav id="appTabs" class="app-tabs" aria-label="Uygulama sekmeleri" hidden>
@@ -45,10 +60,11 @@
       <div class="config-shell">
         <div><div class="eyebrow">PLAYER SETTINGS // PUBLIC DATA</div><h1 style="font-size:32px">Pro <span class="accent">Config</span></h1><p class="sub">Takım veya oyuncu ara; yayımlanmış ayarları ve crosshair kodlarını incele.</p></div>
         <label class="config-search-label">Takım ara<input id="configSearch" type="search" placeholder="Takım adı yaz…" autocomplete="off"></label>
-        <div id="configStatus" class="notice">Açık oyuncu verisi yüklenmedi.</div>
+        <div id="configStatus" class="config-loading" aria-label="Açık oyuncu verileri yükleniyor"><div class="skeleton-stack"><i class="skeleton skeleton-row"></i></div></div>
         <div id="configTeamsView"><div id="configTeamsGrid" class="config-teams-grid"></div></div>
         <div id="configPlayersView" hidden><button type="button" id="configBackTeams" class="secondary config-back">← Takımlara dön</button><h2 id="configSelectedTeam" class="config-view-title"></h2><div id="configPlayersGrid" class="config-players-grid"></div></div>
         <div id="configProfileView" hidden><button type="button" id="configBackPlayers" class="secondary config-back">← Oyunculara dön</button><div id="configProfile"></div></div>
+        <div id="configFavoritesView" hidden><button type="button" id="configBackFavorites" class="secondary config-back">← Takımlara dön</button><h2 class="config-view-title">Favori CFG’lerim</h2><div id="configFavoritesGrid" class="config-players-grid"></div><p id="configFavoritesEmpty" class="notice" hidden>Henüz favori oyuncu kaydetmedin.</p></div>
         <div class="config-directory"><div><b>Daha geniş profesyonel oyuncu katalogları</b><p>CSDB.gg, 26 Ekim 2026 tarihli dizininde 1.011 oyuncu ve 208 takım; CS Tools ise 35 takımda yaklaşık 182 pro kaydı bildiriyor. Tam kadro, güncel crosshair ve detaylı CFG için kaynak profillerini aç. Dış kataloglar Clone Lab'e aktarılmış gibi gösterilmez.</p></div><div class="config-directory-links"><a href="https://csdb.gg/pro-players/" target="_blank" rel="noopener noreferrer">CSDB.gg · 1.011 oyuncu ↗</a><a href="https://cstools.io/pros" target="_blank" rel="noopener noreferrer">CS Tools · 35 takım ↗</a></div></div>
         <p class="config-source">Oyuncu ayarları yerel pro_players.json anlık görüntüsünden gelir: bazı alanlar MIT lisanslı GitHub veri tabanından, diğerleri oyuncu başına bağlantısı verilen yayımlanmış CFG kaynaklarından alınır. Fotoğraf kaynağı ve lisansı, Liquipedia API görsel bağlantısında tutulur. Bulunmayan değerler uydurulmaz. <a href="https://github.com/Guewenn/cs2-pro-sensitivity-database" target="_blank" rel="noopener noreferrer">GitHub veri kaynağı ↗</a> · <a href="https://liquipedia.net/api-terms-of-use" target="_blank" rel="noopener noreferrer">Liquipedia API kullanım koşulları ↗</a>.</p>
       </div>
@@ -56,7 +72,7 @@
   <footer>CLONE LAB kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Maç demosu incelenmeden kesin nişan, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
 </div>
 
-<script src="/static/app.js?v=2.7" defer></script>
-<script src="/static/ui-motion.js?v=2.7" defer></script>
+<script src="/static/app.js?v=2.9" defer></script>
+<script src="/static/ui-motion.js?v=2.9" defer></script>
 </body>
 </html>

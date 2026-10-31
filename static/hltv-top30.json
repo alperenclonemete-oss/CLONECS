@@ -4,34 +4,368 @@
   "ranking_date": "2026-10-26",
   "retrieved_date": "2026-10-31",
   "teams": [
-    {"rank":1,"name":"Spirit","logo":"spirit","players":["sh1ro","magixx","tN1R","zont1x","donk"]},
-    {"rank":2,"name":"Vitality","logo":"vitality","players":["apEX","ropz","ZywOo","flameZ","mezii"]},
-    {"rank":3,"name":"FURIA","logo":"furia","players":["FalleN","yuurih","YEKINDAR","KSCERATO","molodoy"]},
-    {"rank":4,"name":"MOUZ","logo":"mouz","players":["torzsi","Spinx","xertioN","PR","xelex"]},
-    {"rank":5,"name":"Aurora","logo":"aurora","players":["XANTARES","woxic","Jimpphat","kyxsan","Wicadia"]},
-    {"rank":6,"name":"Falcons","logo":"falcons","players":["karrigan","NiKo","TeSeS","m0NESY","kyousuke"]},
-    {"rank":7,"name":"FUT","logo":"fut","players":["SunPayus","xfl0ud","dem0n","Krabeni","dziugss"]},
-    {"rank":8,"name":"Legacy","logo":"legacy","players":["arT","dumau","latto","n1ssim","try"]},
-    {"rank":9,"name":"BetBoom","logo":"betboom","players":["Boombl4","zorte","S1ren","d1Ledez","Magnojez"]},
-    {"rank":10,"name":"G2","logo":"g2","players":["huNter-","NertZ","r1nkle","HeavyGod","MATYS"]},
-    {"rank":11,"name":"Natus Vincere","logo":"navi","players":["Aleksib","iM","b1t","w0nderful","makazze"]},
-    {"rank":12,"name":"PARIVISION","logo":"parivision","players":["HObbit","FL1T","Jame","xiELO","zweih"]},
-    {"rank":13,"name":"MIBR","logo":"mibr","players":["LNZ","nqz","insani","venomzera","tomaszin"]},
-    {"rank":14,"name":"1win","logo":"1win","players":["Ax1Le","nafany","BELCHONOKK","fame","ArtFr0st"]},
-    {"rank":15,"name":"9z","logo":"9z","players":["max","dgt","meyern","luchov","HUASOPEEK"]},
-    {"rank":16,"name":"The MongolZ","logo":"mongolz","players":["nin9","bLitz","Techno","910","cobrazera"]},
-    {"rank":17,"name":"Astralis","logo":"astralis","players":["phzy","siuhy","Staehr","ryu","cmtry"]},
-    {"rank":18,"name":"FaZe","logo":"faze","players":["frozen","Twistzz","Neityu","jcobbb","JBOEN"]},
-    {"rank":20,"name":"Ninjas in Pyjamas","logo":"nip","players":["stavn","sjuush","Krimbo","adamb","xKacpersky"]},
-    {"rank":21,"name":"Nemiga","logo":"nemiga","players":["KaiR0N-","Xant3r","robo","khaN","syph0"]},
-    {"rank":22,"name":"B8","logo":"b8","players":["alex666","npl","kensizor","esenthial","s1zzi"]},
-    {"rank":23,"name":"Liquid","logo":"liquid","players":["NAF","EliGE","malbsMd","JT","Jorko"]},
-    {"rank":24,"name":"HEROIC","logo":"heroic","players":["Brollan","nilo","susp","MartinezSa","Chr1zN"]},
-    {"rank":25,"name":"magic","logo":"magic","players":["MaSvAl","lattykk","sFade8","AW","tenzy"]},
-    {"rank":26,"name":"Envy","logo":"envy","players":["Maka","Lucky","misutaaa","Kursy","Graviti"]},
-    {"rank":27,"name":"GamerLegion","logo":"gamerlegion","players":["REZ","shalfey","Tauson","FL4MUS","hypex"]},
-    {"rank":28,"name":"Luminosity","logo":"luminosity","players":["Rainwaker","afro","lux","yxngstxr","AZUWU"]},
-    {"rank":29,"name":"Alliance","logo":"alliance","players":["twist","eraa","bobeksde","upE","avid"]},
-    {"rank":30,"name":"Eternal Fire","logo":"eternalfire","players":["MisteM","regali","soulfly","Kvem","jottAAA"]}
-  ]
+    {
+      "rank": 1,
+      "name": "Spirit",
+      "logo": "spirit",
+      "players": [
+        "sh1ro",
+        "magixx",
+        "tN1R",
+        "zont1x",
+        "donk"
+      ]
+    },
+    {
+      "rank": 2,
+      "name": "Vitality",
+      "logo": "vitality",
+      "players": [
+        "apEX",
+        "ropz",
+        "ZywOo",
+        "flameZ",
+        "mezii"
+      ]
+    },
+    {
+      "rank": 3,
+      "name": "FURIA",
+      "logo": "furia",
+      "players": [
+        "FalleN",
+        "yuurih",
+        "YEKINDAR",
+        "KSCERATO",
+        "molodoy"
+      ]
+    },
+    {
+      "rank": 4,
+      "name": "MOUZ",
+      "logo": "mouz",
+      "players": [
+        "torzsi",
+        "Spinx",
+        "xertioN",
+        "PR",
+        "xelex"
+      ]
+    },
+    {
+      "rank": 5,
+      "name": "Aurora",
+      "logo": "aurora",
+      "players": [
+        "XANTARES",
+        "woxic",
+        "Jimpphat",
+        "kyxsan",
+        "Wicadia"
+      ]
+    },
+    {
+      "rank": 6,
+      "name": "Falcons",
+      "logo": "falcons",
+      "players": [
+        "karrigan",
+        "NiKo",
+        "TeSeS",
+        "m0NESY",
+        "kyousuke"
+      ]
+    },
+    {
+      "rank": 7,
+      "name": "FUT",
+      "logo": "fut",
+      "players": [
+        "SunPayus",
+        "xfl0ud",
+        "dem0n",
+        "Krabeni",
+        "dziugss"
+      ]
+    },
+    {
+      "rank": 8,
+      "name": "Legacy",
+      "logo": "legacy",
+      "players": [
+        "arT",
+        "dumau",
+        "latto",
+        "n1ssim",
+        "try"
+      ]
+    },
+    {
+      "rank": 9,
+      "name": "BetBoom",
+      "logo": "betboom",
+      "players": [
+        "Boombl4",
+        "zorte",
+        "S1ren",
+        "d1Ledez",
+        "Magnojez"
+      ]
+    },
+    {
+      "rank": 10,
+      "name": "G2",
+      "logo": "g2",
+      "players": [
+        "huNter-",
+        "NertZ",
+        "r1nkle",
+        "HeavyGod",
+        "MATYS"
+      ]
+    },
+    {
+      "rank": 11,
+      "name": "Natus Vincere",
+      "logo": "navi",
+      "players": [
+        "Aleksib",
+        "iM",
+        "b1t",
+        "w0nderful",
+        "makazze"
+      ]
+    },
+    {
+      "rank": 12,
+      "name": "PARIVISION",
+      "logo": "parivision",
+      "players": [
+        "HObbit",
+        "FL1T",
+        "Jame",
+        "xiELO",
+        "zweih"
+      ]
+    },
+    {
+      "rank": 13,
+      "name": "MIBR",
+      "logo": "mibr",
+      "players": [
+        "LNZ",
+        "nqz",
+        "insani",
+        "venomzera",
+        "tomaszin"
+      ]
+    },
+    {
+      "rank": 14,
+      "name": "1win",
+      "logo": "1win",
+      "players": [
+        "Ax1Le",
+        "nafany",
+        "BELCHONOKK",
+        "fame",
+        "ArtFr0st"
+      ]
+    },
+    {
+      "rank": 15,
+      "name": "9z",
+      "logo": "9z",
+      "players": [
+        "max",
+        "dgt",
+        "meyern",
+        "luchov",
+        "HUASOPEEK"
+      ]
+    },
+    {
+      "rank": 16,
+      "name": "The MongolZ",
+      "logo": "mongolz",
+      "players": [
+        "nin9",
+        "bLitz",
+        "Techno",
+        "910",
+        "cobrazera"
+      ]
+    },
+    {
+      "rank": 17,
+      "name": "Astralis",
+      "logo": "astralis",
+      "players": [
+        "phzy",
+        "siuhy",
+        "Staehr",
+        "ryu",
+        "cmtry"
+      ]
+    },
+    {
+      "rank": 18,
+      "name": "FaZe",
+      "logo": "faze",
+      "players": [
+        "frozen",
+        "Twistzz",
+        "Neityu",
+        "jcobbb",
+        "JBOEN"
+      ]
+    },
+    {
+      "rank": 20,
+      "name": "Ninjas in Pyjamas",
+      "logo": "nip",
+      "players": [
+        "stavn",
+        "sjuush",
+        "Krimbo",
+        "adamb",
+        "xKacpersky"
+      ]
+    },
+    {
+      "rank": 21,
+      "name": "Nemiga",
+      "logo": "nemiga",
+      "players": [
+        "KaiR0N-",
+        "Xant3r",
+        "robo",
+        "khaN",
+        "syph0"
+      ]
+    },
+    {
+      "rank": 22,
+      "name": "B8",
+      "logo": "b8",
+      "players": [
+        "alex666",
+        "npl",
+        "kensizor",
+        "esenthial",
+        "s1zzi"
+      ]
+    },
+    {
+      "rank": 23,
+      "name": "Liquid",
+      "logo": "liquid",
+      "players": [
+        "NAF",
+        "EliGE",
+        "malbsMd",
+        "JT",
+        "Jorko"
+      ]
+    },
+    {
+      "rank": 24,
+      "name": "HEROIC",
+      "logo": "heroic",
+      "players": [
+        "Brollan",
+        "nilo",
+        "susp",
+        "MartinezSa",
+        "Chr1zN"
+      ]
+    },
+    {
+      "rank": 25,
+      "name": "magic",
+      "logo": "magic",
+      "players": [
+        "MaSvAl",
+        "lattykk",
+        "sFade8",
+        "AW",
+        "tenzy"
+      ]
+    },
+    {
+      "rank": 26,
+      "name": "Envy",
+      "logo": "envy",
+      "players": [
+        "Maka",
+        "Lucky",
+        "misutaaa",
+        "Kursy",
+        "Graviti"
+      ]
+    },
+    {
+      "rank": 27,
+      "name": "GamerLegion",
+      "logo": "gamerlegion",
+      "players": [
+        "REZ",
+        "shalfey",
+        "Tauson",
+        "FL4MUS",
+        "hypex"
+      ]
+    },
+    {
+      "rank": 28,
+      "name": "Luminosity",
+      "logo": "luminosity",
+      "players": [
+        "Rainwaker",
+        "afro",
+        "lux",
+        "yxngstxr",
+        "AZUWU"
+      ]
+    },
+    {
+      "rank": 29,
+      "name": "Alliance",
+      "logo": "alliance",
+      "players": [
+        "twist",
+        "eraa",
+        "bobeksde",
+        "upE",
+        "avid"
+      ]
+    },
+    {
+      "rank": 30,
+      "name": "Eternal Fire",
+      "logo": "eternalfire",
+      "players": [
+        "MisteM",
+        "regali",
+        "soulfly",
+        "Kvem",
+        "jottAAA"
+      ]
+    }
+  ],
+  "logo_urls": {
+    "14": "https://img-cdn.hltv.org/teamlogo/zbmzI2IMFNwHUvTO4EHaTZ.png?ixlib=java-2.1.0&s=fd29838f5b22b76075de4c80c2e04c0b&w=50",
+    "27": "https://img-cdn.hltv.org/teamlogo/vN7O46QoQ346WIRZ8D3spC.png?ixlib=java-2.1.0&s=f139433d31902eea5898c3a63fcc643a&w=50",
+    "29": "https://img-cdn.hltv.org/teamlogo/xsWK0BtR26rN776qdnWFC1.png?ixlib=java-2.1.0&s=4aaf659c3855ebf08c78c157a0653352&w=50",
+    "13": "https://img-cdn.hltv.org/teamlogo/sVnH-oAf1J5TnMwoY4cxUC.png?ixlib=java-2.1.0&s=b0ef463fa0f1638bce72a89590fbaddf&w=50",
+    "12": "https://img-cdn.hltv.org/teamlogo/MFcDe-M8wfGOUU6x4sRELR.png?ixlib=java-2.1.0&s=1d91076a58b354d8c3eaeda3162c292e&w=50",
+    "11": "https://img-cdn.hltv.org/teamlogo/9iMirAi7ArBLNU8p3kqUTZ.svg?ixlib=java-2.1.0&s=4dd8635be16122656093ae9884675d0c",
+    "30": "https://img-cdn.hltv.org/teamlogo/Tafdq71X3B_-73b73bAixr.png?ixlib=java-2.1.0&s=f1505e0f7e03bed0d0d2b4c809768198&w=50",
+    "21": "https://img-cdn.hltv.org/teamlogo/6ZPCm5r3XyGByXkFGiRnLh.png?ixlib=java-2.1.0&s=daa0328ebd0143763544b564610721e9&w=50",
+    "17": "https://img-cdn.hltv.org/teamlogo/9bgXHp-oh1oaXr7F0mTGmd.svg?ixlib=java-2.1.0&s=f567161ab183001be33948b98c4b2067",
+    "28": "https://img-cdn.hltv.org/teamlogo/HRSwDY9X42P2TiJqy1oeEJ.png?ixlib=java-2.1.0&s=987bcf053f274f928cf18f57f50076a6&w=50",
+    "26": "https://img-cdn.hltv.org/teamlogo/caSZsIlWR3MQuSWMCJDj8V.svg?ixlib=java-2.1.0&s=52dab8f2955522087be3c5d43013bea8",
+    "25": "https://img-cdn.hltv.org/teamlogo/KYi27Dm-DVyEUj0WIG5Bdx.png?ixlib=java-2.1.0&s=d490c0b14e24cbc6ddd70f0534ff3651&w=50",
+    "23": "https://img-cdn.hltv.org/teamlogo/JMeLLbWKCIEJrmfPaqOz4O.svg?ixlib=java-2.1.0&s=c02caf90234d3a3ebac074c84ba1ea62"
+  }
 }

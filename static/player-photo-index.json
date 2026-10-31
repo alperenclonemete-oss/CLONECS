@@ -1,626 +1,452 @@
 [
   {
-    "rank": 1,
+    "rank": 2,
     "player": "mezii",
     "team": "Vitality",
     "file": "/static/player-photos/01-mezii.png"
   },
   {
-    "rank": 1,
+    "rank": 2,
     "player": "apEX",
     "team": "Vitality",
     "file": "/static/player-photos/01-apex.png"
   },
   {
-    "rank": 1,
+    "rank": 2,
     "player": "ropz",
     "team": "Vitality",
     "file": "/static/player-photos/01-ropz.png"
   },
   {
-    "rank": 1,
+    "rank": 2,
     "player": "flameZ",
     "team": "Vitality",
     "file": "/static/player-photos/01-flamez.png"
   },
   {
-    "rank": 1,
+    "rank": 2,
     "player": "ZywOo",
     "team": "Vitality",
     "file": "/static/player-photos/01-zywoo.png"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "player": "YEKINDAR",
     "team": "FURIA",
     "file": "/static/player-photos/02-yekindar.png"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "player": "molodoy",
     "team": "FURIA",
     "file": "/static/player-photos/02-molodoy.png"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "player": "yuurih",
     "team": "FURIA",
     "file": "/static/player-photos/02-yuurih.png"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "player": "FalleN",
     "team": "FURIA",
     "file": "/static/player-photos/02-fallen.png"
   },
   {
-    "rank": 2,
+    "rank": 3,
     "player": "KSCERATO",
     "team": "FURIA",
     "file": "/static/player-photos/02-kscerato.png"
   },
   {
-    "rank": 3,
+    "rank": 11,
     "player": "iM",
     "team": "Natus Vincere",
     "file": "/static/player-photos/03-im.png"
   },
   {
-    "rank": 3,
+    "rank": 11,
     "player": "makazze",
     "team": "Natus Vincere",
     "file": "/static/player-photos/03-makazze.png"
   },
   {
-    "rank": 3,
+    "rank": 11,
     "player": "b1t",
     "team": "Natus Vincere",
     "file": "/static/player-photos/03-b1t.png"
   },
   {
-    "rank": 3,
+    "rank": 11,
     "player": "w0nderful",
     "team": "Natus Vincere",
     "file": "/static/player-photos/03-w0nderful.png"
   },
   {
-    "rank": 3,
+    "rank": 11,
     "player": "Aleksib",
     "team": "Natus Vincere",
     "file": "/static/player-photos/03-aleksib.png"
   },
   {
-    "rank": 4,
+    "rank": 6,
     "player": "m0NESY",
     "team": "Falcons",
     "file": "/static/player-photos/04-m0nesy.png"
   },
   {
-    "rank": 4,
+    "rank": 6,
     "player": "NiKo",
     "team": "Falcons",
     "file": "/static/player-photos/04-niko.png"
   },
   {
-    "rank": 4,
+    "rank": 6,
     "player": "TeSeS",
     "team": "Falcons",
     "file": "/static/player-photos/04-teses.png"
   },
   {
-    "rank": 4,
+    "rank": 5,
     "player": "kyxsan",
-    "team": "Falcons",
+    "team": "Aurora",
     "file": "/static/player-photos/04-kyxsan.png"
   },
   {
-    "rank": 4,
+    "rank": 6,
     "player": "kyousuke",
     "team": "Falcons",
     "file": "/static/player-photos/04-kyousuke.png"
   },
   {
-    "rank": 5,
+    "rank": 12,
     "player": "xiELO",
     "team": "PARIVISION",
     "file": "/static/player-photos/05-xielo.png"
   },
   {
-    "rank": 5,
+    "rank": 14,
     "player": "BELCHONOKK",
-    "team": "PARIVISION",
+    "team": "1win",
     "file": "/static/player-photos/05-belchonokk.png"
   },
   {
-    "rank": 5,
+    "rank": 12,
     "player": "Jame",
     "team": "PARIVISION",
     "file": "/static/player-photos/05-jame.png"
   },
   {
-    "rank": 5,
+    "rank": 12,
     "player": "zweih",
     "team": "PARIVISION",
     "file": "/static/player-photos/05-zweih.png"
   },
   {
-    "rank": 6,
+    "rank": 4,
     "player": "torzsi",
     "team": "MOUZ",
     "file": "/static/player-photos/06-torzsi.png"
   },
   {
-    "rank": 6,
+    "rank": 4,
     "player": "Spinx",
     "team": "MOUZ",
     "file": "/static/player-photos/06-spinx.png"
   },
   {
-    "rank": 6,
+    "rank": 24,
     "player": "Brollan",
-    "team": "MOUZ",
+    "team": "HEROIC",
     "file": "/static/player-photos/06-brollan.png"
   },
   {
-    "rank": 6,
+    "rank": 4,
     "player": "xertioN",
     "team": "MOUZ",
     "file": "/static/player-photos/06-xertion.png"
   },
   {
-    "rank": 6,
+    "rank": 5,
     "player": "Jimpphat",
-    "team": "MOUZ",
+    "team": "Aurora",
     "file": "/static/player-photos/06-jimpphat.png"
   },
   {
-    "rank": 7,
-    "player": "MAJ3R",
-    "team": "Aurora",
-    "file": "/static/player-photos/07-maj3r.png"
-  },
-  {
-    "rank": 7,
+    "rank": 5,
     "player": "XANTARES",
     "team": "Aurora",
     "file": "/static/player-photos/07-xantares.png"
   },
   {
-    "rank": 7,
+    "rank": 5,
     "player": "woxic",
     "team": "Aurora",
     "file": "/static/player-photos/07-woxic.png"
   },
   {
-    "rank": 7,
+    "rank": 5,
     "player": "Wicadia",
     "team": "Aurora",
     "file": "/static/player-photos/07-wicadia.png"
   },
   {
-    "rank": 7,
+    "rank": 30,
     "player": "soulfly",
-    "team": "Aurora",
+    "team": "Eternal Fire",
     "file": "/static/player-photos/07-soulfly.png"
   },
   {
-    "rank": 8,
+    "rank": 16,
     "player": "cobrazera",
     "team": "The MongolZ",
     "file": "/static/player-photos/08-cobrazera.png"
   },
   {
-    "rank": 8,
+    "rank": 16,
     "player": "910",
     "team": "The MongolZ",
     "file": "/static/player-photos/08-910.png"
   },
   {
-    "rank": 8,
-    "player": "mzinho",
-    "team": "The MongolZ",
-    "file": "/static/player-photos/08-mzinho.png"
-  },
-  {
-    "rank": 8,
+    "rank": 16,
     "player": "bLitz",
     "team": "The MongolZ",
     "file": "/static/player-photos/08-blitz.png"
   },
   {
-    "rank": 9,
+    "rank": 1,
     "player": "sh1ro",
     "team": "Spirit",
     "file": "/static/player-photos/09-sh1ro.png"
   },
   {
-    "rank": 9,
+    "rank": 1,
     "player": "magixx",
     "team": "Spirit",
     "file": "/static/player-photos/09-magixx.png"
   },
   {
-    "rank": 9,
+    "rank": 1,
     "player": "tN1R",
     "team": "Spirit",
     "file": "/static/player-photos/09-tn1r.png"
   },
   {
-    "rank": 9,
+    "rank": 1,
     "player": "donk",
     "team": "Spirit",
     "file": "/static/player-photos/09-donk.png"
   },
   {
-    "rank": 9,
+    "rank": 1,
     "player": "zont1x",
     "team": "Spirit",
     "file": "/static/player-photos/09-zont1x.png"
   },
   {
-    "rank": 10,
+    "rank": 17,
     "player": "phzy",
     "team": "Astralis",
     "file": "/static/player-photos/10-phzy.png"
   },
   {
-    "rank": 10,
-    "player": "HooXi",
-    "team": "Astralis",
-    "file": "/static/player-photos/10-hooxi.png"
-  },
-  {
-    "rank": 10,
+    "rank": 17,
     "player": "Staehr",
     "team": "Astralis",
     "file": "/static/player-photos/10-staehr.png"
   },
   {
-    "rank": 10,
+    "rank": 17,
     "player": "ryu",
     "team": "Astralis",
     "file": "/static/player-photos/10-ryu.png"
   },
   {
-    "rank": 11,
+    "rank": 6,
     "player": "karrigan",
-    "team": "FaZe",
+    "team": "Falcons",
     "file": "/static/player-photos/11-karrigan.png"
   },
   {
-    "rank": 11,
-    "player": "broky",
-    "team": "FaZe",
-    "file": "/static/player-photos/11-broky.png"
-  },
-  {
-    "rank": 11,
+    "rank": 18,
     "player": "Twistzz",
     "team": "FaZe",
     "file": "/static/player-photos/11-twistzz.png"
   },
   {
-    "rank": 11,
+    "rank": 18,
     "player": "jcobbb",
     "team": "FaZe",
     "file": "/static/player-photos/11-jcobbb.png"
   },
   {
-    "rank": 11,
+    "rank": 18,
     "player": "frozen",
     "team": "FaZe",
     "file": "/static/player-photos/11-frozen.png"
   },
   {
-    "rank": 12,
+    "rank": 10,
     "player": "MATYS",
     "team": "G2",
     "file": "/static/player-photos/12-matys.png"
   },
   {
-    "rank": 12,
+    "rank": 7,
     "player": "SunPayus",
-    "team": "G2",
+    "team": "FUT",
     "file": "/static/player-photos/12-sunpayus.png"
   },
   {
-    "rank": 12,
+    "rank": 10,
     "player": "NertZ",
     "team": "G2",
     "file": "/static/player-photos/12-nertz.png"
   },
   {
-    "rank": 12,
+    "rank": 10,
     "player": "HeavyGod",
     "team": "G2",
     "file": "/static/player-photos/12-heavygod.png"
   },
   {
-    "rank": 12,
+    "rank": 10,
     "player": "huNter-",
     "team": "G2",
     "file": "/static/player-photos/12-hunter.png"
   },
   {
-    "rank": 13,
+    "rank": 17,
     "player": "cmtry",
-    "team": "FUT",
+    "team": "Astralis",
     "file": "/static/player-photos/13-cmtry.png"
   },
   {
-    "rank": 14,
-    "player": "saadzin",
-    "team": "Legacy",
-    "file": "/static/player-photos/14-saadzin.png"
-  },
-  {
-    "rank": 15,
-    "player": "Ex3rcice",
-    "team": "3DMAX",
-    "file": "/static/player-photos/15-ex3rcice.png"
-  },
-  {
-    "rank": 16,
+    "rank": 24,
     "player": "nilo",
     "team": "HEROIC",
     "file": "/static/player-photos/16-nilo.png"
   },
   {
-    "rank": 16,
+    "rank": 24,
     "player": "Chr1zN",
     "team": "HEROIC",
     "file": "/static/player-photos/16-chr1zn.png"
   },
   {
-    "rank": 16,
+    "rank": 24,
     "player": "susp",
     "team": "HEROIC",
     "file": "/static/player-photos/16-susp.png"
   },
   {
-    "rank": 18,
+    "rank": 23,
     "player": "malbsMd",
     "team": "Liquid",
     "file": "/static/player-photos/18-malbsmd.png"
   },
   {
-    "rank": 18,
+    "rank": 17,
     "player": "siuhy",
-    "team": "Liquid",
+    "team": "Astralis",
     "file": "/static/player-photos/18-siuhy.png"
   },
   {
-    "rank": 18,
+    "rank": 23,
     "player": "NAF",
     "team": "Liquid",
     "file": "/static/player-photos/18-naf.png"
   },
   {
-    "rank": 18,
+    "rank": 23,
     "player": "EliGE",
     "team": "Liquid",
     "file": "/static/player-photos/18-elige.png"
   },
   {
-    "rank": 19,
-    "player": "biguzera",
-    "team": "paiN",
-    "file": "/static/player-photos/19-biguzera.png"
-  },
-  {
-    "rank": 19,
-    "player": "snow",
-    "team": "paiN",
-    "file": "/static/player-photos/19-snow.png"
-  },
-  {
-    "rank": 21,
-    "player": "JamYoung",
-    "team": "TYLOO",
-    "file": "/static/player-photos/21-jamyoung.png"
-  },
-  {
-    "rank": 21,
-    "player": "Jee",
-    "team": "TYLOO",
-    "file": "/static/player-photos/21-jee.png"
-  },
-  {
-    "rank": 21,
-    "player": "Mercury",
-    "team": "TYLOO",
-    "file": "/static/player-photos/21-mercury.png"
-  },
-  {
-    "rank": 21,
-    "player": "Moseyuh",
-    "team": "TYLOO",
-    "file": "/static/player-photos/21-moseyuh.png"
-  },
-  {
-    "rank": 21,
-    "player": "Zero",
-    "team": "TYLOO",
-    "file": "/static/player-photos/21-zero.png"
-  },
-  {
-    "rank": 22,
-    "player": "Snax",
-    "team": "GamerLegion",
-    "file": "/static/player-photos/22-snax.png"
-  },
-  {
-    "rank": 22,
+    "rank": 27,
     "player": "Tauson",
     "team": "GamerLegion",
     "file": "/static/player-photos/22-tauson.png"
   },
   {
-    "rank": 22,
+    "rank": 27,
     "player": "hypex",
     "team": "GamerLegion",
     "file": "/static/player-photos/22-hypex.png"
   },
   {
-    "rank": 22,
+    "rank": 27,
     "player": "REZ",
     "team": "GamerLegion",
     "file": "/static/player-photos/22-rez.png"
   },
   {
-    "rank": 22,
+    "rank": 4,
     "player": "PR",
-    "team": "GamerLegion",
+    "team": "MOUZ",
     "file": "/static/player-photos/22-pr.png"
   },
   {
-    "rank": 23,
-    "player": "Gizmy",
-    "team": "Monte",
-    "file": "/static/player-photos/23-gizmy.png"
-  },
-  {
-    "rank": 24,
+    "rank": 10,
     "player": "r1nkle",
-    "team": "Ninjas in Pyjamas",
+    "team": "G2",
     "file": "/static/player-photos/24-r1nkle.png"
   },
   {
-    "rank": 25,
-    "player": "Sonic",
-    "team": "NRG",
-    "file": "/static/player-photos/25-sonic.png"
-  },
-  {
-    "rank": 25,
-    "player": "nitr0",
-    "team": "NRG",
-    "file": "/static/player-photos/25-nitr0.png"
-  },
-  {
-    "rank": 25,
-    "player": "Grim",
-    "team": "NRG",
-    "file": "/static/player-photos/25-grim.png"
-  },
-  {
-    "rank": 26,
+    "rank": 24,
     "player": "MartinezSa",
-    "team": "Gentle Mates",
+    "team": "HEROIC",
     "file": "/static/player-photos/26-martinezsa.png"
   },
   {
-    "rank": 28,
+    "rank": 27,
     "player": "FL4MUS",
-    "team": "BetBoom",
+    "team": "GamerLegion",
     "file": "/static/player-photos/28-fl4mus.png"
   },
   {
-    "rank": 28,
+    "rank": 9,
     "player": "Magnojez",
     "team": "BetBoom",
     "file": "/static/player-photos/28-magnojez.png"
   },
   {
-    "rank": 28,
+    "rank": 9,
     "player": "S1ren",
     "team": "BetBoom",
     "file": "/static/player-photos/28-s1ren.png"
   },
   {
-    "rank": 28,
+    "rank": 9,
     "player": "Boombl4",
     "team": "BetBoom",
     "file": "/static/player-photos/28-boombl4.png"
   },
   {
-    "rank": 28,
+    "rank": 9,
     "player": "zorte",
     "team": "BetBoom",
     "file": "/static/player-photos/28-zorte.png"
   },
   {
-    "rank": 30,
-    "player": "Senzu",
-    "team": "Passion UA",
-    "file": "/static/player-photos/30-senzu.png"
-  },
-  {
-    "rank": 30,
+    "rank": 23,
     "player": "JT",
-    "team": "Passion UA",
+    "team": "Liquid",
     "file": "/static/player-photos/30-jt.png"
   },
   {
     "rank": 30,
     "player": "Kvem",
-    "team": "Passion UA",
+    "team": "Eternal Fire",
     "file": "/static/player-photos/30-kvem.png"
   },
   {
-    "rank": 30,
-    "player": "nicx",
-    "team": "Passion UA",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/c/c5/Nicx_at_IEM_Atlanta_2026.jpg/420px-Nicx_at_IEM_Atlanta_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Nicx",
-    "attribution_url": "https://liquipedia.net/commons/File:Nicx_at_IEM_Atlanta_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 29,
-    "player": "kAlash",
-    "team": "HOTU",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/b/b6/KAlash_at_Roman_Imperium_Cup_V.jpg/420px-KAlash_at_Roman_Imperium_Cup_V.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/KAlash",
-    "attribution_url": "https://liquipedia.net/commons/File:KAlash_at_Roman_Imperium_Cup_V.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 29,
-    "player": "mizu",
-    "team": "HOTU",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/3/33/Mizu_exile_5.jpeg/420px-Mizu_exile_5.jpeg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Mizu",
-    "attribution_url": "https://liquipedia.net/commons/File:Mizu_exile_5.jpeg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 26,
-    "player": "alex",
-    "team": "Gentle Mates",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/1/12/Alex_at_Asia_Minor_Championship_Krak%C3%B3w_2017.jpg/420px-Alex_at_Asia_Minor_Championship_Krak%C3%B3w_2017.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Alex",
-    "attribution_url": "https://liquipedia.net/commons/File:Alex_at_Asia_Minor_Championship_Krak%C3%B3w_2017.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 29,
-    "player": "n0rb3r7",
-    "team": "HOTU",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/6/6c/N0rb3r7_at_Roman_Imperium_Cup_V.jpg/420px-N0rb3r7_at_Roman_Imperium_Cup_V.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/N0rb3r7",
-    "attribution_url": "https://liquipedia.net/commons/File:N0rb3r7_at_Roman_Imperium_Cup_V.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 23,
+    "rank": 28,
     "player": "afro",
-    "team": "Monte",
+    "team": "Luminosity",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/3/3a/Afro_at_Roman_Imperium_Cup_VIII.jpg/420px-Afro_at_Roman_Imperium_Cup_VIII.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -630,43 +456,7 @@
     "artist": null
   },
   {
-    "rank": 24,
-    "player": "Snappi",
-    "team": "Ninjas in Pyjamas",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/5/5c/Snappi_at_IEM_Krakow_2026.jpg/420px-Snappi_at_IEM_Krakow_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Snappi",
-    "attribution_url": "https://liquipedia.net/commons/File:Snappi_at_IEM_Krakow_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 25,
-    "player": "oSee",
-    "team": "NRG",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/2/24/OSee_at_IEM_Krakow_2026.jpg/420px-OSee_at_IEM_Krakow_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/OSee",
-    "attribution_url": "https://liquipedia.net/commons/File:OSee_at_IEM_Krakow_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 27,
-    "player": "beastik",
-    "team": "SINNERS",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/c/c9/Beastik_at_Roman_Imperium_Cup_VII.jpg/420px-Beastik_at_Roman_Imperium_Cup_VII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Beastik",
-    "attribution_url": "https://liquipedia.net/commons/File:Beastik_at_Roman_Imperium_Cup_VII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 13,
+    "rank": 7,
     "player": "dziugss",
     "team": "FUT",
     "file": null,
@@ -678,19 +468,7 @@
     "artist": null
   },
   {
-    "rank": 25,
-    "player": "br0",
-    "team": "NRG",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/3/30/Br0_at_BLAST_Open_Spring_2026.jpg/420px-Br0_at_BLAST_Open_Spring_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Br0",
-    "attribution_url": "https://liquipedia.net/commons/File:Br0_at_BLAST_Open_Spring_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 20,
+    "rank": 22,
     "player": "kensizor",
     "team": "B8",
     "file": null,
@@ -702,7 +480,7 @@
     "artist": null
   },
   {
-    "rank": 24,
+    "rank": 20,
     "player": "xKacpersky",
     "team": "Ninjas in Pyjamas",
     "file": null,
@@ -714,9 +492,9 @@
     "artist": null
   },
   {
-    "rank": 15,
+    "rank": 26,
     "player": "misutaaa",
-    "team": "3DMAX",
+    "team": "Envy",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/f/f1/Misutaaa_at_PGL_Bucharest_2026.jpg/420px-Misutaaa_at_PGL_Bucharest_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -726,21 +504,9 @@
     "artist": null
   },
   {
-    "rank": 29,
-    "player": "frontales",
-    "team": "HOTU",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/8/8d/Frontales_at_Roman_Imperium_Cup_V.jpg/420px-Frontales_at_Roman_Imperium_Cup_V.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Frontales",
-    "attribution_url": "https://liquipedia.net/commons/File:Frontales_at_Roman_Imperium_Cup_V.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 15,
+    "rank": 26,
     "player": "Maka",
-    "team": "3DMAX",
+    "team": "Envy",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/1/1d/Maka_at_IEM_Rio_2026.jpg/420px-Maka_at_IEM_Rio_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -750,9 +516,9 @@
     "artist": null
   },
   {
-    "rank": 19,
+    "rank": 13,
     "player": "nqz",
-    "team": "paiN",
+    "team": "MIBR",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/f/fb/Nqz_at_StarLadder_StarSeries_Fall_2026.jpg/420px-Nqz_at_StarLadder_StarSeries_Fall_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -762,19 +528,7 @@
     "artist": null
   },
   {
-    "rank": 26,
-    "player": "dav1g",
-    "team": "Gentle Mates",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/7/70/Dav1g_at_Roman_Imperium_Cup_VIII.jpg/420px-Dav1g_at_Roman_Imperium_Cup_VIII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Dav1g",
-    "attribution_url": "https://liquipedia.net/commons/File:Dav1g_at_Roman_Imperium_Cup_VIII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 17,
+    "rank": 15,
     "player": "meyern",
     "team": "9z",
     "file": null,
@@ -786,7 +540,7 @@
     "artist": null
   },
   {
-    "rank": 17,
+    "rank": 15,
     "player": "HUASOPEEK",
     "team": "9z",
     "file": null,
@@ -798,69 +552,9 @@
     "artist": null
   },
   {
-    "rank": 27,
-    "player": "kisserek",
-    "team": "SINNERS",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/1/18/Kisserek_at_Roman_Imperium_Cup_VII.jpg/420px-Kisserek_at_Roman_Imperium_Cup_VII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Kisserek",
-    "attribution_url": "https://liquipedia.net/commons/File:Kisserek_at_Roman_Imperium_Cup_VII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 19,
-    "player": "piriajr",
-    "team": "paiN",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/c/ca/Piriajr_at_IEM_Atlanta_2026.jpg/420px-Piriajr_at_IEM_Atlanta_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Piriajr",
-    "attribution_url": "https://liquipedia.net/commons/File:Piriajr_at_IEM_Atlanta_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 26,
-    "player": "mopoz",
-    "team": "Gentle Mates",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/1/1d/Mopoz_at_Roman_Imperium_Cup_VIII.jpg/420px-Mopoz_at_Roman_Imperium_Cup_VIII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Mopoz",
-    "attribution_url": "https://liquipedia.net/commons/File:Mopoz_at_Roman_Imperium_Cup_VIII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 13,
-    "player": "lauNX",
-    "team": "FUT",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/a/ae/LauNX_at_PGL_Bucharest_2026.jpg/420px-LauNX_at_PGL_Bucharest_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/LauNX",
-    "attribution_url": "https://liquipedia.net/commons/File:LauNX_at_PGL_Bucharest_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 16,
-    "player": "Alkaren",
-    "team": "HEROIC",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/a/aa/Alkaren_at_Esports_World_Cup_2025.jpg/420px-Alkaren_at_Esports_World_Cup_2025.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Alkaren",
-    "attribution_url": "https://liquipedia.net/commons/File:Alkaren_at_Esports_World_Cup_2025.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 16,
+    "rank": 7,
     "player": "xfl0ud",
-    "team": "HEROIC",
+    "team": "FUT",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/7/79/Xfl0ud_at_Esports_World_Cup_2026.jpg/420px-Xfl0ud_at_Esports_World_Cup_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -870,33 +564,9 @@
     "artist": null
   },
   {
-    "rank": 24,
-    "player": "cairne",
-    "team": "Ninjas in Pyjamas",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/5/5e/Cairne_at_Stake_Pulse_Beat_I.jpg/420px-Cairne_at_Stake_Pulse_Beat_I.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Cairne",
-    "attribution_url": "https://liquipedia.net/commons/File:Cairne_at_Stake_Pulse_Beat_I.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 29,
-    "player": "dukefissura",
-    "team": "HOTU",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/4/49/Dukefissura_at_Roman_Imperium_Cup_V.jpg/420px-Dukefissura_at_Roman_Imperium_Cup_V.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Dukefissura",
-    "attribution_url": "https://liquipedia.net/commons/File:Dukefissura_at_Roman_Imperium_Cup_V.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 23,
+    "rank": 28,
     "player": "AZUWU",
-    "team": "Monte",
+    "team": "Luminosity",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/c/cf/AZUWU_at_Roman_Imperium_Cup_VIII.jpg/420px-AZUWU_at_Roman_Imperium_Cup_VIII.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -906,31 +576,7 @@
     "artist": null
   },
   {
-    "rank": 19,
-    "player": "vsm",
-    "team": "paiN",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/1/19/V%24m_at_IEM_Atlanta_2026.jpg/420px-V%24m_at_IEM_Atlanta_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/V%24m",
-    "attribution_url": "https://liquipedia.net/commons/File:V$m_at_IEM_Atlanta_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 27,
-    "player": "stressarN",
-    "team": "SINNERS",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/3/33/StressarN_at_Roman_Imperium_Cup_VII.jpg/420px-StressarN_at_Roman_Imperium_Cup_VII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/StressarN",
-    "attribution_url": "https://liquipedia.net/commons/File:StressarN_at_Roman_Imperium_Cup_VII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 13,
+    "rank": 7,
     "player": "Krabeni",
     "team": "FUT",
     "file": null,
@@ -942,7 +588,7 @@
     "artist": null
   },
   {
-    "rank": 13,
+    "rank": 7,
     "player": "dem0n",
     "team": "FUT",
     "file": null,
@@ -954,9 +600,9 @@
     "artist": null
   },
   {
-    "rank": 23,
+    "rank": 28,
     "player": "Rainwaker",
-    "team": "Monte",
+    "team": "Luminosity",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/5/59/Rainwaker_at_Roman_Imperium_Cup_VIII.jpg/420px-Rainwaker_at_Roman_Imperium_Cup_VIII.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -966,19 +612,7 @@
     "artist": null
   },
   {
-    "rank": 27,
-    "player": "MoDo",
-    "team": "SINNERS",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/f/fe/MoDo_at_Roman_Imperium_Cup_VII.jpg/420px-MoDo_at_Roman_Imperium_Cup_VII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/MoDo",
-    "attribution_url": "https://liquipedia.net/commons/File:MoDo_at_Roman_Imperium_Cup_VII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 20,
+    "rank": 22,
     "player": "s1zzi",
     "team": "B8",
     "file": null,
@@ -990,7 +624,7 @@
     "artist": null
   },
   {
-    "rank": 20,
+    "rank": 22,
     "player": "alex666",
     "team": "B8",
     "file": null,
@@ -1002,31 +636,7 @@
     "artist": null
   },
   {
-    "rank": 10,
-    "player": "jabbi",
-    "team": "Astralis",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/8/8f/Jabbi_at_BLAST_Rivals_Spring_2026.jpg/420px-Jabbi_at_BLAST_Rivals_Spring_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Jabbi",
-    "attribution_url": "https://liquipedia.net/commons/File:Jabbi_at_BLAST_Rivals_Spring_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 23,
-    "player": "Bymas",
-    "team": "Monte",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/2/21/Bymas_at_CCT_Season_3_Global_Finals.jpg/420px-Bymas_at_CCT_Season_3_Global_Finals.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Bymas",
-    "attribution_url": "https://liquipedia.net/commons/File:Bymas_at_CCT_Season_3_Global_Finals.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 14,
+    "rank": 8,
     "player": "n1ssim",
     "team": "Legacy",
     "file": null,
@@ -1038,7 +648,7 @@
     "artist": null
   },
   {
-    "rank": 17,
+    "rank": 15,
     "player": "dgt",
     "team": "9z",
     "file": null,
@@ -1050,19 +660,7 @@
     "artist": null
   },
   {
-    "rank": 18,
-    "player": "ultimate",
-    "team": "Liquid",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/f/f9/Ultimate_at_Stake_Pulse_Beat_II.jpg/420px-Ultimate_at_Stake_Pulse_Beat_II.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Ultimate",
-    "attribution_url": "https://liquipedia.net/commons/File:Ultimate_at_Stake_Pulse_Beat_II.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 14,
+    "rank": 8,
     "player": "latto",
     "team": "Legacy",
     "file": null,
@@ -1074,7 +672,7 @@
     "artist": null
   },
   {
-    "rank": 14,
+    "rank": 8,
     "player": "dumau",
     "team": "Legacy",
     "file": null,
@@ -1086,7 +684,7 @@
     "artist": null
   },
   {
-    "rank": 24,
+    "rank": 20,
     "player": "sjuush",
     "team": "Ninjas in Pyjamas",
     "file": null,
@@ -1098,7 +696,7 @@
     "artist": null
   },
   {
-    "rank": 17,
+    "rank": 15,
     "player": "max",
     "team": "9z",
     "file": null,
@@ -1110,9 +708,9 @@
     "artist": null
   },
   {
-    "rank": 30,
+    "rank": 8,
     "player": "try",
-    "team": "Passion UA",
+    "team": "Legacy",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/c/c8/Try_at_BLAST_Open_Fall_2026.jpg/420px-Try_at_BLAST_Open_Fall_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -1122,9 +720,9 @@
     "artist": null
   },
   {
-    "rank": 15,
+    "rank": 26,
     "player": "Graviti",
-    "team": "3DMAX",
+    "team": "Envy",
     "file": null,
     "remote_url": "https://liquipedia.net/commons/images/thumb/5/53/Graviti_at_IEM_Rio_2026.jpg/420px-Graviti_at_IEM_Rio_2026.jpg",
     "source": "Liquipedia MediaWiki API",
@@ -1134,19 +732,7 @@
     "artist": null
   },
   {
-    "rank": 5,
-    "player": "nota",
-    "team": "PARIVISION",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/e/e9/Nota_at_IEM_Cologne_2026.jpg/420px-Nota_at_IEM_Cologne_2026.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Nota",
-    "attribution_url": "https://liquipedia.net/commons/File:Nota_at_IEM_Cologne_2026.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 14,
+    "rank": 8,
     "player": "arT",
     "team": "Legacy",
     "file": null,
@@ -1158,7 +744,7 @@
     "artist": null
   },
   {
-    "rank": 20,
+    "rank": 22,
     "player": "esenthial",
     "team": "B8",
     "file": null,
@@ -1170,19 +756,7 @@
     "artist": null
   },
   {
-    "rank": 27,
-    "player": "SHOCK",
-    "team": "SINNERS",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/4/47/SHOCK_at_Roman_Imperium_Cup_VII.jpg/420px-SHOCK_at_Roman_Imperium_Cup_VII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/SHOCK",
-    "attribution_url": "https://liquipedia.net/commons/File:SHOCK_at_Roman_Imperium_Cup_VII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 8,
+    "rank": 16,
     "player": "Techno",
     "team": "The MongolZ",
     "file": null,
@@ -1194,7 +768,7 @@
     "artist": null
   },
   {
-    "rank": 20,
+    "rank": 22,
     "player": "npl",
     "team": "B8",
     "file": null,
@@ -1206,19 +780,7 @@
     "artist": null
   },
   {
-    "rank": 26,
-    "player": "sausol",
-    "team": "Gentle Mates",
-    "file": null,
-    "remote_url": "https://liquipedia.net/commons/images/thumb/1/14/Sausol_at_Roman_Imperium_Cup_VIII.jpg/420px-Sausol_at_Roman_Imperium_Cup_VIII.jpg",
-    "source": "Liquipedia MediaWiki API",
-    "source_page": "https://liquipedia.net/counterstrike/Sausol",
-    "attribution_url": "https://liquipedia.net/commons/File:Sausol_at_Roman_Imperium_Cup_VIII.jpg",
-    "license": null,
-    "artist": null
-  },
-  {
-    "rank": 17,
+    "rank": 15,
     "player": "luchov",
     "team": "9z",
     "file": null,
