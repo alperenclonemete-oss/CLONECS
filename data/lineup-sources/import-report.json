@@ -1,0 +1,42 @@
+{
+  "records": 447,
+  "byMap": {
+    "ancient": 57,
+    "anubis": 82,
+    "cache": 7,
+    "dust2": 31,
+    "inferno": 69,
+    "mirage": 50,
+    "nuke": 34,
+    "overpass": 57,
+    "train": 29,
+    "vertigo": 31
+  },
+  "skipped": [
+    {
+      "map": "dust2",
+      "id": "76b83178-3872-4a48-b291-7da1d13ebdb4",
+      "reason": "Missing aim, destination or supported grenade type"
+    },
+    {
+      "map": "nuke",
+      "id": "d50225e9-35f7-4123-bfae-8b576f76bcb9",
+      "reason": "Missing aim, destination or supported grenade type"
+    },
+    {
+      "map": "train",
+      "id": "e0609936-dc3f-4cb1-a710-89ed81f12ba2",
+      "reason": "Missing localized instructions"
+    },
+    {
+      "map": "train",
+      "id": "7f2d9b34-68ab-4009-857a-1f6d1a397311",
+      "reason": "Missing localized instructions"
+    },
+    {
+      "map": "train",
+      "id": "5edab8c3-56a9-4eb4-9f14-0b83799afb6b",
+      "reason": "Missing aim, destination or supported grenade type"
+    }
+  ]
+}
