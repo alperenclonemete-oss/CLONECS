@@ -223,20 +223,19 @@ $('configProfile').addEventListener('click',async event=>{const button=event.tar
 function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('configPlayersView').hidden=view!=='players';$('configProfileView').hidden=view!=='profile';$('configFavoritesView').hidden=view!=='favorites'}
 async function selectMainTab(target){
   const selected=typeof target==='string'?target:(target?'configs':'faceit');
-  const panels={faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab')};
+  const panels={faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),settings:$('settingsTab')};
   Object.entries(panels).forEach(([name,panel])=>{panel.hidden=name!==selected;});
   document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
   if(selected==='configs')await loadProConfigs();
+  if(selected==='settings')window.renderPlayerCenter?.();
   if(selected==='steam')await loadSteamProfile();
 }function closeProfileMenu(){const menu=$('profileDropdown');menu.classList.remove('is-open');$('profileMenuButton').setAttribute('aria-expanded','false');setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},150)}
 $('profileMenuButton').addEventListener('click',()=>{const menu=$('profileDropdown'),open=menu.hidden;menu.hidden=!open;$('profileMenuButton').setAttribute('aria-expanded',String(open));requestAnimationFrame(()=>menu.classList.toggle('is-open',open));});
 $('profileDropdown').addEventListener('click',async event=>{
   const favorite=event.target.closest('[data-toggle-favorite]');if(favorite){favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}return;}
   const item=event.target.closest('[data-profile-menu]');if(!item)return;const action=item.dataset.profileMenu;
-  if(action==='settings'){$('profileSettingsPanel').hidden=!$('profileSettingsPanel').hidden;$('savedFaceitNickname').focus();return;}
-  closeProfileMenu();$('profileSettingsPanel').hidden=true;
-  if(action==='profile'){await selectMainTab(false);const nickname=$('savedFaceitNickname').value.trim();if(nickname)await loadProfile(nickname);else{$('status').textContent='FACEIT profili bağlı değil. Hesap ayarlarından kullanıcı adını ekleyebilirsin.';$('profileDropdown').hidden=false;$('profileMenuButton').setAttribute('aria-expanded','true');$('profileDropdown').classList.add('is-open');$('profileSettingsPanel').hidden=false;}}
-  if(action==='favorites'){await selectMainTab(true);setConfigView('favorites');renderFavoriteConfigs();}
+  closeProfileMenu();
+  if(action==='home'||action==='settings'||action==='saved'){await selectMainTab('settings');window.renderPlayerCenter?.(action==='saved'?'saved':'home');}
 });
 $('configProfile').addEventListener('click',async event=>{const favorite=event.target.closest('[data-toggle-favorite]');if(!favorite)return;favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}});
 $('configFavoritesGrid').addEventListener('click',event=>{const item=event.target.closest('[data-favorite-config]');if(item)renderTop30Player(item.dataset.favoriteConfig,item.dataset.favoriteTeam)});
@@ -277,9 +276,10 @@ document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventLis
 document.querySelectorAll('[data-auth-close]').forEach(button=>button.addEventListener('click',closeAuthModal));
 async function setAccountState(data,openSavedProfile=false){
   if(data?.authenticated){data={...activeAccountData,...data};activeAccountData=data;}else activeAccountData={};
+  window.activeAccountData=activeAccountData;
   const loggedIn=Boolean(data?.authenticated);
   $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
-  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;$('lineupsTab').hidden=true;
+  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;$('lineupsTab').hidden=true;$('settingsTab').hidden=true;
   document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
@@ -299,7 +299,6 @@ async function setAccountState(data,openSavedProfile=false){
   $('steamConnectSetting').hidden=Boolean(data.steam_id);$('steamConnectedSetting').hidden=!data.steam_id;
   $('profileWidgetInitials').textContent=String(data.username||'CL').slice(0,2).toUpperCase();
   if(data.steam_avatar_url){$('profileWidgetAvatar').src=data.steam_avatar_url;$('profileWidgetAvatar').hidden=false;$('profileWidgetInitials').hidden=true;}else{$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;}
-  $('profileSettingsPanel').hidden=true;
   if(data.faceit_nickname&&openSavedProfile)await loadProfile(data.faceit_nickname);
   else if(!data.faceit_nickname)$('status').textContent=data.steam_id?'Steam hesabın hazır. FACEIT profilin varsa ekleyebilir veya daha sonra bağlayabilirsin.':'Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.';
   try{await syncAccountFavorites()}catch(error){favoriteConfigs=readLocalFavorites();renderFavoriteConfigs();accountMessage('Favoriler bu tarayıcıda gösteriliyor; hesapla eşitlenemedi: '+error.message,'error')}
@@ -351,8 +350,8 @@ async function loadSteamProfile(){
   catch(error){$('steamResults').innerHTML='';$('steamStatus').textContent=error.message;$('steamStatus').className='error';}
 }
 $('steamRefresh').addEventListener('click',()=>loadSteamProfile());
-$('connectFaceitPrompt').addEventListener('click',event=>{
-  event.stopPropagation();$('profileDropdown').hidden=false;$('profileMenuButton').setAttribute('aria-expanded','true');$('profileDropdown').classList.add('is-open');$('profileSettingsPanel').hidden=false;$('savedFaceitNickname').focus();
+$('connectFaceitPrompt').addEventListener('click',async event=>{
+  event.stopPropagation();await selectMainTab('settings');$('savedFaceitNickname').focus();
 });
 $('loginForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/login');});
 $('registerForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/register');});
@@ -363,7 +362,7 @@ $('faceitLinkForm').addEventListener('submit',async e=>{
     const data=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});
     await setAccountState({authenticated:true,username:$('profileMenuAccount').textContent,faceit_nickname:data.faceit_nickname,persistent_storage:data.persistent_storage},false);
     accountMessage('FACEIT profili bulundu ve bu hesaba kaydedildi.','success');
-    $('profileSettingsPanel').hidden=true;
+    window.renderPlayerCenter?.();
     await loadProfile(data.faceit_nickname);
   }catch(err){accountMessage(err.message,'error');}
   finally{button.disabled=false;}
@@ -392,6 +391,15 @@ $('serverConnect').addEventListener('click',()=>{
   message.classList.remove('is-error');
   message.textContent=$('serverMode').value+' sunucusu için Steam bağlantısı açılıyor…';
   window.location.href='steam://connect/'+address;
+});
+function savedServersKey(){return `clone_lab_servers_${configKey($('profileMenuAccount').textContent||'guest')}`}
+function getSavedServers(){try{const entries=JSON.parse(localStorage.getItem(savedServersKey())||'[]');return Array.isArray(entries)?entries.filter(item=>item&&typeof item.address==='string'&&typeof item.mode==='string'):[]}catch{return []}}
+function saveServers(entries){try{localStorage.setItem(savedServersKey(),JSON.stringify(entries.slice(0,20)))}catch{}}
+$('serverSave').addEventListener('click',()=>{
+  const address=$('serverAddress').value.trim(),mode=$('serverMode').value;
+  const valid=address.match(/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i);const message=$('serverMessage');
+  if(!valid||Number(valid[1])<1||Number(valid[1])>65535){message.textContent='Kaydetmek için geçerli bir sunucu adresi ve port gir.';message.classList.add('is-error');return;}
+  const entries=getSavedServers();if(!entries.some(item=>item.address===address&&item.mode===mode))entries.unshift({address,mode});saveServers(entries);message.classList.remove('is-error');message.textContent='Sunucu Oyuncu Merkezi’ne kaydedildi.';window.renderPlayerCenter?.();
 });
 const lineupScene=$('lineupScene');
 const lineupHand=document.querySelector('.lineup-hand');
