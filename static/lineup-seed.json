@@ -2,17 +2,22 @@
   {
     "id": "65b95df59b59b5853363171c",
     "map": "dust2",
-    "title": "Mid to B smoke",
+    "title": "Mid → B · CT geçidi smoke · 1",
     "type": "smoke",
     "x": 48.64864864864865,
     "y": 42.2972972972973,
-    "tx": 45.18779342723005,
-    "ty": 35.45663046615212,
+    "tx": 51,
+    "ty": 25,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "This is a Mid to B lineup that is helpful when going from mid to B",
+    "throwType": "Kaynak atış tuşunu belirtmiyor; duruş, nişan ve sonuç fotoğraflarını incele.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "ooccupate"
+    "author": "ooccupate",
+    "team": "T",
+    "standImage": "/static/lineup-images/65b95df59b59b5853363171c-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65b95df59b59b5853363171c-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65b95df59b59b5853363171c-landingPosition.jpg",
+    "coordinateNote": "Hedef, sonuç fotoğrafındaki CT geçidine göre düzeltildi; yaklaşık radar bölgesi."
   },
   {
     "id": "65c2b0112e0dc09b91ed08e3",
@@ -25,9 +30,13 @@
     "ty": 8.811748819150045,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Go to the box next to the stairs and throw Molly",
+    "throwType": "Merdivenin yanındaki kutuya yerleş, fotoğraftaki nişanı eşleştir ve molotofu at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "CT",
+    "standImage": "/static/lineup-images/65c2b0112e0dc09b91ed08e3-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c2b0112e0dc09b91ed08e3-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c2b0112e0dc09b91ed08e3-landingPosition.jpg"
   },
   {
     "id": "65c533b12e0dc09b91ed08f3",
@@ -40,9 +49,13 @@
     "ty": 18.024031675534182,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Stand in corner, aim, and throw",
+    "throwType": "Köşeye yerleş, fotoğraftaki nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c533b12e0dc09b91ed08f3-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c533b12e0dc09b91ed08f3-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c533b12e0dc09b91ed08f3-landingPosition.jpg"
   },
   {
     "id": "65c6950a2e0dc09b91ed0969",
@@ -55,9 +68,13 @@
     "ty": 42.37572882695918,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Aim and Jump Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6950a2e0dc09b91ed0969-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6950a2e0dc09b91ed0969-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6950a2e0dc09b91ed0969-landingPosition.jpg"
   },
   {
     "id": "65c6963f2e0dc09b91ed0974",
@@ -70,9 +87,13 @@
     "ty": 36.894291267253024,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Aim and jump throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6963f2e0dc09b91ed0974-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6963f2e0dc09b91ed0974-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6963f2e0dc09b91ed0974-landingPosition.jpg"
   },
   {
     "id": "65c6980c2e0dc09b91ed09e4",
@@ -85,9 +106,13 @@
     "ty": 45.959745692920905,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Go to garbage can, aim, jump throw",
+    "throwType": "Fotoğraftaki çöp kutusuna yerleş, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6980c2e0dc09b91ed09e4-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6980c2e0dc09b91ed09e4-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6980c2e0dc09b91ed09e4-landingPosition.jpg"
   },
   {
     "id": "65c699cc2e0dc09b91ed0a31",
@@ -100,9 +125,13 @@
     "ty": 49.12211351582831,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c699cc2e0dc09b91ed0a31-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c699cc2e0dc09b91ed0a31-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c699cc2e0dc09b91ed0a31-landingPosition.jpg"
   },
   {
     "id": "65c69a312e0dc09b91ed0a35",
@@ -115,9 +144,13 @@
     "ty": 40.05665909016042,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c69a312e0dc09b91ed0a35-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c69a312e0dc09b91ed0a35-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c69a312e0dc09b91ed0a35-landingPosition.jpg"
   },
   {
     "id": "65c69c522e0dc09b91ed0a70",
@@ -130,9 +163,13 @@
     "ty": 22.6456574310098,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Throw through opening in B main",
+    "throwType": "B tünelindeki açıklıktan, fotoğraftaki nişanı kullanarak normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c69c522e0dc09b91ed0a70-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c69c522e0dc09b91ed0a70-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c69c522e0dc09b91ed0a70-landingPosition.jpg"
   },
   {
     "id": "65c69cab2e0dc09b91ed0a75",
@@ -145,24 +182,33 @@
     "ty": 23.033868735105024,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c69cab2e0dc09b91ed0a75-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c69cab2e0dc09b91ed0a75-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c69cab2e0dc09b91ed0a75-landingPosition.jpg"
   },
   {
     "id": "65c69d1a2e0dc09b91ed0a7a",
     "map": "dust2",
-    "title": "Mid to B Smoke",
+    "title": "Mid → B · CT geçidi smoke · 2",
     "type": "smoke",
     "x": 48.38930465805007,
     "y": 43.07744921832803,
-    "tx": 45.18779342723005,
-    "ty": 35.45663046615212,
+    "tx": 51,
+    "ty": 25,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c69d1a2e0dc09b91ed0a7a-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c69d1a2e0dc09b91ed0a7a-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c69d1a2e0dc09b91ed0a7a-landingPosition.jpg",
+    "coordinateNote": "Hedef, sonuç fotoğrafındaki CT geçidine göre düzeltildi; yaklaşık radar bölgesi."
   },
   {
     "id": "65c69e342e0dc09b91ed0aa0",
@@ -175,9 +221,13 @@
     "ty": 22.6456574310098,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Line up with the crack in the wall and jump throw",
+    "throwType": "Duvardaki çatlakla hizalan, fotoğraftaki noktaya nişan al ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c69e342e0dc09b91ed0aa0-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c69e342e0dc09b91ed0aa0-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c69e342e0dc09b91ed0aa0-landingPosition.jpg"
   },
   {
     "id": "65c6a0492e0dc09b91ed0abf",
@@ -190,9 +240,13 @@
     "ty": 22.6456574310098,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": " Aim and throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6a0492e0dc09b91ed0abf-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6a0492e0dc09b91ed0abf-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6a0492e0dc09b91ed0abf-landingPosition.jpg"
   },
   {
     "id": "65c6a1da2e0dc09b91ed0af9",
@@ -205,9 +259,13 @@
     "ty": 28.080615688342903,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Jump on barrel and jump throw",
+    "throwType": "Fotoğraftaki varilin üstüne çık, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6a1da2e0dc09b91ed0af9-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6a1da2e0dc09b91ed0af9-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6a1da2e0dc09b91ed0af9-landingPosition.jpg"
   },
   {
     "id": "65c6a2762e0dc09b91ed0aff",
@@ -220,9 +278,13 @@
     "ty": 60.92828672134928,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Jump on barrel and jump throw",
+    "throwType": "Fotoğraftaki varilin üstüne çık, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6a2762e0dc09b91ed0aff-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6a2762e0dc09b91ed0aff-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6a2762e0dc09b91ed0aff-landingPosition.jpg"
   },
   {
     "id": "65c6ae3a2e0dc09b91ed0b71",
@@ -235,9 +297,13 @@
     "ty": 79.69166913726653,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Aim + Throw",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve normal atış yap.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6ae3a2e0dc09b91ed0b71-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6ae3a2e0dc09b91ed0b71-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6ae3a2e0dc09b91ed0b71-landingPosition.jpg"
   },
   {
     "id": "65c6b27d2e0dc09b91ed0b9b",
@@ -250,9 +316,13 @@
     "ty": 22.839763083057413,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "lineup is  in the open so you are exposed",
+    "throwType": "Başlangıç noktası açıkta; rakibe görünürsün. Kaynak atış tuşunu belirtmiyor, fotoğrafları kontrol et.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6b27d2e0dc09b91ed0b9b-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6b27d2e0dc09b91ed0b9b-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6b27d2e0dc09b91ed0b9b-landingPosition.jpg"
   },
   {
     "id": "65c6b2d42e0dc09b91ed0ba1",
@@ -265,9 +335,13 @@
     "ty": 21.293276674243174,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Go to Corner and Jump Throw",
+    "throwType": "Köşeye yerleş, fotoğraftaki noktaya nişan al ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez",
+    "team": "T",
+    "standImage": "/static/lineup-images/65c6b2d42e0dc09b91ed0ba1-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/65c6b2d42e0dc09b91ed0ba1-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/65c6b2d42e0dc09b91ed0ba1-landingPosition.jpg"
   },
   {
     "id": "6696d0935180067a636d9321",
@@ -280,8 +354,12 @@
     "ty": 57.14285496011986,
     "from": "Radarda işaretli başlangıç",
     "aim": "Nişan fotoğrafı eklenecek",
-    "throwType": "Jump Throw\n\nCredit: @NartOutHere",
+    "throwType": "Fotoğraftaki konumda dur, nişanı eşleştir ve zıplayarak at.",
     "source": "https://github.com/shimupan/lineupx",
-    "author": "kagiriez"
+    "author": "kagiriez / @NartOutHere",
+    "team": "T",
+    "standImage": "/static/lineup-images/6696d0935180067a636d9321-standingPosition.jpg",
+    "aimImage": "/static/lineup-images/6696d0935180067a636d9321-aimingPosition.jpg",
+    "landingImage": "/static/lineup-images/6696d0935180067a636d9321-landingPosition.jpg"
   }
 ]

@@ -11,9 +11,12 @@ vm.createContext(context);vm.runInContext(fs.readFileSync('static/lineup-catalog
    stored=bad;assert.equal(C.read().maps.mirage.lineups.length,7);
  }
  stored=null;const row=C.read().maps.mirage.lineups[0];
- C.save('mirage',{...row,throwType:'Updated instruction'});
+ C.save('mirage',{...row,standImage:'/static/custom.png',tx:1});
  assert.equal(C.read().maps.mirage.lineups.length,7);
- assert.equal(C.read().maps.mirage.lineups.find(r=>r.id===row.id).throwType,'Updated instruction');
+ assert.equal(C.read().maps.mirage.lineups.find(r=>r.id===row.id).standImage,'/static/custom.png');
+ assert.equal(C.read().maps.mirage.lineups.find(r=>r.id===row.id).tx,row.tx);
+ for(const record of seed)for(const field of ['standImage','aimImage','landingImage'])assert.ok(fs.existsSync('.'+record[field]));
+ for(const record of seed.filter(r=>r.map==='dust2'&&r.title.includes('CT geçidi')))assert.equal(record.ty,25);
  assert.throws(()=>C.save('mirage',{...row,x:NaN}));
  assert.equal(C.image('javascript:alert(1)'),'');
  const groups=C.clusters([{...row,x:20,y:20},{...row,id:'second',x:21,y:20},{...row,id:'far',x:70,y:70}]);
