@@ -13,6 +13,14 @@ import httpx
 from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent / ".env.worker")
 load_dotenv()
+# Podman EnvironmentFile preserves quotes unlike python-dotenv. Normalize before
+# account_store reads DATABASE_URL; never log credentials.
+for _name in ("DATABASE_URL", "STEAM_API_KEY", "STEAM_WORKER_REFRESH_TOKEN", "MATCH_TRACKING_KEY"):
+    _value = os.getenv(_name, "").strip()
+    if len(_value) >= 2 and _value[0] == _value[-1] and _value[0] in "\"'":
+        _value = _value[1:-1]
+    if _name in os.environ:
+        os.environ[_name] = _value
 from account_store import connection, db_cursor, init_database
 from match_tracking import cipher, sql, init_tracking, enqueue, SHARE
 
@@ -131,6 +139,7 @@ def process_one():
     except Exception:
         state = "failed" if job["attempts"] >= 4 else "retry"
         error, serialized = "Demo alınamadı veya çözümlenemedi. Süresi dolmuş ya da oyuncuyu içermeyen bir demo olabilir.", None
+    print("Demo job: " + state, flush=True)
     with connection() as conn, db_cursor(conn) as cur:
         cur.execute(sql("UPDATE cs2_matches SET status=?,error=?,result_json=?,retry_at=? WHERE user_id=? AND share_code=?"),
                     (state, error, serialized, int(time.time()) + 900, job["user_id"], job["share_code"]))
@@ -143,6 +152,7 @@ if __name__ == "__main__":
         sys.exit("STEAM_API_KEY ve STEAM_WORKER_REFRESH_TOKEN ayarlanmalı.")
     init_database()
     init_tracking()
+    print("Match worker started; polling enabled.", flush=True)
     while True:
         try:
             poll_tracking()

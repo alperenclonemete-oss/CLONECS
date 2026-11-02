@@ -67,4 +67,22 @@ def tracking_status(user_id, steam_id):
         cur.execute(sql("SELECT status,result_json,error,created_at FROM cs2_matches WHERE user_id=? AND steam_id=? ORDER BY created_at DESC LIMIT 30"), (user_id, steam_id))
         matches = [{"status": r["status"], "result": json.loads(r["result_json"]) if r["result_json"] else None,
                     "error": r["error"], "created_at": r["created_at"]} for r in cur.fetchall()]
-    return {"configured": bool(os.getenv("MATCH_TRACKING_KEY")), "tracking": tracking, "matches": matches}
+        cur.execute(sql("SELECT result_json FROM cs2_matches WHERE user_id=? AND steam_id=? AND status='complete' AND result_json IS NOT NULL ORDER BY created_at DESC,share_code DESC LIMIT 10"), (user_id, steam_id))
+        completed = [{"status": "complete", "result": json.loads(r["result_json"])} for r in cur.fetchall()]
+    return {"configured": bool(os.getenv("MATCH_TRACKING_KEY")), "tracking": tracking, "matches": matches,
+            "summary": summarize_matches(completed)}
+
+
+def summarize_matches(matches):
+    """Aggregate available completed analyses, not an invented Steam history."""
+    results = [m["result"] for m in matches if m["status"] == "complete" and m.get("result")][:10]
+    def valid(value):
+        return isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value < float("inf")
+    def ratio(numerator, denominator, multiplier=1):
+        pairs = [(r.get(numerator), r.get(denominator)) for r in results]
+        pairs = [(a, b) for a, b in pairs if valid(a) and valid(b)]
+        total = sum(b for _, b in pairs)
+        return round(multiplier * sum(a for a, _ in pairs) / total, 2) if total else None
+    return {"count": len(results), "limit": 10, "kd": ratio("kills", "deaths"),
+            "hs_percent": ratio("headshots", "kills", 100), "adr": ratio("damage", "rounds"),
+            "rounds": sum(r["rounds"] for r in results if valid(r.get("rounds")))}

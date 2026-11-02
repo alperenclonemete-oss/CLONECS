@@ -223,7 +223,7 @@ $('configProfile').addEventListener('click',async event=>{const button=event.tar
 function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('configPlayersView').hidden=view!=='players';$('configProfileView').hidden=view!=='profile';$('configFavoritesView').hidden=view!=='favorites'}
 async function selectMainTab(target){
   const selected=typeof target==='string'?target:(target?'configs':'faceit');
-  const panels={faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab')};
+  const panels={faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab')};
   Object.entries(panels).forEach(([name,panel])=>{panel.hidden=name!==selected;});
   document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
   if(selected==='configs')await loadProConfigs();
@@ -279,7 +279,7 @@ async function setAccountState(data,openSavedProfile=false){
   if(data?.authenticated){data={...activeAccountData,...data};activeAccountData=data;}else activeAccountData={};
   const loggedIn=Boolean(data?.authenticated);
   $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
-  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;
+  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;$('lineupsTab').hidden=true;
   document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
@@ -420,11 +420,32 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
     gsap.registerPlugin(ScrollTrigger,MotionPathPlugin);
     const pinned=$('lineupPinned'),section=$('lineupFeature');
     const grenadeArtwork=lineupGrenade.querySelector('img');
+    const palm=document.createElement('i');
+    Object.assign(palm.style,{position:'absolute',left:'74%',top:'38%',width:'1px',height:'1px'});
+    lineupHand.append(palm);
+    const flight={progress:0};
+    let release={x:0,y:0};
+    function anchor(){const a=palm.getBoundingClientRect(),b=lineupScene.getBoundingClientRect();return {x:a.left-b.left,y:a.top-b.top};}
+    function syncGrenade(){
+      const t=flight.progress;
+      let point;
+      if(t===0){release=anchor();point=release;}
+      else {
+        // Measure the release pose independently of scroll direction and resize.
+        const current={xPercent:gsap.getProperty(lineupHand,'xPercent'),yPercent:gsap.getProperty(lineupHand,'yPercent'),rotation:gsap.getProperty(lineupHand,'rotation')};
+        gsap.set(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4});release=anchor();gsap.set(lineupHand,current);
+        const w=lineupScene.clientWidth,h=lineupScene.clientHeight,u=1-t;
+        point={x:u*u*u*release.x+3*u*u*t*w*.45+3*u*t*t*w*.96+t*t*t*w*.54,
+               y:u*u*u*release.y+3*u*u*t*h*.02+3*u*t*t*h*.12+t*t*t*h*.78};
+      }
+      gsap.set(lineupGrenade,{x:point.x,y:point.y});
+      if(t===0)gsap.set(lineupGrenade,{autoAlpha:gsap.getProperty(lineupHand,'opacity')});
+    }
     gsap.set(lineupHand,{xPercent:-76,yPercent:34,rotation:-27,autoAlpha:0});
-    gsap.set(lineupGrenade,{left:0,top:0,x:0,y:0,scale:1,autoAlpha:0,transformOrigin:'50% 50%'});
+    gsap.set(lineupGrenade,{left:0,top:0,xPercent:-50,yPercent:-50,x:0,y:0,scale:1,autoAlpha:0,transformOrigin:'50% 50%'});
     gsap.set(smokeCanvas,{visibility:'hidden',opacity:0,scale:.38,transformOrigin:'50% 65%'});
     gsap.set(guideRevealTargets,{autoAlpha:0,y:22,filter:'blur(12px)'});
-    const lineupTimeline=gsap.timeline({
+    const lineupTimeline=gsap.timeline({onUpdate:syncGrenade,
       scrollTrigger:{
         trigger:section,pin:pinned,pinSpacing:true,anticipatePin:1,
         start:'top top',
@@ -440,13 +461,10 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       .to(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4,autoAlpha:1,duration:.2,ease:'power1.out'},0)
       .to(lineupHand,{xPercent:-95,yPercent:45,rotation:24,autoAlpha:.12,duration:.2,ease:'power2.in'},.2)
       .set(lineupGrenade,{autoAlpha:1},.2)
-      .to(lineupGrenade,{
-        motionPath:{path:'#smoke-trajectory',align:'#smoke-trajectory',alignOrigin:[.5,.5],autoRotate:false,start:0,end:1},
-        duration:.54,ease:'none'
-      },.2)
+      .to(flight,{progress:1,duration:.54,ease:'none'},.2)
       .to(grenadeArtwork,{rotation:360,duration:.54,ease:'none',transformOrigin:'50% 50%'},.2)
-      .to(lineupGrenade,{y:-18,duration:.025,ease:'power2.out'},.74)
-      .to(lineupGrenade,{y:0,duration:.035,ease:'bounce.out'},.765)
+      .to(grenadeArtwork,{y:-18,duration:.025,ease:'power2.out'},.74)
+      .to(grenadeArtwork,{y:0,duration:.035,ease:'bounce.out'},.765)
       .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.8)
       .to(smokeCanvas,{visibility:'visible',opacity:.25,scale:1.28,duration:.16,ease:'power2.out'},.8)
       .to(lineupCopy,{autoAlpha:0,duration:.08},.8)
@@ -472,3 +490,5 @@ const renderAccountState=setAccountState;
 setAccountState=async function(data,openSavedProfile=false){await renderAccountState(data,openSavedProfile);const active=Boolean(data&&data.authenticated);$('playerBanner').hidden=!active;$('portalWatermark').hidden=!active;$('faceitInlineConnect').hidden=!active||Boolean(activeAccountData.faceit_nickname);if(active){$('bannerName').textContent=activeAccountData.steam_persona_name||activeAccountData.username||'Player';$('bannerSteamId').textContent=activeAccountData.steam_id||'Steam ID not connected';document.querySelector('.steam-certified').hidden=!activeAccountData.steam_id;if(activeAccountData.steam_avatar_url){$('bannerAvatar').src=activeAccountData.steam_avatar_url;$('bannerAvatar').hidden=false;}else $('bannerAvatar').hidden=true;}};
 
 $('sidebarToggle').addEventListener('click',()=>{const collapsed=document.body.classList.toggle('sidebar-collapsed');$('sidebarToggle').setAttribute('aria-expanded',String(!collapsed));$('sidebarToggle').setAttribute('aria-label',collapsed?'Menüyü genişlet':'Menüyü daralt');});
+
+if(window.matchMedia('(max-width:760px)').matches){document.body.classList.add('sidebar-collapsed');$('sidebarToggle').setAttribute('aria-expanded','false');$('sidebarToggle').setAttribute('aria-label','Menüyü genişlet');}

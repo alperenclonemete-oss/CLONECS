@@ -10,7 +10,7 @@ os.environ['APP_DATABASE_PATH'] = str(Path(temp.name) / 'test.sqlite3')
 from cryptography.fernet import Fernet
 os.environ['MATCH_TRACKING_KEY'] = Fernet.generate_key().decode()
 from account_store import init_database, connection, db_cursor, create_user, create_session, link_steam_account
-from match_tracking import init_tracking, connect_tracking, tracking_status, disconnect_tracking, cipher
+from match_tracking import init_tracking, connect_tracking, tracking_status, disconnect_tracking, cipher, summarize_matches
 from match_worker import poll_tracking, process_one, validate_demo_url
 from match_analysis import analyze
 from fastapi import FastAPI
@@ -23,6 +23,20 @@ AUTH = 'ABCD-ABCDE-ABCD'
 
 
 class TrackingTests(unittest.TestCase):
+    def test_summary_weighted_missing_and_limit(self):
+        def match(**result):
+            return {"status": "complete", "result": result}
+        rows = [match(kills=10,deaths=5,headshots=8,damage=1000,rounds=10),
+                match(kills=30,deaths=15,headshots=12,damage=3000,rounds=20)]
+        summary = summarize_matches(rows)
+        self.assertEqual(summary['hs_percent'], 50)
+        self.assertEqual(summary['kd'], 2)
+        self.assertEqual(summary['adr'], 133.33)
+        self.assertEqual(summarize_matches(rows * 8)['count'], 10)
+        self.assertIsNone(summarize_matches([match(kills=0,deaths=0,rounds=0)])['adr'])
+        self.assertEqual(summarize_matches(rows + [match(rounds=20)])['adr'], 133.33)
+        self.assertEqual(summarize_matches([{'status':'retry','result':None}])['count'], 0)
+
     @classmethod
     def setUpClass(cls):
         init_database(); init_tracking()
