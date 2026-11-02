@@ -31,6 +31,8 @@ app = FastAPI(title="CLONE LAB", version="2.5.0")
 from match_routes import router as match_router
 from match_tracking import init_tracking
 app.include_router(match_router)
+from server_routes import router as server_router
+app.include_router(server_router)
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 

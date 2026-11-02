@@ -23,12 +23,11 @@
     if(view==='connections')host.querySelector('.settings-section')?.scrollIntoView({block:'start',behavior:'smooth'});
   }
   host.addEventListener('click',event=>{
-    const connect=event.target.closest('[data-connect]');if(connect){location.href='steam://connect/'+connect.dataset.connect;return;}
     const button=event.target.closest('[data-center]');if(!button)return;
     const action=button.dataset.center;
     if(action==='saved-nades')jump('lineups','saved-nades');
     else if(action==='configs')jump('configs','configs');
-    else if(action==='servers'){const entries=window.getSavedServers?.()||[];const list=entries.length?entries.map(item=>`<button class="saved-server" data-connect="${esc(item.address)}">${esc(item.mode)} <b>${esc(item.address)}</b></button>`).join(''):'<p class="settings-empty">Henüz sunucu kaydetmedin. Ana sayfadaki Server Browser’dan adresi ekleyebilirsin.</p>';saved.innerHTML=`<article class="settings-saved-detail"><div class="eyebrow">SAVED SERVERS</div><h3>Kaydedilen sunucular</h3>${list}</article>`;}
+    else if(action==='servers'){jump('servers');window.dispatchEvent(new CustomEvent('clone:servers:saved'));}
     else if(action==='connections')host.querySelector('.settings-section')?.scrollIntoView({block:'start',behavior:'smooth'});
   });
   document.getElementById('settingsRefreshSaved').addEventListener('click',()=>renderPlayerCenter('saved'));
