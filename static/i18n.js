@@ -1,7 +1,9 @@
 (() => {
   'use strict';
   // Exact UI phrases only: never translate player names, input values or commands.
-  const phrases = `FACEIT profil URL veya kullanici adini gir. Analiz bu sayfada acilir.|Enter a FACEIT profile URL or username. Analysis opens on this page.|Введите ссылку на профиль FACEIT или имя пользователя. Анализ откроется здесь.
+  const phrases = `Antrenmanım|My practice|Моя тренировка
+Taktikler|Tactics|Тактики
+FACEIT profil URL veya kullanici adini gir. Analiz bu sayfada acilir.|Enter a FACEIT profile URL or username. Analysis opens on this page.|Введите ссылку на профиль FACEIT или имя пользователя. Анализ откроется здесь.
 Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.|Your account is ready. Connect FACEIT from your profile menu.|Аккаунт готов. Подключите FACEIT через меню профиля.
 FACEIT profilin henüz bağlı değil|Your FACEIT profile is not connected yet|Профиль FACEIT пока не подключён
 Steam hesabını bağlayarak CS2 verilerini eşleştir.|Connect Steam to link your CS2 data.|Подключите Steam для синхронизации данных CS2.

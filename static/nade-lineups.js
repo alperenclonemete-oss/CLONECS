@@ -67,6 +67,7 @@ $('#nadeLightbox').onclick=e=>{if(e.target===$('#nadeLightbox'))$('#nadeLightbox
 $('#nadeSearch').oninput=e=>{query=e.target.value;render()};
 $('#photoFilter').onclick=()=>{photosOnly=!photosOnly;$('#photoFilter').setAttribute('aria-pressed',String(photosOnly));render()};
 $('#savedFilter').onclick=()=>{savedOnly=!savedOnly;$('#savedFilter').setAttribute('aria-pressed',String(savedOnly));render()};
+window.addEventListener('clone:nades:open',e=>{const d=e.detail||{};if(!Object.hasOwn(C.maps,d.map))return;map=d.map;type='all';team='all';query='';savedOnly=false;photosOnly=false;$('#nadeSearch').value='';$('#savedFilter').setAttribute('aria-pressed','false');$('#photoFilter').setAttribute('aria-pressed','false');const r=C.read().maps[map].lineups.find(r=>r.id===d.id);active=r?.id||null;selected=active?[active]:[];floor=r?.startFloor||'upper';render()});
 window.addEventListener('clone:nades:saved',()=>{savedOnly=true;query='';type='all';team='all';photosOnly=false;$('#photoFilter').setAttribute('aria-pressed','false');$('#nadeSearch').value='';$('#savedFilter').setAttribute('aria-pressed','true');const first=Object.entries(C.read().maps).find(([,m])=>m.lineups.some(r=>favorites.includes(r.id)));if(first)map=first[0];render()});
 window.addEventListener('clone:lineups:changed',render);render();
 })();

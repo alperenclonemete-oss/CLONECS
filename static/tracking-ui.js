@@ -7,6 +7,7 @@
   const stateNames={pending:'İşleyicinin ilk kontrolü bekleniyor',active:'Maç geçmişi takibi açık',error:'Bağlantı kontrolü gerekiyor',queued:'Analiz sırası bekleniyor',processing:'Demo işleniyor',retry:'Tekrar denenecek',failed:'Analiz tamamlanamadı'};
   let generation=0;
   function render(data){
+    window.dispatchEvent(new CustomEvent('clone:steam-analysis',{detail:data}));
     document.getElementById('trackingStatus').textContent=!data.configured?'Otomatik takip sunucusu henüz etkinleştirilmedi.':data.tracking?(stateNames[data.tracking.status]||'Bekleniyor')+(data.tracking.error?' · '+data.tracking.error:''):'Steam hesabın bağlı. Maç analizi için yukarıdaki kodları ekle.';
     document.querySelector('#matchTrackingForm button').disabled=!data.configured;
     document.getElementById('trackingDisconnect').hidden=!data.tracking;
@@ -21,7 +22,7 @@
   document.getElementById('matchTrackingForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button');button.disabled=true;const g=++generation;try{const data=await api('/api/cs2/tracking',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});form.reset();if(g===generation)render(data)}catch(error){document.getElementById('trackingStatus').textContent=error.message}finally{button.disabled=false}});
   document.getElementById('trackingRefresh').addEventListener('click',refresh);
   document.getElementById('trackingDisconnect').addEventListener('click',async()=>{try{await api('/api/cs2/tracking',{method:'DELETE'});await refresh()}catch(e){document.getElementById('trackingStatus').textContent=e.message}});
-  new MutationObserver(()=>{if(!host.hidden)refresh();else{generation++;document.getElementById('trackingMatches').innerHTML='';document.getElementById('trackingSummary').innerHTML='';document.getElementById('matchTrackingForm').reset()}}).observe(host,{attributes:true,attributeFilter:['hidden']});
+  new MutationObserver(()=>{if(!host.hidden)refresh();else{generation++;document.getElementById('steamPerformanceLab')?.remove();document.getElementById('trackingMatches').innerHTML='';document.getElementById('trackingSummary').innerHTML='';document.getElementById('matchTrackingForm').reset()}}).observe(host,{attributes:true,attributeFilter:['hidden']});
   setInterval(()=>{if(!host.hidden&&!document.hidden)refresh()},30000);
   if(!host.hidden)refresh();
 })();

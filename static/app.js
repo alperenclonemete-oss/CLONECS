@@ -12,7 +12,7 @@ async function api(path, options={}) {
 function fmtDate(ts){ if(!ts) return 'Tarih bilinmiyor'; const n=Number(ts); const d=new Date(n < 1e12 ? n*1000 : n); return isNaN(d)?'Tarih bilinmiyor':d.toLocaleDateString('tr-TR'); }
 function matchLabel(m){ return m.map || m.match_type || m.game_mode || 'FACEIT maçı'; }
 function renderStatChart(points,label,suffix=''){
-  const data=(points||[]).filter(p=>Number.isFinite(Number(p.value))).map(p=>({...p,value:Number(p.value)}));
+  const data=(points||[]).filter(p=>p.value!==null&&p.value!==undefined&&p.value!==''&&Number.isFinite(Number(p.value))).map(p=>({...p,value:Number(p.value)}));
   if(data.length<2)return `<div class="chart-empty"><b>${esc(label)}</b><span>Grafik için en az iki geçerli FACEIT maç verisi gerekli (${data.length} mevcut).</span></div>`;
   const w=680,h=190,pad=28,min=Math.min(...data.map(p=>p.value)),max=Math.max(...data.map(p=>p.value)),span=max-min||1;
   const coords=data.map((p,i)=>[pad+i*(w-pad*2)/(data.length-1),h-pad-(p.value-min)*(h-pad*2)/span]);
@@ -113,6 +113,7 @@ async function loadProfile(nickname){
       $('coach').insertAdjacentHTML('afterbegin','<p class="error">Son maç istatistikleri FACEIT’ten alınamadı. Yaşam boyu istatistikler ve maç geçmişi ayrı olarak görüntüleniyor.</p>');
     }
     $('dashboardLoading')?.remove(); const metrics=$('results').querySelector('.metrics'); if(metrics)metrics.insertAdjacentHTML('afterend',buildDashboard(p,recentMatches,recentStats));else $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
+    window.dispatchEvent(new CustomEvent('clone:faceit-analysis',{detail:recentStats||{items:[]}}));
     $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Tamamlandı';}
   } catch(e){ $('dashboardLoading')?.remove(); $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Hata';} }
   finally {}
@@ -223,9 +224,10 @@ $('configProfile').addEventListener('click',async event=>{const button=event.tar
 function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('configPlayersView').hidden=view!=='players';$('configProfileView').hidden=view!=='profile';$('configFavoritesView').hidden=view!=='favorites'}
 async function selectMainTab(target){
   const selected=typeof target==='string'?target:(target?'configs':'faceit');
-  const panels={servers:$('serversTab'),faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),studio:$('studioTab'),settings:$('settingsTab')};
+  const panels={training:$('trainingTab'),tactics:$('tacticsTab'),servers:$('serversTab'),faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),studio:$('studioTab'),settings:$('settingsTab')};
   Object.entries(panels).forEach(([name,panel])=>{if(panel)panel.hidden=name!==selected;});
   document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
+  if(selected==='training')await window.loadTraining?.();
   if(selected==='servers')await window.loadServerDirectory?.();
   if(selected==='configs')await loadProConfigs();
   if(selected==='settings')window.renderPlayerCenter?.();
@@ -280,7 +282,7 @@ async function setAccountState(data,openSavedProfile=false){
   window.activeAccountData=activeAccountData;
   const loggedIn=Boolean(data?.authenticated);
   $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
-  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;$('serversTab').hidden=true;$('lineupsTab').hidden=true;if($('studioTab'))$('studioTab').hidden=true;$('settingsTab').hidden=true;
+  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;$('configsTab').hidden=true;$('serversTab').hidden=true;$('lineupsTab').hidden=true;if($('trainingTab'))$('trainingTab').hidden=true;if($('tacticsTab'))$('tacticsTab').hidden=true;document.getElementById('steamPerformanceLab')?.remove();if($('studioTab'))$('studioTab').hidden=true;$('settingsTab').hidden=true;
   document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
