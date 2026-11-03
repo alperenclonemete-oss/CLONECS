@@ -12,5 +12,5 @@
  }
  window.renderPerformanceLab=(host,rows,source)=>render(host,rows,source);
  window.addEventListener('clone:steam-analysis',e=>{let host=document.getElementById('steamPerformanceLab');if(!host){host=document.createElement('section');host.id='steamPerformanceLab';host.className='performance-lab';document.querySelector('.match-tracking').before(host)}render(host,M.steam(e.detail),'Steam')});
- window.addEventListener('clone:faceit-analysis',e=>{document.getElementById('faceitPerformanceLab')?.remove();const host=document.createElement('section');host.id='faceitPerformanceLab';host.className='performance-lab';document.getElementById('results').prepend(host);render(host,M.faceit(e.detail.items),'FACEIT')});
+ window.addEventListener('clone:faceit-analysis',e=>{document.getElementById('faceitPerformanceLab')?.remove();const host=document.createElement('section');host.id='faceitPerformanceLab';host.className='performance-lab';const dashboard=document.querySelector('#results .dashboard');if(dashboard)dashboard.querySelector('.performance-head').after(host);else document.getElementById('results').append(host);render(host,M.faceit(e.detail.items),'FACEIT')});
 })();

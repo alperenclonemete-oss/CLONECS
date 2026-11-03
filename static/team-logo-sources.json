@@ -31,8 +31,10 @@
     "team": "Aurora",
     "logo": "aurora",
     "rank": 5,
-    "source": "Existing local logo asset",
-    "local": true
+    "source": "https://auroragg.my/",
+    "local": true,
+    "file": "/static/team-logos/aurora-current.svg",
+    "checked": "2026-11-03"
   },
   {
     "team": "Falcons",
