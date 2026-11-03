@@ -2,6 +2,7 @@
 import json
 import math
 import sys
+from mistake_analysis import analyze_mistakes
 
 
 def number(value):
@@ -29,7 +30,7 @@ def analyze(path, steam_id):
     values = {key: number(row.get(key)) for key in fields}
     kills, deaths, hs, rounds = (values[k] for k in ("kills_total", "deaths_total", "headshot_kills_total", "total_rounds_played"))
     ratio = lambda a, b, factor=1: round(a / b * factor, 2) if a is not None and b and b > 0 else None
-    return {"map": header.get("map_name"), "steam_id": str(steam_id), "name": str(row.get("name", "")),
+    return {"mistakes": analyze_mistakes(parser, steam_id), "map": header.get("map_name"), "steam_id": str(steam_id), "name": str(row.get("name", "")),
             "kills": kills, "deaths": deaths, "assists": values["assists_total"], "headshots": hs,
             "rounds": rounds, "kd": ratio(kills, deaths), "hs_percent": ratio(hs, kills, 100),
             "adr": ratio(values["damage_total"], rounds), "damage": values["damage_total"],

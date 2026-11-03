@@ -50,6 +50,11 @@ async def home():
     return FileResponse(BASE_DIR / "static" / "index.html")
 
 
+@app.get("/sw.js", include_in_schema=False)
+async def service_worker():
+    return FileResponse(BASE_DIR / "static" / "sw.js", media_type="application/javascript", headers={"Cache-Control": "no-cache", "Service-Worker-Allowed": "/"})
+
+
 async def faceit_get(path: str, params: dict[str, Any] | None = None) -> dict[str, Any]:
     if not FACEIT_API_KEY:
         raise HTTPException(

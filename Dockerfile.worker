@@ -8,7 +8,7 @@ COPY --from=node-deps /usr/local/bin/node /usr/local/bin/node
 WORKDIR /app
 COPY requirements.txt requirements-worker.txt ./
 RUN pip install --no-cache-dir -r requirements-worker.txt
-COPY account_store.py match_tracking.py match_worker.py match_analysis.py ./
+COPY account_store.py match_tracking.py match_worker.py match_analysis.py mistake_analysis.py ./
 COPY worker/resolve-demo.cjs ./worker/resolve-demo.cjs
 COPY --from=node-deps /deps/node_modules ./worker/node_modules
 RUN useradd --create-home worker
