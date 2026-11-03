@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
+const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('static/i18n-extra.js','utf8'),ctx);
+assert.equal(ctx.window.CloneExtraLanguages.length,7);
+for(const [key,row] of Object.entries(ctx.window.CloneExtraTranslations))for(const lang of ctx.window.CloneExtraLanguages)assert.ok(typeof row[lang]==='string'&&row[lang].length>0,`${key}: ${lang}`);
+console.log('PASS: seven additional languages, all dictionary entries populated');
+const seed=JSON.parse(fs.readFileSync('static/lineup-seed.json','utf8'));
+const old=seed[0], hidden=seed[1];
+const replacement={...old,x:12,y:34,tx:56,ty:78,coordinateSpace:'manual',source:'CLONE LAB',video:'/api/lineup-videos/'+'a'.repeat(32)};
+const context={window:{dispatchEvent(){}},Event:class{},localStorage:{getItem:()=>null},fetch:async url=>({ok:true,json:async()=>String(url).includes('/overrides')?{items:[replacement,{...hidden,hidden:true}]}:seed})};
+vm.createContext(context);vm.runInContext(fs.readFileSync('static/lineup-catalog.js','utf8'),context);
+(async()=>{const C=context.window.LineupCatalog;await C.ready;const rows=Object.values(C.read().maps).flatMap(m=>m.lineups);assert.equal(rows.length,seed.length-1);const r=rows.find(r=>r.id===old.id);assert.equal(r.x,12);assert.equal(r.worldStart,null);assert.equal(r.video,replacement.video);assert.ok(!rows.some(r=>r.id===hidden.id));console.log('PASS: published edits replace coordinates and clear obsolete practice commands; hidden entries removed');})();

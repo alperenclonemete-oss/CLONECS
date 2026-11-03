@@ -1752,3 +1752,5 @@ body.sidebar-collapsed .sidebar-toggle{align-self:center}
 .atlas-detail h2{white-space:pre-line}.throw-instruction p{white-space:pre-line;line-height:1.7}.lineup-media-note{font-size:12px;color:#aca399;line-height:1.65}.lineup-practice{margin:14px 0;padding:12px;border:1px solid #ffffff20;border-radius:8px;font-size:12px;line-height:1.6}.lineup-practice summary{cursor:pointer;color:#f6b082}.lineup-practice>code{display:block;overflow-wrap:anywhere;background:#101010;padding:12px;margin-bottom:10px}.lineup-practice button{font-size:12px}.lineup-workshop{font-size:12px;color:#ffae79;margin:8px 0}
 #teamFilters small{opacity:.65}#teamFilters button[aria-pressed=true]{border-color:#ff8b44;background:#38251b}.atlas-toolbar #typeFilters{flex-basis:100%}
 .group-choices{max-height:280px;overflow:auto;padding:3px}.lineup-gallery:empty{display:none}
+
+.lineup-video{display:block;width:100%;max-height:480px;background:#080808;border-radius:10px;margin:16px 0}

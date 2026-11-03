@@ -12,8 +12,8 @@ router = APIRouter()
 PROVIDERS = {
     "warmup": ("WarmupServer", "https://warmupserver.net/servers.php", "https://warmupserver.net/api/servercards/query.php"),
     "cybershoke": ("CYBERSHOKE", "https://cybershoke.net/cs2", "https://cybershoke.net/api/api/v2/main/data"),
-    "xplay": ("XPLAY.GG", "https://xplay.gg/servers", None),
-    "pracc": ("PRACC", "https://pracc.com/play", None),
+    "xplay": ("XPLAY.GG", "https://xplay.gg/tr", "https://xplay.gg/api/play/getAllServers"),
+    "pracc": ("PRACC", "https://pracc.com/play", "https://pracc.com/api/csgo/deathmatch/servers"),
 }
 try:
     _cache = json.loads((Path(__file__).parent / "static/server-directory-snapshot.json").read_text(encoding="utf-8"))
@@ -52,6 +52,21 @@ def normalize(provider, payload):
                 mode=item.get("mode", "DM"), city=item.get("city", ""), country=item.get("code", ""),
                 map=item.get("map", ""), players=live.get("server_current_users"), capacity=live.get("server_total_shown_slots"),
                 bots=live.get("server_current_bots"), stale=live.get("freshness") != "fresh"))
+    elif provider == "xplay":
+        modes = {1:'Deathmatch',2:'HS DM',3:'Pistol DM',4:'AWP DM',5:'BHOP',6:'Arena',7:'Retake',8:'Duels',9:'Pistol Retake',10:'Surf',11:'KZ',13:'AWP',14:'Fast Arena',15:'PUBLIC',16:'Bots',18:'Capture the Flag',25:'CS2',27:'5x5',28:'2x2',33:'Fun Modes'}
+        for item in payload['serversList']:
+            mode = modes.get(item.get('GameModeID'), 'Other')
+            rows.append(dict(address=f"{item.get('IP')}:{item.get('Port')}", name=f"{mode} #{item.get('NameSite', '')}",
+                mode=mode, city=item.get('City',''), country=item.get('CountryCode',''), map=item.get('CurrentMap',''),
+                players=item.get('Online'), capacity=item.get('TotalSlots'), bots=None, stale=False))
+    elif provider == "pracc":
+        for item in payload:
+            if item.get("Game") != "cs2":
+                continue
+            mode = str(item.get("Mode", "")).replace(";", " · ")
+            rows.append(dict(address=item.get("Address"), name="PRACC · " + mode,
+                mode=mode, city=item.get("Region", ""), country="", map=item.get("MapName", ""),
+                players=item.get("NumPlayersLive"), capacity=item.get("MaxPlayers"), bots=None, stale=False))
     else:
         modules = payload["data"]["modules"]
         locations = {x["location"]: x for x in modules["servers_locations"]["data"]}
@@ -105,9 +120,10 @@ async def server_directory():
     providers, servers = [], []
     for key, (name, url, endpoint) in PROVIDERS.items():
         cached = _cache.get(key, {})
-        usable = time.time() - cached.get("updatedAt", 0) < 86400
+        age = time.time() - cached.get("updatedAt", 0)
+        usable = age < 30 * 86400
         rows = cached.get("servers", []) if usable else []
         providers.append(dict(id=key, name=name, url=url, count=len(rows), updatedAt=cached.get("updatedAt"),
-            status="directory" if not endpoint else "unavailable" if not rows else "stale" if cached.get("stale") else "updated"))
-        servers.extend({**row, "stale": row["stale"] or cached.get("stale", True)} for row in rows)
+            status="directory" if not endpoint else "unavailable" if not rows else "stale" if cached.get("stale") or age >= 86400 else "updated"))
+        servers.extend({**row, "map": row.get("map", "") if age < 86400 else "", "stale": row["stale"] or cached.get("stale", True) or age >= 86400} for row in rows)
     return {"providers": providers, "servers": servers}

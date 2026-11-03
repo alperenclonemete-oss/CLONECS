@@ -137,14 +137,21 @@ Maçlarını otomatik analiz et|Analyze your matches automatically|Автома�
 Maç geçmişi erişim kodu|Match history access code|Код доступа к истории матчей
 Başlangıç maç paylaşım kodu|Starting match share code|Код исходного матча`;
   const dictionary=new Map(phrases.split('\n').map(line=>{const [tr,en,ru]=line.split('|');return [tr,{tr,en,ru}];}));
+  for(const entry of dictionary.values())Object.assign(entry,window.CloneExtraTranslations?.[entry.en]||{});
+  const languages=['tr','en','ru',...(window.CloneExtraLanguages||[])];
   let language='tr';try{language=localStorage.getItem('clone-language')||'tr';}catch{}
-  if(!['tr','en','ru'].includes(language))language='tr';
+  if(!languages.includes(language))language='tr';
+  const dynamicWords={tr:['sunucu','atış','oyuncu','bot','Son bilinen liste','Güncellendi','Kaynak erişilemiyor'],en:['servers','throws','players','bots','Last known list','Updated','Source unavailable'],ru:['серверов','бросков','игроков','ботов','Последний список','Обновлено','Источник недоступен'],de:['Server','Würfe','Spieler','Bots','Letzte bekannte Liste','Aktualisiert','Quelle nicht erreichbar'],es:['servidores','lanzamientos','jugadores','bots','Última lista conocida','Actualizado','Fuente no disponible'],fr:['serveurs','lancers','joueurs','bots','Dernière liste connue','Actualisé','Source indisponible'],pt:['servidores','lançamentos','jogadores','bots','Última lista conhecida','Atualizado','Fonte indisponível'],zh:['服务器','投掷','玩家','机器人','最近已知列表','已更新','来源不可用'],hi:['सर्वर','थ्रो','खिलाड़ी','बॉट','अंतिम ज्ञात सूची','अपडेट किया गया','स्रोत उपलब्ध नहीं'],ar:['خوادم','رميات','لاعبين','بوتات','آخر قائمة معروفة','تم التحديث','المصدر غير متاح']};
   const originals=new WeakMap();
   const skipped='script,style,code,textarea,[data-no-translate],#profileWidgetName,#profileMenuAccount,#profileWidgetInitials,.config-player-name';
-  function translate(value){const trim=value.trim(),entry=dictionary.get(trim);return entry?value.replace(trim,entry[language]):value;}
+  function translate(value){const trim=value.trim(),entry=dictionary.get(trim);if(entry)return value.replace(trim,(entry[language]||entry.en));
+    const words=dynamicWords[language];
+    if(/^\d+ sunucu · (Son bilinen liste|Güncellendi|Kaynak erişilemiyor)$/.test(trim))return value.replace('sunucu',words[0]).replace('Son bilinen liste',words[4]).replace('Güncellendi',words[5]).replace('Kaynak erişilemiyor',words[6]);
+    if(/^[\w ]+ · \d+ atış$/.test(trim))return value.replace('atış',words[1]);
+    return value;}
   const header=document.querySelector('.site-header');if(!header)return;
   const picker=document.createElement('label');picker.className='language-picker';picker.dataset.noTranslate='';
-  picker.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></svg><select aria-label="Language / Dil / Язык"><option value="tr">Türkçe</option><option value="en">English</option><option value="ru">Русский</option></select>';
+  picker.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18M5 6h14M5 18h14"/></svg><select aria-label="Language / Dil / Язык"><option value="tr">Türkçe</option><option value="en">English</option><option value="ru">Русский</option><option value="de">Deutsch</option><option value="es">Español</option><option value="fr">Français</option><option value="pt">Português</option><option value="zh">中文</option><option value="hi">हिन्दी</option><option value="ar">العربية</option></select>';
   header.append(picker);const select=picker.querySelector('select');select.value=language;
   function apply(){
     observer.disconnect();

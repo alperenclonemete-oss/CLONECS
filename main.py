@@ -33,12 +33,15 @@ from match_tracking import init_tracking
 app.include_router(match_router)
 from server_routes import router as server_router
 app.include_router(server_router)
+from lineup_admin import router as lineup_admin_router, init_lineups
+app.include_router(lineup_admin_router)
 
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 
 @app.on_event("startup")
 async def initialize_account_store() -> None:
     await asyncio.to_thread(init_database)
+    await asyncio.to_thread(init_lineups)
     await asyncio.to_thread(init_tracking)
 
 
