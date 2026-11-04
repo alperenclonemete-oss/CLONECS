@@ -33,6 +33,8 @@ from match_tracking import init_tracking
 app.include_router(match_router)
 from server_routes import router as server_router
 app.include_router(server_router)
+from esports_routes import router as esports_router
+app.include_router(esports_router)
 from lineup_admin import router as lineup_admin_router, init_lineups
 app.include_router(lineup_admin_router)
 

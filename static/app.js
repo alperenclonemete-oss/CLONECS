@@ -216,7 +216,7 @@ $('configProfile').addEventListener('click',async event=>{const button=event.tar
 function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('configPlayersView').hidden=view!=='players';$('configProfileView').hidden=view!=='profile';$('configFavoritesView').hidden=view!=='favorites'}
 async function selectMainTab(target){
   const selected=typeof target==='string'?target:(target?'configs':'faceit');
-  const panels={economy:$('economyTab'),training:$('trainingTab'),tactics:$('tacticsTab'),servers:$('serversTab'),faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),studio:$('studioTab'),settings:$('settingsTab')};
+  const panels={esports:$('esportsTab'),training:$('trainingTab'),tactics:$('tacticsTab'),servers:$('serversTab'),faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),studio:$('studioTab'),settings:$('settingsTab')};
   Object.entries(panels).forEach(([name,panel])=>{if(panel)panel.hidden=name!==selected;});
   document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
   if(selected==='training')await window.loadTraining?.();
@@ -274,7 +274,7 @@ async function setAccountState(data,openSavedProfile=false){
   window.activeAccountData=activeAccountData;
   const loggedIn=Boolean(data?.authenticated);
   $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
-  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;if($('economyTab'))$('economyTab').hidden=true;$('configsTab').hidden=true;$('serversTab').hidden=true;$('lineupsTab').hidden=true;if($('trainingTab'))$('trainingTab').hidden=true;if($('tacticsTab'))$('tacticsTab').hidden=true;document.getElementById('steamPerformanceLab')?.remove();if($('studioTab'))$('studioTab').hidden=true;$('settingsTab').hidden=true;
+  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;if($('esportsTab'))$('esportsTab').hidden=true;$('configsTab').hidden=true;$('serversTab').hidden=true;$('lineupsTab').hidden=true;if($('trainingTab'))$('trainingTab').hidden=true;if($('tacticsTab'))$('tacticsTab').hidden=true;document.getElementById('steamPerformanceLab')?.remove();if($('studioTab'))$('studioTab').hidden=true;$('settingsTab').hidden=true;
   document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
   const persistenceNote=$('accountPersistenceNote');
   persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
