@@ -419,31 +419,44 @@ smokeArtwork.addEventListener('load',fitSmokeArtwork);
 smokeArtwork.src='/static/lineup/smoke-cloud.png';
 window.addEventListener('resize',fitSmokeArtwork,{passive:true});
 if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
-  if(window.gsap&&window.ScrollTrigger&&window.MotionPathPlugin&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-    gsap.registerPlugin(ScrollTrigger,MotionPathPlugin);
+  if(window.gsap&&window.ScrollTrigger&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    gsap.registerPlugin(ScrollTrigger);
     const pinned=$('lineupPinned'),section=$('lineupFeature');
     const grenadeArtwork=lineupGrenade.querySelector('img');
     const palm=document.createElement('i');
     Object.assign(palm.style,{position:'absolute',left:'74%',top:'38%',width:'1px',height:'1px'});
     lineupHand.append(palm);
     const flight={progress:0};
-    let release={x:0,y:0};
+    const trajectory=$('smoke-trajectory');
+    let pathLength=0,geometryKey='';
     function anchor(){const a=palm.getBoundingClientRect(),b=lineupScene.getBoundingClientRect();return {x:a.left-b.left,y:a.top-b.top};}
+    function updateFlightPath(){
+      const key=[lineupScene.clientWidth,lineupScene.clientHeight,lineupHand.clientWidth,lineupHand.clientHeight].join(':');
+      if(key===geometryKey)return;
+      // Release pose: -5% translation, -4deg rotation, origin 24% 88%.
+      // Compute it independently of GSAP's in-progress hand tween.
+      const w=lineupHand.clientWidth,h=lineupHand.clientHeight,r=-4*Math.PI/180;
+      const dx=(.74-.24)*w,dy=(.38-.88)*h;
+      const release={x:.24*w+Math.cos(r)*dx-Math.sin(r)*dy-.05*w,
+        y:lineupScene.clientHeight*1.05-h+.88*h+Math.sin(r)*dx+Math.cos(r)*dy-.05*h};
+      const x=release.x/lineupScene.clientWidth*1600,y=release.y/lineupScene.clientHeight*900;
+      trajectory.setAttribute('d',`M ${x} ${y} C 720 18 1536 108 864 702`);
+      pathLength=trajectory.getTotalLength();geometryKey=key;
+    }
     function syncGrenade(){
-      const t=flight.progress;
-      let point;
-      if(t===0){release=anchor();point=release;}
-      else {
-        // Measure the release pose independently of scroll direction and resize.
-        const current={xPercent:gsap.getProperty(lineupHand,'xPercent'),yPercent:gsap.getProperty(lineupHand,'yPercent'),rotation:gsap.getProperty(lineupHand,'rotation')};
-        gsap.set(lineupHand,{xPercent:-5,yPercent:-5,rotation:-4});release=anchor();gsap.set(lineupHand,current);
-        const w=lineupScene.clientWidth,h=lineupScene.clientHeight,u=1-t;
-        point={x:u*u*u*release.x+3*u*u*t*w*.45+3*u*t*t*w*.96+t*t*t*w*.54,
-               y:u*u*u*release.y+3*u*u*t*h*.02+3*u*t*t*h*.12+t*t*t*h*.78};
+      updateFlightPath();
+      let point=anchor();
+      if(flight.progress>0){
+        // The visible SVG and grenade share the exact same path, including on resize/reverse scroll.
+        const svgPoint=trajectory.getPointAtLength(pathLength*flight.progress);
+        const matrix=trajectory.getScreenCTM();
+        if(matrix){const screen=new DOMPoint(svgPoint.x,svgPoint.y).matrixTransform(matrix),bounds=lineupScene.getBoundingClientRect();point={x:screen.x-bounds.left,y:screen.y-bounds.top};}
       }
       gsap.set(lineupGrenade,{x:point.x,y:point.y});
-      if(t===0)gsap.set(lineupGrenade,{autoAlpha:gsap.getProperty(lineupHand,'opacity')});
+      if(flight.progress===0)gsap.set(lineupGrenade,{autoAlpha:gsap.getProperty(lineupHand,'opacity')});
     }
+    lineupHand.querySelector('img').addEventListener('load',()=>{geometryKey='';syncGrenade();},{once:true});
+    window.addEventListener('resize',syncGrenade,{passive:true});
     gsap.set(lineupHand,{xPercent:-76,yPercent:34,rotation:-27,autoAlpha:0});
     gsap.set(lineupGrenade,{left:0,top:0,xPercent:-50,yPercent:-50,x:0,y:0,scale:1,autoAlpha:0,transformOrigin:'50% 50%'});
     gsap.set(smokeCanvas,{visibility:'hidden',opacity:0,scale:.38,transformOrigin:'50% 65%'});
@@ -456,7 +469,7 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
         scrub:1.2,invalidateOnRefresh:true,
         onUpdate:self=>{
           gsap.set($('lineupProgress'),{scaleX:self.progress});
-          lineupStageLabel.textContent=self.progress<.4?'01 — HAND / THROW':self.progress<.8?'02 — FLIGHT / BOUNCE':'03 — SMOKE / LINEUP GUIDE';
+          lineupStageLabel.textContent=self.progress<.4?'01 — HAND / THROW':self.progress<.8?'02 — FLIGHT / TRAJECTORY':'03 — SMOKE / LINEUP GUIDE';
         }
       }
     });
@@ -466,8 +479,6 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       .set(lineupGrenade,{autoAlpha:1},.2)
       .to(flight,{progress:1,duration:.54,ease:'none'},.2)
       .to(grenadeArtwork,{rotation:360,duration:.54,ease:'none',transformOrigin:'50% 50%'},.2)
-      .to(grenadeArtwork,{y:-18,duration:.025,ease:'power2.out'},.74)
-      .to(grenadeArtwork,{y:0,duration:.035,ease:'bounce.out'},.765)
       .to(lineupGrenade,{scale:.28,autoAlpha:0,duration:.02},.8)
       .to(smokeCanvas,{visibility:'visible',opacity:.25,scale:1.28,duration:.16,ease:'power2.out'},.8)
       .to(lineupCopy,{autoAlpha:0,duration:.08},.8)

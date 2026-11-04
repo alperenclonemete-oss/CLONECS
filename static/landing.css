@@ -1,0 +1,30 @@
+/* Public introduction. Scoped to keep the authenticated workspace independent. */
+#landingPage .guest-welcome{gap:40px;padding-top:70px;padding-bottom:80px;grid-template-columns:1.1fr 1fr}
+#landingPage h1{font-size:clamp(42px,5.4vw,78px);line-height:1.06;letter-spacing:-.055em}
+#landingPage .hero-copy .sub{max-width:550px;font-size:18px;line-height:1.8}
+#landingPage .landing-radar-art{min-height:490px;overflow:hidden;border:1px solid #38312b;border-radius:20px;background:radial-gradient(ellipse at 65% 30%,#50301b55,transparent 68%),#121211;box-shadow:0 24px 80px #0007;transform:rotate(2deg)}
+#landingPage .landing-radar{display:block;width:90%;margin:12px auto;opacity:.65;filter:saturate(.6)}
+.radar-caption{display:flex;justify-content:space-between;padding:22px 24px;font-size:10px;letter-spacing:.15em;color:#aaa399}
+.radar-overlay-label{position:absolute;left:28px;bottom:68px;text-shadow:0 3px 24px #000;background:linear-gradient(90deg,#121211ed,transparent);padding:20px 30px 20px 0}
+.radar-overlay-label span{font-size:10px;letter-spacing:.18em;color:#ff823c}.radar-overlay-label strong{display:block;font-size:36px;line-height:1.15;margin-top:12px;letter-spacing:-.04em}
+.landing-module-strip{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-around;padding:19px;background:#171512;border-top:1px solid #3b3027;font-size:10px;letter-spacing:.15em;color:#c3b5a8}
+#landingPage .landing-bento{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin:28px 0 64px}
+#landingPage .landing-feature{padding:clamp(24px,3.5vw,44px);border:1px solid #332d28;border-radius:18px;background:linear-gradient(140deg,#211b16,#141312 65%);display:flex;flex-direction:column;min-width:0}
+#landingPage .landing-feature h3{font-size:clamp(25px,2.7vw,38px);line-height:1.15;letter-spacing:-.035em;margin:28px 0 18px}
+#landingPage .landing-feature p{font-size:15px;line-height:1.85;color:#bdb4ab;max-width:640px;margin:0 0 20px}
+#landingPage .landing-feature small{color:#91877e;line-height:1.6;font-size:12px}
+.landing-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 24px}.landing-metrics span{padding:16px 8px;border-top:2px solid #f86c26;color:#b6a89a;font-size:11px}.landing-metrics b{display:block;color:#fff;font-size:18px;margin-top:8px}
+.landing-note{border-left:2px solid #ff722e;padding:18px;margin:12px 0 22px;background:#ff702509;line-height:1.7;color:#e4d6c9}
+#landingPage .landing-tool-grid{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:60px}
+#landingPage .landing-tool-grid h3{font-size:27px}.landing-feature-footer{margin-top:auto;padding-top:22px;border-top:1px solid #332a23;color:#e39466;font-size:10px;line-height:1.6;letter-spacing:.1em}
+.landing-steps{display:flex;justify-content:space-between;gap:20px;border-block:1px solid #3b3027;padding:30px 0;margin-bottom:80px;color:#ff792e;font-size:12px}.landing-steps b{color:#ded7cf;margin-left:12px;font-size:15px}
+#landingPage .landing-guide-radar{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;background:#161716;overflow:hidden}
+.landing-guide-radar img{max-width:100%;height:100%;max-height:48vh;object-fit:contain;opacity:.8}.landing-guide-radar>span{position:absolute;bottom:10px;background:#131313e8;padding:10px 14px;font-size:10px;letter-spacing:.12em}
+#landingPage .guide-videos{display:grid;grid-template-columns:1fr;min-height:0}
+#landingPage .smoke-cloud{left:54%;top:78%}
+#landingPage .feature-card{border-radius:18px}
+@media(max-width:1000px){#landingPage .landing-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#landingPage .landing-radar-art{min-height:380px}}
+@media(max-width:760px){#landingPage .guest-welcome{padding:40px 12px;gap:30px}#landingPage h1{font-size:clamp(38px,9vw,58px)}#landingPage .hero-copy .sub{font-size:16px}#landingPage .landing-radar-art{min-height:0;transform:none;aspect-ratio:1/1.1}#landingPage .landing-radar{width:85%}.radar-overlay-label strong{font-size:29px}.radar-caption{padding:18px 14px;font-size:8px}#landingPage .landing-bento,#landingPage .landing-tool-grid{grid-template-columns:1fr;margin-bottom:35px}.landing-steps{flex-direction:column;gap:24px;margin-bottom:40px}.landing-metrics b{font-size:15px}#landingPage .landing-guide-radar{display:none}#landingPage .guide-panel-foot{gap:12px;flex-wrap:wrap}#landingPage .guide-panel-foot button{min-height:44px}#landingPage .guide-panel-body{grid-template-columns:1fr}#landingPage .landing-feature h3{margin-top:20px}}
+@media(prefers-reduced-motion:reduce){#landingPage .trajectory,#landingPage .lineup-grenade{display:none}}
+
+#landingPage{overflow-x:clip}
