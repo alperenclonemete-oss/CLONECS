@@ -21,7 +21,7 @@
 #landingPage .landing-guide-radar{position:relative;display:flex;align-items:center;justify-content:center;min-height:0;background:#161716;overflow:hidden}
 .landing-guide-radar img{max-width:100%;height:100%;max-height:48vh;object-fit:contain;opacity:.8}.landing-guide-radar>span{position:absolute;bottom:10px;background:#131313e8;padding:10px 14px;font-size:10px;letter-spacing:.12em}
 #landingPage .guide-videos{display:grid;grid-template-columns:1fr;min-height:0}
-#landingPage .smoke-cloud{left:54%;top:78%}
+#landingPage .smoke-cloud{left:82%;top:52%}
 #landingPage .feature-card{border-radius:18px}
 @media(max-width:1000px){#landingPage .landing-tool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#landingPage .landing-radar-art{min-height:380px}}
 @media(max-width:760px){#landingPage .guest-welcome{padding:40px 12px;gap:30px}#landingPage h1{font-size:clamp(38px,9vw,58px)}#landingPage .hero-copy .sub{font-size:16px}#landingPage .landing-radar-art{min-height:0;transform:none;aspect-ratio:1/1.1}#landingPage .landing-radar{width:85%}.radar-overlay-label strong{font-size:29px}.radar-caption{padding:18px 14px;font-size:8px}#landingPage .landing-bento,#landingPage .landing-tool-grid{grid-template-columns:1fr;margin-bottom:35px}.landing-steps{flex-direction:column;gap:24px;margin-bottom:40px}.landing-metrics b{font-size:15px}#landingPage .landing-guide-radar{display:none}#landingPage .guide-panel-foot{gap:12px;flex-wrap:wrap}#landingPage .guide-panel-foot button{min-height:44px}#landingPage .guide-panel-body{grid-template-columns:1fr}#landingPage .landing-feature h3{margin-top:20px}}

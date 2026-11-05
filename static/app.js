@@ -440,7 +440,7 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       const release={x:.24*w+Math.cos(r)*dx-Math.sin(r)*dy-.05*w,
         y:lineupScene.clientHeight*1.05-h+.88*h+Math.sin(r)*dx+Math.cos(r)*dy-.05*h};
       const x=release.x/lineupScene.clientWidth*1600,y=release.y/lineupScene.clientHeight*900;
-      trajectory.setAttribute('d',`M ${x} ${y} C 720 18 1420 72 1540 470`);
+      trajectory.setAttribute('d',`M ${x} ${y} C 720 18 1500 72 1590 470`);
       pathLength=trajectory.getTotalLength();geometryKey=key;
     }
     function syncGrenade(){
