@@ -82,7 +82,7 @@ Render'ın ücretsiz planı zaman zaman uykuya geçebilir ve ilk açılış yava
 ## Hesap ve kayıtlı FACEIT profili
 
 - Ziyaretçi kullanıcı adı ve parola ile hesap açabilir veya giriş yapabilir. Parolalar scrypt ile özetlenerek saklanır; tarayıcı oturumu HTTP-only çerezle tutulur.
-- FACEIT nickini hesaba kaydettiğinde uygulama profili FACEIT Data API üzerinden bulur ve sonraki girişinde otomatik açar. Bu bir FACEIT OAuth bağlantısı değildir ve profil sahipliğini doğrulamaz.
+- **Profilim → Hesap bağlantıları** bölümünden FACEIT kullanıcı adını veya profil URL’sini kaydedebilir ve bağlantıyı kaldırabilirsin. Uygulama herkese açık profili FACEIT Data API üzerinden bulur. Bu işlem profil sahipliğini doğrulamaz.
 - Yerelde veritabanı `data/accounts.sqlite3` içinde tutulur; bu klasör Git dışında bırakılır.
 - Render dağıtımında kalıcı hesaplar için `DATABASE_URL` ortam değişkenine kalıcı bir Postgres bağlantısı ver veya ücretli web servisine `/var/data` gibi kalıcı disk bağlayıp `RENDER_DISK_PATH=/var/data` ayarla. Ücretsiz Render web servislerinin dosya sistemi restart/deploy sonrası silinebilir; ücretsiz Render Postgres veritabanları da 30 gün sonra sona erer. Uzun süreli hesaplar için ücretsiz geçici veritabanı kullanma.
 - Yeni kullanıcı adı/parola akışında e-posta doğrulama ve parola sıfırlama yoktur; parolanı güvenli yerde sakla.
@@ -166,6 +166,7 @@ GitHub'daki `main` dalına gönder. Render bu dala bağlı otomatik deploy ediyo
 ## Steam ile giriş ve CS2 verileri
 
 - Giriş penceresindeki **Steam ile devam et** seçeneği Steam OpenID ile çalışır. Steam parolası Clone Lab’e girilmez. Yeni hesap SteamID ile oluşturulur; var olan Clone Lab hesabı, profil menüsündeki hesap ayarlarından Steam’e bağlanabilir.
+- **Profilim → Hesap bağlantıları** altında Steam bağlantısını kaldırırken mevcut Clone Lab parolanı doğrula. Yalnızca Steam ile oluşturduğun hesapta önce bir Clone Lab kullanıcı adı ve parola belirle. Steam bağlantısını kaldırmak otomatik maç takibini durdurur.
 - Steam oturumu, API anahtarından bağımsızdır. Profil ve oyun verileri için `.env` dosyasına `STEAM_API_KEY` ekle; Render Environment bölümüne aynı adıyla gizli değişken olarak ekle. Anahtar HTML/JavaScript’e veya Git’e yazılmaz.
 - Render’da `PUBLIC_BASE_URL` değişkenini sitenin tam HTTPS adresine ayarla (ör. `https://clonecs.onrender.com`). Yerelde `.env.example` içindeki `http://127.0.0.1:8000` adresini kullan.
 - **Steam / CS2** sekmesi Steam’in API’de görünür kıldığı profili, CS2 toplam ve son iki haftalık oyun süresini ve `GetUserStatsForGame` tarafından gerçekten döndürülen istatistikleri gösterir. Profil/oyun gizliliği bu alanları sınırlayabilir.

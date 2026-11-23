@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 let activePlayerId=null;
 let activeAccountData={};
-let steamProfileLoaded=false;
+let faceitRequest=0,steamRequest=0;
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path, options={}) {
   const r = await fetch(path, {headers:{'Content-Type':'application/json'}, ...options});
@@ -64,24 +64,39 @@ function buildDashboard(p,matches,recentStats){
   return `<section class="card dashboard"><div class="season-head"><div><div class="eyebrow">FACEIT · CS2 · SON PERFORMANS</div><div class="season-title">Maç özeti</div></div><div class="season-summary"><div><b>${known.length}</b><span>Sonucu bilinen maç</span></div><div><b class="positive">${wins}G</b><span>Galibiyet</span></div><div><b class="negative">${losses}M</b><span>Mağlubiyet</span></div><div><b>${rate===null?'—':`%${rate.toFixed(1)}`}</b><span>Kazanma oranı</span></div></div></div><div class="performance-head"><b>Son 30 maç performansı</b><span>İstatistik alınan ${sourceRows.length} maç · ${known.length} sonucu eşleşen maç</span></div><div class="dashboard-chart">${trend}</div><div class="dashboard-metrics">${cards.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong>${esc(x[1])}</strong></div>`).join('')}</div><p class="notice elo-note">Tarihsel ELO değişimi FACEIT Data API yanıtında bulunmadığı için burada güncel ELO ve gerçek maç sonuçlarından hesaplanan hareketli galibiyet oranı gösterilir.</p>${renderMapRadar(mapData)}</section>`;
 }
 function showProfile(p){
-  $('profileWidgetName').textContent=p.nickname||$('profileWidgetName').textContent;
+  $('profileWidgetName').textContent=activeAccountData.steam_persona_name||p.nickname||$('profileWidgetName').textContent;
   $('profileMenuFaceit').textContent=p.nickname||'FACEIT profili bağlanmadı';
-  if(p.avatar){$('profileWidgetAvatar').src=p.avatar;$('profileWidgetAvatar').hidden=false;$('profileWidgetInitials').hidden=true;}else{$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;}
+  if(activeAccountData.steam_avatar_url)setProfileAvatar(activeAccountData.steam_avatar_url);
+  else if(p.avatar){$('profileWidgetAvatar').src=p.avatar;$('profileWidgetAvatar').hidden=false;$('profileWidgetInitials').hidden=true;}else{$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;}
   $('results').innerHTML = `
     <section class="card profile"><img class="avatar" src="${esc(p.avatar || '')}" onerror="this.style.visibility='hidden'" alt="${esc(p.nickname)} FACEIT profil fotoğrafı"><div style="flex:1;min-width:0"><div class="name">${esc(p.nickname)}</div><div class="muted" style="font-size:13px;margin-top:5px">${esc(p.country || 'Ülke bilgisi yok')} · FACEIT Level ${esc(p.skill_level ?? '—')}</div></div><div style="text-align:right"><div class="muted" style="font-size:12px">FACEIT ELO</div><strong style="font-size:25px;color:var(--accent)">${esc(p.elo ?? '—')}</strong><div style="margin-top:6px"><a href="${esc(p.faceit_url || '#')}" target="_blank" rel="noreferrer" style="color:var(--accent);font-size:12px">FACEIT profil ↗</a></div></div></section>
     <section class="metrics"><div class="metric"><label>Son maçlar</label><strong id="matchCount" class="skeleton skeleton-value" aria-label="Yükleniyor"></strong></div><div class="metric"><label>Analiz durumu</label><strong id="analysisState" class="skeleton skeleton-value" style="font-size:17px" aria-label="Yükleniyor"></strong></div></section>
     <section id="dashboardLoading" class="card dashboard loading-card" aria-label="Performans grafikleri yükleniyor"><div class="skeleton skeleton-heading"></div><div class="charts"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div><i class="skeleton skeleton-row"></i></section>
-    <section class="card section"><h2>Son maçlar</h2><div id="matches" class="skeleton-stack" aria-label="Maç geçmişi yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div></section>
-    <section class="card section"><h2>Koçluk notları</h2><div id="coach" class="skeleton-stack" aria-label="İstatistikler yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div></section>`;
+    <section class="card section faceit-section"><h2>Son maçlar</h2><div id="matches" class="skeleton-stack" aria-label="Maç geçmişi yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div></section>
+    <section class="card section faceit-section"><h2>Koçluk notları</h2><div id="coach" class="skeleton-stack" aria-label="İstatistikler yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div></section>`;
+}
+function renderFaceitMatch(match){
+  const outcome=match.won===true?'win':match.won===false?'loss':'unknown';
+  const label={win:'Galibiyet',loss:'Mağlubiyet',unknown:'Sonuç bilinmiyor'}[outcome];
+  const score=Object.values(match.results?.score||{}).join(' : ');
+  const link=match.faceit_url?'<a href="'+esc(match.faceit_url)+'" target="_blank" rel="noopener noreferrer">FACEIT’te aç ↗</a>':'';
+  const detail=match.match_id?'<button type="button" class="secondary" data-match-detail="'+esc(match.match_id)+'">Maç detayı</button>':'';
+  return '<article class="match faceit-match"><div class="faceit-match-info"><strong>'+esc(matchLabel(match))+'</strong><time>'+esc(fmtDate(match.finished_at))+'</time></div>'+
+    '<span class="faceit-result" data-outcome="'+outcome+'">'+label+'</span><b class="faceit-score">'+esc(score||'—')+'</b>'+
+    '<div class="faceit-match-actions">'+link+detail+'</div><div class="match-detail" hidden></div></article>';
 }
 async function loadProfile(nickname){
+  const request=++faceitRequest;
+  if(!nickname)return;
   $('error').textContent=''; $('results').innerHTML='<section class="card loading-card" aria-label="FACEIT verisi yükleniyor"><div class="skeleton skeleton-heading"></div><div class="skeleton-stack"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div></section>'; $('status').textContent='FACEIT profili aranıyor…';
   try {
     const p=await api(`/api/player?nickname=${encodeURIComponent(nickname)}`);
+    if(request!==faceitRequest)return;
     if(!p.player_id) throw new Error('Oyuncu ID bilgisi alınamadı. FACEIT oyun profilini kontrol et.');
     activePlayerId=p.player_id;
     showProfile(p); $('status').textContent='Profil bulundu. Maç ve istatistik verileri yükleniyor…';
     const settled=await Promise.allSettled([api('/api/player/'+encodeURIComponent(p.player_id)+'/matches?limit=30'),api('/api/player/'+encodeURIComponent(p.player_id)+'/stats'),api('/api/player/'+encodeURIComponent(p.player_id)+'/match-stats?limit=100')]);
+    if(request!==faceitRequest)return;
     const matchResult=settled[0], statsResult=settled[1], recentStatsResult=settled[2];
     let recentMatches=[]; let recentStats=null;
     if(recentStatsResult.status==='fulfilled') recentStats=recentStatsResult.value;
@@ -90,24 +105,37 @@ async function loadProfile(nickname){
       recentMatches=items;
       const known=items.filter(m=>m.won===true||m.won===false); const wins=known.filter(m=>m.won===true).length;
       const summary=known.length ? '<p class="notice">Sonucu bilinen '+known.length+' maç: '+wins+' galibiyet, '+(known.length-wins)+' mağlubiyet (%'+Math.round(wins/known.length*100)+'). Bu oran yalnızca bu listedeki sonuçları kapsar.</p>' : '<p class="notice">FACEIT yanıtında kazanan takım güvenle eşleştirilemedi; galibiyet oranı hesaplanmadı.</p>';
-      $('matches').innerHTML=(items.length?items.map(m=>'<div class="match"><div><strong>'+esc(matchLabel(m))+'</strong><div class="muted" style="margin-top:5px">'+esc(m.map ? 'Harita' : 'Maç türü')+' · '+esc(fmtDate(m.finished_at))+'</div><div class="muted" style="font-size:11px;margin-top:4px">'+(m.won===true?'Galibiyet':m.won===false?'Mağlubiyet':'Sonuç FACEIT yanıtında yok')+'</div></div><div style="text-align:right"><div>'+esc((m.results?.score && Object.values(m.results.score).join(' : ')) || 'Skor yok')+'</div>'+(m.faceit_url?'<a href="'+esc(m.faceit_url)+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:11px">FACEIT maç sayfası ↗</a>':'')+'<div style="margin-top:8px"><button type="button" class="secondary" data-match-detail="'+esc(m.match_id)+'" style="padding:7px 9px;font-size:11px">Detayları yükle</button></div></div><div class="match-detail" hidden style="flex:0 0 100%;margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:10px"></div></div>').join(''):'Maç geçmişi bulunamadı.')+summary; const matchRows=$('matches').querySelectorAll('.match'); matchRows.forEach((row,index)=>{row.hidden=index>=2;}); if(matchRows.length>2) $('matches').insertAdjacentHTML('beforeend','<button type="button" class="secondary" id="showMoreMatches" style="margin-top:12px;min-height:40px">Devamını göster</button>');    } else { $('matchCount').textContent='—'; $('matchCount').classList.remove('skeleton','skeleton-value'); $('matches').innerHTML=`<div class="error">${esc(matchResult.reason.message)}</div>`; }
+      $('matches').innerHTML=(items.length?items.map(renderFaceitMatch).join(''):'<p>Maç geçmişi bulunamadı.</p>')+summary;
+      const rows=$('matches').querySelectorAll('.match');
+      rows.forEach((row,index)=>{row.hidden=index>=2});
+      if(rows.length>2)$('matches').insertAdjacentHTML('beforeend','<button type="button" class="secondary" id="showMoreMatches">Devamını göster</button>');
+    }else{
+      $('matchCount').textContent='—';
+      $('matchCount').classList.remove('skeleton','skeleton-value');
+      $('matches').innerHTML='<p class="error">'+esc(matchResult.reason.message)+'</p>';
+    }
     if(statsResult.status==='fulfilled'){
-      const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches,recent_stats:recentStats})});
-      const ms=report.metrics_detected;
-      const metricBits=[['Win rate',ms.win_rate==null?'—':`${ms.win_rate}%`],['ADR',ms.adr==null?'—':ms.adr],['K/D',ms.kd==null?'—':ms.kd],['HS%',ms.headshot_pct==null?'—':`${ms.headshot_pct}%`]];
-      $('coach').innerHTML=`${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
+      try{
+        const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches,recent_stats:recentStats})});
+        if(request!==faceitRequest)return;
+        $('coach').innerHTML=`${report.recommendations.map(r=>`<div class="recommendation"><span class="tag">${esc(r.priority)}</span><h3>${esc(r.title)}</h3><p>${esc(r.body)}</p></div>`).join('')}<p class="notice" style="margin-top:12px">${esc(report.confidence_note)}</p>`;
+      }catch(error){
+        if(request!==faceitRequest)return;
+        $('coach').textContent='Koçluk önerileri şu anda alınamadı. Maç ve istatistik verilerini inceleyebilirsin.';
+      }
     } else { $('coach').innerHTML=`<div class="error">İstatistikler alınamadı: ${esc(statsResult.reason.message)}. Maç geçmişi yine de görüntülenebilir.</div>`; }
-    if(recentStats){
-      const lifetime=statsResult.status==='fulfilled'?(statsResult.value.lifetime||{}):{};
+    if(statsResult.status==='fulfilled'){
+      const lifetime=statsResult.value.lifetime||{};
       const fields=Object.entries(lifetime).map(([k,v])=>`<li>${esc(k)}: ${esc(v)}</li>`).join('');
       $('results').insertAdjacentHTML('beforeend',`<details class="card faceit-match-stats"><summary>Yaşam boyu FACEIT istatistikleri</summary><ul>${fields||'<li>Alan bulunamadı.</li>'}</ul></details>`);
-    }else{
+    }
+    if(!recentStats){
       $('coach').insertAdjacentHTML('afterbegin','<p class="error">Son maç istatistikleri FACEIT’ten alınamadı. Yaşam boyu istatistikler ve maç geçmişi ayrı olarak görüntüleniyor.</p>');
     }
     $('dashboardLoading')?.remove(); const metrics=$('results').querySelector('.metrics'); if(metrics)metrics.insertAdjacentHTML('afterend',buildDashboard(p,recentMatches,recentStats));else $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
     window.dispatchEvent(new CustomEvent('clone:faceit-analysis',{detail:recentStats||{items:[]}}));
     $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Tamamlandı';}
-  } catch(e){ $('dashboardLoading')?.remove(); $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Hata';} }
+  } catch(e){ if(request!==faceitRequest)return; $('dashboardLoading')?.remove(); $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Hata';} }
   finally {}
 }
 
@@ -155,20 +183,63 @@ let playerConfigFiles=[];
 let playerPhotoFiles=[];
 let favoriteConfigs=[];let favoriteOwner='';
 function favoritesStorageKey(){const name=$('profileMenuAccount').textContent||'guest';return `clone_lab_favorites_${configKey(name)}`}
-function readLocalFavorites(){try{const items=JSON.parse(localStorage.getItem(favoritesStorageKey())||'[]');return Array.isArray(items)?items.filter(item=>item&&item.name&&item.team):[]}catch{return []}}
+function readLocalFavorites(key=favoritesStorageKey()){
+  try{
+    const items=JSON.parse(localStorage.getItem(key)||'[]');
+    return Array.isArray(items)?items.filter(item=>typeof item?.name==='string'&&typeof item?.team==='string'):[];
+  }catch{return []}
+}
+const favoritesCacheKey=owner=>'clone-lab-config-cache:'+owner;
 function getFavoriteConfigs(){return favoriteConfigs}
 function isFavoriteConfig(name,team){return favoriteConfigs.some(item=>configKey(item.name)===configKey(name)&&configKey(item.team)===configKey(team))}
 function favoriteButton(name,team){const saved=isFavoriteConfig(name,team);return `<button type="button" class="favorite-toggle${saved?' is-saved':''}" data-toggle-favorite data-favorite-name="${esc(name)}" data-favorite-team="${esc(team)}" aria-pressed="${saved}">${saved?'🔖 Favorilerde':'☆ Favorilere ekle'}</button>`}
-function writeLocalFavorites(items){favoriteConfigs=items;try{localStorage.setItem(favoritesStorageKey(),JSON.stringify(items))}catch{}}
-async function syncAccountFavorites(){const owner=activeAccountData.username||$('profileMenuAccount').textContent||'';if(!owner||!activeAccountData.authenticated||favoriteOwner===owner)return;const local=readLocalFavorites();const remote=await api('/api/account/favorites');let items=Array.isArray(remote.items)?remote.items:[];for(const item of local){if(!items.some(saved=>configKey(saved.name)===configKey(item.name)&&configKey(saved.team)===configKey(item.team))){const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({name:item.name,team:item.team,saved:true})});items=Array.isArray(result.items)?result.items:items.concat(item)}}writeLocalFavorites(items);renderFavoriteConfigs();favoriteOwner=owner}
-async function toggleFavoriteConfig(name,team){const saved=!isFavoriteConfig(name,team);const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({name,team,saved})});writeLocalFavorites(Array.isArray(result.items)?result.items:[]);renderFavoriteConfigs();return saved}
+function updateFavoriteList(items,owner){
+  if(activeAccountData.account_id!==owner)return;
+  favoriteConfigs=items;
+  try{localStorage.setItem(favoritesCacheKey(owner),JSON.stringify(items))}catch{}
+  renderFavoriteConfigs();
+}
+async function syncAccountFavorites(force=false){
+  const owner=activeAccountData.account_id;
+  if(!owner||(!force&&favoriteOwner===owner))return;
+  const legacyKey=favoritesStorageKey();
+  const migrationKey=favoritesCacheKey(owner)+':migrated';
+  let legacy=[];
+  try{if(!localStorage.getItem(migrationKey))legacy=readLocalFavorites(legacyKey)}catch{}
+  const remote=await api('/api/account/favorites',{cache:'no-store'});
+  if(activeAccountData.account_id!==owner)return;
+  let items=Array.isArray(remote.items)?remote.items:[];
+  for(const item of legacy){
+    if(items.some(saved=>configKey(saved.name)===configKey(item.name)&&configKey(saved.team)===configKey(item.team)))continue;
+    const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({...item,saved:true})});
+    if(activeAccountData.account_id!==owner)return;
+    items=Array.isArray(result.items)?result.items:items;
+  }
+  try{localStorage.setItem(migrationKey,'1')}catch{}
+  updateFavoriteList(items,owner);
+  favoriteOwner=owner;
+}
+window.refreshFavoriteConfigs=()=>syncAccountFavorites(true).catch(error=>accountMessage(error.message,'error'));
+async function toggleFavoriteConfig(name,team){
+  const owner=activeAccountData.account_id;
+  if(!owner)return false;
+  const saved=!isFavoriteConfig(name,team);
+  const result=await api('/api/account/favorites',{method:'PUT',body:JSON.stringify({name,team,saved})});
+  updateFavoriteList(Array.isArray(result.items)?result.items:[],owner);
+  return saved;
+}
 function updateFavoriteButton(button,saved){button.classList.toggle('is-saved',saved);button.setAttribute('aria-pressed',String(saved));button.textContent=saved?'🔖 Favorilerde':'☆ Favorilere ekle'}
 function renderFavoriteConfigs(){const items=favoriteConfigs;$('configFavoritesGrid').innerHTML=items.map(item=>`<button type="button" class="config-player-card" data-favorite-config="${esc(item.name)}" data-favorite-team="${esc(item.team)}"><span class="config-player-photo"><span>${esc(String(item.name||'?').slice(0,2).toUpperCase())}</span></span><b>${esc(item.name)}</b><small>${esc(item.team)}</small></button>`).join('');$('configFavoritesEmpty').hidden=items.length>0}
 function configValue(value){if(value===undefined||value===null)return '';const clean=String(value).trim();return !clean||/^(null|undefined|n\/a|na|unknown|not available|not set)$/i.test(clean)?'':clean}
 function configMetric(label,value){const clean=configValue(value);return clean?`<div class="config-metric"><span>${esc(label)}</span><b>${esc(clean)}</b></div>`:''}
 function configSection(title,content){return content?`<h3 class="config-section-title">${esc(title)}</h3>${content}`:''}
 function configKey(value){return configImageSlug(value)}
-function teamLogoImage(teamData,alt){const slug=teamData.logo||configTeamImageSlug(teamData.name);const local=configKey(teamData.name)==='aurora'?'/static/team-logos/aurora-current.svg':`/static/team-logos/${slug}.png`;const remote=hltvRankingMeta.logo_urls?.[teamData.rank];const preferRemote=remote&&['parivision','mibr','1win','nemiga','luminosity','alliance','eternalfire'].includes(configKey(teamData.name));const primary=preferRemote?remote:local;const fallback=preferRemote?local:(remote||`https://cstools.io/teams/${slug}.png`);return `<img src="${esc(primary)}" alt="${esc(alt)}" loading="lazy" referrerpolicy="no-referrer" onerror="if(!this.dataset.fallback){this.dataset.fallback='1';this.src='${esc(fallback)}'}else{this.remove()}">`}
+function teamLogoImage(teamData,alt){
+  const slug=teamData.logo||configTeamImageSlug(teamData.name);
+  const remote=hltvRankingMeta.logo_urls?.[teamData.rank];
+  const source=slug==='aurora'?'/static/team-logos/aurora-current.svg':remote||('/static/team-logos/'+slug+'.png');
+  return '<img src="'+esc(source)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">';
+}
 function renderConfigTeams(){
   const query=$('configSearch').value.trim().toLocaleLowerCase('tr'); const teams=hltvTeams.filter(team=>!query||team.name.toLocaleLowerCase('tr').includes(query)||team.players.some(name=>name.toLocaleLowerCase('tr').includes(query)));
   const teamCards=teams.map(team=>`<button type="button" class="config-team-card" data-config-team="${esc(team.name)}"><span class="config-team-logo">${teamLogoImage(team,team.name+' takım logosu')}</span><b><i>#${team.rank}</i> ${esc(team.name)}</b></button>`).join('');
@@ -217,20 +288,24 @@ function setConfigView(view){$('configTeamsView').hidden=view!=='teams';$('confi
 async function selectMainTab(target){
   const selected=typeof target==='string'?target:(target?'configs':'faceit');
   const panels={esports:$('esportsTab'),training:$('trainingTab'),tactics:$('tacticsTab'),servers:$('serversTab'),faceit:$('faceitTab'),steam:$('steamTab'),configs:$('configsTab'),lineups:$('lineupsTab'),studio:$('studioTab'),settings:$('settingsTab')};
+  if(!panels[selected])return;
+  const wasHidden=panels[selected].hidden;
   Object.entries(panels).forEach(([name,panel])=>{if(panel)panel.hidden=name!==selected;});
   document.querySelectorAll('.app-tab').forEach(tab=>tab.setAttribute('aria-selected',String(tab.dataset.tab===selected)));
+  if(wasHidden)window.scrollTo({top:0,behavior:'instant'});
   if(selected==='training')await window.loadTraining?.();
   if(selected==='servers')await window.loadServerDirectory?.();
   if(selected==='configs')await loadProConfigs();
   if(selected==='settings')window.renderPlayerCenter?.();
   if(selected==='steam')await loadSteamProfile();
+  if(selected==='faceit'&&activeAccountData.faceit_nickname&&!$('results').hasChildNodes())await loadProfile(activeAccountData.faceit_nickname);
 }function closeProfileMenu(){const menu=$('profileDropdown');menu.classList.remove('is-open');$('profileMenuButton').setAttribute('aria-expanded','false');setTimeout(()=>{if(!menu.classList.contains('is-open'))menu.hidden=true;},150)}
 $('profileMenuButton').addEventListener('click',()=>{const menu=$('profileDropdown'),open=menu.hidden;menu.hidden=!open;$('profileMenuButton').setAttribute('aria-expanded',String(open));requestAnimationFrame(()=>menu.classList.toggle('is-open',open));});
 $('profileDropdown').addEventListener('click',async event=>{
   const favorite=event.target.closest('[data-toggle-favorite]');if(favorite){favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}return;}
   const item=event.target.closest('[data-profile-menu]');if(!item)return;const action=item.dataset.profileMenu;
   closeProfileMenu();
-  if(action==='home'||action==='settings'||action==='saved'){await selectMainTab('settings');window.renderPlayerCenter?.(action==='saved'?'saved':'home');}
+  if(action==='home'||action==='settings'||action==='saved'){await selectMainTab('settings');window.renderPlayerCenter?.(action==='saved'?'saved':action==='settings'?'connections':'home');}
 });
 $('configProfile').addEventListener('click',async event=>{const favorite=event.target.closest('[data-toggle-favorite]');if(!favorite)return;favorite.disabled=true;try{const saved=await toggleFavoriteConfig(favorite.dataset.favoriteName,favorite.dataset.favoriteTeam);updateFavoriteButton(favorite,saved)}catch(error){accountMessage('Favori kaydedilemedi: '+error.message,'error')}finally{favorite.disabled=false}});
 $('configFavoritesGrid').addEventListener('click',event=>{const item=event.target.closest('[data-favorite-config]');if(item)renderTop30Player(item.dataset.favoriteConfig,item.dataset.favoriteTeam)});
@@ -269,35 +344,78 @@ function closeAuthModal(){
 document.querySelectorAll('[data-auth-open]').forEach(button=>button.addEventListener('click',()=>openAuthModal(button.dataset.authOpen)));
 document.querySelectorAll('[data-auth-mode]').forEach(button=>button.addEventListener('click',()=>setAuthMode(button.dataset.authMode)));
 document.querySelectorAll('[data-auth-close]').forEach(button=>button.addEventListener('click',closeAuthModal));
+function setProfileAvatar(url){
+  const image=$('profileWidgetAvatar');
+  if(url)image.src=url;else image.removeAttribute('src');
+  image.hidden=!url;
+  $('profileWidgetInitials').hidden=Boolean(url);
+}
+
 async function setAccountState(data,openSavedProfile=false){
-  if(data?.authenticated){data={...activeAccountData,...data};activeAccountData=data;}else activeAccountData={};
-  window.activeAccountData=activeAccountData;
+  const prior=activeAccountData;
   const loggedIn=Boolean(data?.authenticated);
-  $('landingPage').hidden=loggedIn;$('authActions').hidden=loggedIn;$('appBranding').hidden=!loggedIn;
-  $('appTabs').hidden=!loggedIn;$('faceitTab').hidden=!loggedIn;$('steamTab').hidden=true;if($('esportsTab'))$('esportsTab').hidden=true;$('configsTab').hidden=true;$('serversTab').hidden=true;$('lineupsTab').hidden=true;if($('trainingTab'))$('trainingTab').hidden=true;if($('tacticsTab'))$('tacticsTab').hidden=true;document.getElementById('steamPerformanceLab')?.remove();if($('studioTab'))$('studioTab').hidden=true;$('settingsTab').hidden=true;
-  document.querySelectorAll('.app-tab').forEach((tab,index)=>tab.setAttribute('aria-selected',String(index===0)));
-  const persistenceNote=$('accountPersistenceNote');
-  persistenceNote.textContent=data?.persistent_storage?'Hesap kayıtları yapılandırılmış veritabanı veya disk üzerinde tutuluyor; sağlayıcının saklama koşulları geçerlidir.':'Uyarı: Bu Render yayını kalıcı depolama bildirmiyor. Servis yeniden başlarsa kayıtlı hesaplar silinebilir; kalıcı Postgres DATABASE_URL veya kalıcı disk yapılandır.';
-  $('authLoggedOut').hidden=loggedIn;$('profileWidget').hidden=!loggedIn;
-  if(loggedIn)closeAuthModal();
-  if(!loggedIn){
-    $('results').innerHTML='';$('error').textContent='';$('status').textContent='Clone Lab hesabınla giriş yap veya yeni bir hesap oluştur.';
-    $('steamResults').innerHTML='';$('steamStatus').textContent='Steam verisi henüz yüklenmedi.';$('steamFaceitPrompt').hidden=true;$('steamNotConnected').hidden=true;$('steamConnectSetting').hidden=true;$('steamConnectedSetting').hidden=true;steamProfileLoaded=false;activePlayerId=null;
-    $('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;favoriteConfigs=[];favoriteOwner='';renderFavoriteConfigs();closeProfileMenu();return;
+  activeAccountData=loggedIn?data:{};
+  window.activeAccountData=activeAccountData;
+  $('landingPage').hidden=loggedIn;
+  $('authActions').hidden=loggedIn;
+  $('authLoggedOut').hidden=loggedIn;
+  $('profileWidget').hidden=!loggedIn;
+  $('appTabs').hidden=!loggedIn;
+  $('appBranding').hidden=!loggedIn;
+  $('portalWatermark').hidden=!loggedIn;
+  const newSession=!loggedIn||prior.account_id!==data.account_id;
+  if(newSession){
+    favoriteConfigs=[];favoriteOwner='';renderFavoriteConfigs();
+    $('steamDisconnectForm').reset();$('steamDisconnectForm').hidden=true;
+    $('steamDisconnectToggle').setAttribute('aria-expanded','false');
+    for(const panel of document.querySelectorAll('.tab-panel'))panel.hidden=true;
+    document.getElementById('steamPerformanceLab')?.remove();
   }
+  if(newSession||prior.faceit_nickname!==data.faceit_nickname){
+    faceitRequest++;activePlayerId=null;
+    $('results').replaceChildren();$('error').textContent='';$('status').textContent='';
+  }
+  if(newSession||prior.steam_id!==data.steam_id){
+    steamRequest++;
+    $('steamResults').replaceChildren();$('steamStatus').textContent='';
+  }
+  if(!loggedIn){
+    setProfileAvatar(null);favoriteConfigs=[];favoriteOwner='';renderFavoriteConfigs();closeProfileMenu();
+    window.dispatchEvent(new Event('clone:account-changed'));
+    return;
+  }
+  closeAuthModal();
   $('profileMenuAccount').textContent=data.username||'';
-  $('profileMenuSteam').textContent=data.steam_id?'Steam · '+(data.steam_persona_name||data.username):'Steam hesabı bağlı değil';
-  $('profileMenuFaceit').textContent=data.faceit_nickname?`FACEIT · ${data.faceit_nickname}`:'FACEIT profili bağlı değil';
-  $('savedFaceitNickname').value=data.faceit_nickname||'';
-  $('profileWidgetName').textContent=data.faceit_nickname||data.steam_persona_name||data.username||'';
-  $('steamFaceitPrompt').hidden=!data.steam_id||Boolean(data.faceit_nickname);$('steamNotConnected').hidden=Boolean(data.steam_id);
-  $('steamConnectSetting').hidden=Boolean(data.steam_id);$('steamConnectedSetting').hidden=!data.steam_id;
+  $('profileMenuSteam').textContent=data.steam_id?`Steam · ${data.steam_persona_name||data.steam_id}`:'';
+  $('profileMenuFaceit').textContent=data.faceit_nickname?`FACEIT · ${data.faceit_nickname}`:'';
+  $('profileWidgetName').textContent=data.steam_persona_name||data.faceit_nickname||data.username||'';
   $('profileWidgetInitials').textContent=String(data.username||'CL').slice(0,2).toUpperCase();
-  if(data.steam_avatar_url){$('profileWidgetAvatar').src=data.steam_avatar_url;$('profileWidgetAvatar').hidden=false;$('profileWidgetInitials').hidden=true;}else{$('profileWidgetAvatar').hidden=true;$('profileWidgetInitials').hidden=false;}
-  if(data.faceit_nickname&&openSavedProfile)await loadProfile(data.faceit_nickname);
-  else if(!data.faceit_nickname)$('status').textContent=data.steam_id?'Steam hesabın hazır. FACEIT profilin varsa ekleyebilir veya daha sonra bağlayabilirsin.':'Hesabın hazır. FACEIT profilini profil menüsünden bağlayabilirsin.';
-  try{await syncAccountFavorites()}catch(error){favoriteConfigs=readLocalFavorites();renderFavoriteConfigs();accountMessage('Favoriler bu tarayıcıda gösteriliyor; hesapla eşitlenemedi: '+error.message,'error')}
-}function accountMessage(text,type=''){
+  if(newSession||prior.steam_id!==data.steam_id||prior.faceit_nickname!==data.faceit_nickname)setProfileAvatar(data.steam_avatar_url);
+  $('savedFaceitNickname').value=data.faceit_nickname||'';
+  $('faceitEmpty').hidden=Boolean(data.faceit_nickname);
+  $('faceitRefresh').hidden=!data.faceit_nickname;
+  $('steamNotConnected').hidden=Boolean(data.steam_id);
+  $('steamRefresh').hidden=!data.steam_id;
+  $('steamConnectSetting').hidden=Boolean(data.steam_id);
+  $('steamDisconnectToggle').hidden=!data.steam_id;
+  $('faceitDisconnect').hidden=!data.faceit_nickname;
+  $('steamReplacementLabel').hidden=!data.steam_only_login;
+  const steamForm=$('steamDisconnectForm');
+  steamForm.elements.username.required=Boolean(data.steam_only_login);
+  steamForm.elements.username.disabled=!data.steam_only_login;
+  steamForm.elements.password.autocomplete=data.steam_only_login?'new-password':'current-password';
+  $('steamPasswordLabel').textContent=data.steam_only_login?'Yeni Clone Lab parolan':'Clone Lab parolan';
+  $('steamDisconnectCopy').textContent=data.steam_only_login?'Önce Clone Lab giriş bilgilerini belirle. Böylece Steam bağlantısını kaldırdıktan sonra hesabına erişebilirsin.':'Parolanı doğrula. Steam maç takibi de durdurulacak.';
+  const persistenceNote=$('accountPersistenceNote');
+  persistenceNote.hidden=Boolean(data.persistent_storage);
+  persistenceNote.textContent=data.persistent_storage?'':'Sunucuda kalıcı depolama etkin değil. Hesap değişiklikleri yeniden başlatmada kaybolabilir.';
+  window.renderPlayerCenter?.();
+  window.dispatchEvent(new Event('clone:account-changed'));
+  if(newSession||openSavedProfile)await selectMainTab(data.faceit_nickname?'faceit':data.steam_id?'steam':'settings');
+  try{await syncAccountFavorites();if(activeAccountData===data)window.renderPlayerCenter?.()}
+  catch(error){if(activeAccountData===data){favoriteConfigs=readLocalFavorites(favoritesCacheKey(data.account_id));renderFavoriteConfigs();accountMessage('Favoriler eşitlenemedi: '+error.message,'error')}}
+}
+function accountMessage(text,type=''){
   const el=$('authMessage');el.textContent=text;el.className='account-message'+(type?' '+type:'');const profile=$('profileMessage');profile.textContent=text;profile.className='profile-message'+(type?' '+type:'');
 }
 async function restoreAccount(){
@@ -306,12 +424,11 @@ async function restoreAccount(){
     const params=new URLSearchParams(location.search),steamResult=params.get('steam_login'),reason=params.get('reason');
     await setAccountState(data,true);
     if(steamResult==='success'||steamResult==='linked'){
-      $('status').textContent=steamResult==='linked'?'Steam hesabı Clone Lab hesabına bağlandı.':'Steam ile giriş başarılı. FACEIT kullanıyorsan profil menüsünden ekleyebilirsin.';
-      if(data.steam_id&&!data.faceit_nickname){$('steamFaceitPrompt').hidden=false;}
+      if(steamResult==='linked'){await selectMainTab('settings');accountMessage('Steam hesabı bağlandı.','success');}
       history.replaceState({},'',location.pathname+location.hash);
     }else if(steamResult==='error'){
       const messages={state:'Steam giriş doğrulaması başarısız oldu. Lütfen tekrar dene.',expired:'Steam giriş isteğinin süresi doldu. Tekrar dene.',cancelled:'Steam girişi iptal edildi.',setup:'Steam girişi için sunucu adresi yapılandırılmamış.',return:'Steam dönüş adresi doğrulanamadı.',identity:'Steam hesabı doğrulanamadı.',verify:'Steam doğrulama sunucusuna erişilemedi.',already_linked:'Bu Steam hesabı başka bir Clone Lab hesabına bağlı.'};
-      openAuthModal('login');accountMessage(messages[reason]||'Steam ile giriş tamamlanamadı. Tekrar dene.','error');history.replaceState({},'',location.pathname+location.hash);
+      if(data.authenticated)await selectMainTab('settings');else openAuthModal('login');accountMessage(messages[reason]||'Steam ile giriş tamamlanamadı. Tekrar dene.','error');history.replaceState({},'',location.pathname+location.hash);
     }
   }catch(e){accountMessage('Hesap bilgisi alınamadı: '+e.message,'error');}
 }async function submitAuth(form,path){
@@ -335,32 +452,78 @@ function renderSteamProfile(data){
   const metrics=[steamMetric('Toplam CS2 süresi',hours(cs2.playtime_minutes)),steamMetric('Son 2 haftada',hours(cs2.recent_playtime_minutes)),steamMetric('Steam oyun istatistiği',cs2.stats_available?cs2.stats.length:null,' kayıt')].join('');
   const avatar=profile.avatar_url?`<img class="steam-profile-avatar" src="${esc(profile.avatar_url)}" alt="${esc(profile.persona_name||'Steam')} avatarı">`:'<div class="steam-profile-avatar steam-avatar-fallback">S</div>';
   const stats=(cs2.stats||[]).map(item=>`<div class="steam-stat-row"><span>${esc(String(item.name).replaceAll('_',' '))}</span><b>${esc(item.value)}</b></div>`).join('');
-  const statusNote=data.unavailable_sources?.length?`<p class="notice">Gizlilik ayarları veya Steam API erişimi nedeniyle bazı alanlar alınamadı: ${esc(data.unavailable_sources.join(', '))}.</p>`:'';
+  const statusNote=data.unavailable_sources?.length?'<p class="notice">Steam gizlilik ayarları veya geçici erişim sorunları bazı alanları etkileyebilir.</p>':'';
   $('steamResults').innerHTML=`<section class="steam-profile-card">${avatar}<div class="steam-profile-copy"><span class="eyebrow">STEAM PLAYER</span><h2>${esc(profile.persona_name||'Steam hesabı')}</h2><a href="${esc(profile.profile_url||'#')}" target="_blank" rel="noopener noreferrer">Steam profilini aç ↗</a></div><span class="steam-app-badge">COUNTER-STRIKE 2 · 730</span></section><div class="steam-metrics">${metrics}</div>${stats?`<details class="steam-stats-details"><summary>Steam’in yayımladığı ${stats.length} oyun istatistiği</summary><div class="steam-stats-grid">${stats}</div></details>`:'<div class="notice">Steam bu profil için herkese açık CS2 oyun istatistiği döndürmedi.</div>'}<section class="steam-history-note"><b>Maç geçmişi</b><p>${esc(cs2.match_history?.message||'Steam Web API kişisel CS2 maç geçmişini maç maç sağlamıyor.')}</p></section>${statusNote}<p class="steam-source">Kaynak: ${esc(data.source||'Steam Web API')}. ${esc(data.privacy_note||'Gizlilik ayarları erişilebilir alanları etkileyebilir.')}</p>`;
 }
 async function loadSteamProfile(){
-  if(!activeAccountData.steam_id){$('steamNotConnected').hidden=false;$('steamStatus').textContent='Steam hesabı bağlı değil.';$('steamResults').innerHTML='';return;}
-  $('steamNotConnected').hidden=true;$('steamStatus').className='notice';$('steamStatus').innerHTML='<div class="skeleton-stack" aria-label="Steam verisi yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div>';
-  try{const data=await api('/api/steam/profile');renderSteamProfile(data);steamProfileLoaded=true;$('steamStatus').textContent='Steam hesabı doğrulandı. Yalnızca API’den alınan alanlar gösteriliyor.';}
-  catch(error){$('steamResults').innerHTML='';$('steamStatus').textContent=error.message;$('steamStatus').className='error';}
+  const request=++steamRequest;
+  if(!activeAccountData.steam_id)return;
+  $('steamStatus').className='provider-status';
+  $('steamStatus').innerHTML='<div class="skeleton-stack" aria-label="Steam verisi yükleniyor"><i class="skeleton skeleton-row"></i><i class="skeleton skeleton-row"></i></div>';
+  try{
+    const data=await api('/api/steam/profile');
+    if(request!==steamRequest)return;
+    renderSteamProfile(data);$('steamStatus').textContent='';
+  }catch(error){
+    if(request!==steamRequest)return;
+    $('steamStatus').textContent=error.message;$('steamStatus').className='error';
+  }
 }
-$('steamRefresh').addEventListener('click',()=>loadSteamProfile());
-$('connectFaceitPrompt').addEventListener('click',async event=>{
-  event.stopPropagation();await selectMainTab('settings');$('savedFaceitNickname').focus();
+$('steamRefresh').addEventListener('click',()=>{
+  loadSteamProfile();
+  window.dispatchEvent(new Event('clone:tracking-refresh'));
 });
+$('faceitRefresh').addEventListener('click',()=>loadProfile(activeAccountData.faceit_nickname));
+document.querySelectorAll('[data-open-connections]').forEach(button=>button.addEventListener('click',async()=>{
+  await selectMainTab('settings');
+  $('connectionsTitle').scrollIntoView({block:'start'});
+  $('savedFaceitNickname').focus({preventScroll:true});
+}));
 $('loginForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/login');});
 $('registerForm').addEventListener('submit',e=>{e.preventDefault();submitAuth(e.currentTarget,'/api/account/register');});
-$('faceitLinkForm').addEventListener('submit',async e=>{
-  e.preventDefault();const button=e.currentTarget.querySelector('button[type="submit"]');button.disabled=true;accountMessage('FACEIT profili aranıyor…');
+$('faceitLinkForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const button=event.currentTarget.querySelector('button[type="submit"]');
+  button.disabled=true;
+  accountMessage('FACEIT profili aranıyor…');
   try{
     const nickname=$('savedFaceitNickname').value.trim();
     const data=await api('/api/account/faceit',{method:'POST',body:JSON.stringify({nickname})});
-    await setAccountState({authenticated:true,username:$('profileMenuAccount').textContent,faceit_nickname:data.faceit_nickname,persistent_storage:data.persistent_storage},false);
-    accountMessage('FACEIT profili bulundu ve bu hesaba kaydedildi.','success');
-    window.renderPlayerCenter?.();
-    await loadProfile(data.faceit_nickname);
-  }catch(err){accountMessage(err.message,'error');}
-  finally{button.disabled=false;}
+    await setAccountState({...activeAccountData,faceit_nickname:data.faceit_nickname,persistent_storage:data.persistent_storage});
+    accountMessage('FACEIT profili kaydedildi. Analizin FACEIT sekmesinde hazır.','success');
+  }catch(error){accountMessage(error.message,'error')}
+  finally{button.disabled=false}
+});
+$('faceitDisconnect').addEventListener('click',async event=>{
+  const button=event.currentTarget;
+  button.disabled=true;
+  try{
+    const data=await api('/api/account/faceit',{method:'DELETE'});
+    await setAccountState(data);
+    accountMessage('FACEIT bağlantısı kaldırıldı.','success');
+    $('savedFaceitNickname').focus();
+  }catch(error){accountMessage(error.message,'error')}
+  finally{button.disabled=false}
+});
+$('steamDisconnectToggle').addEventListener('click',event=>{
+  const form=$('steamDisconnectForm');
+  form.hidden=!form.hidden;
+  event.currentTarget.setAttribute('aria-expanded',String(!form.hidden));
+  if(form.hidden)form.reset();else form.elements[activeAccountData.steam_only_login?'username':'password'].focus();
+});
+$('steamDisconnectForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const form=event.currentTarget,button=form.querySelector('button');
+  button.disabled=true;
+  try{
+    const data=await api('/api/account/steam/disconnect',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});
+    form.reset();form.hidden=true;
+    $('steamDisconnectToggle').setAttribute('aria-expanded','false');
+    await setAccountState(data);
+    accountMessage('Steam bağlantısı kaldırıldı ve otomatik takip durduruldu.','success');
+    $('steamConnectSetting').focus();
+  }catch(error){accountMessage(error.message,'error')}
+  finally{button.disabled=false}
 });
 $('logoutButton').addEventListener('click',async()=>{
   try{await api('/api/account/logout',{method:'POST'});await setAccountState({authenticated:false});accountMessage('Oturum kapatıldı.');}
@@ -409,6 +572,7 @@ const guideRevealTargets=[...document.querySelectorAll('.guide-panel-top,.guide-
 function fitSmokeArtwork(){
   if(!smokeCanvas||!smokeContext||!smokeArtwork.complete||!smokeArtwork.naturalWidth)return;
   const bounds=smokeCanvas.getBoundingClientRect(),ratio=Math.min(window.devicePixelRatio||1,2);
+  if(!bounds.width||!bounds.height)return;
   smokeCanvas.width=Math.max(1,Math.round(bounds.width*ratio));smokeCanvas.height=Math.max(1,Math.round(bounds.height*ratio));
   smokeContext.setTransform(ratio,0,0,ratio,0,0);smokeContext.clearRect(0,0,bounds.width,bounds.height);
   const scale=Math.min(bounds.width/smokeArtwork.width,bounds.height/smokeArtwork.height);
@@ -444,6 +608,7 @@ if(lineupScene&&lineupHand&&lineupGrenade&&lineupResult&&smokeCanvas){
       pathLength=trajectory.getTotalLength();geometryKey=key;
     }
     function syncGrenade(){
+      if(!lineupScene.clientWidth||!lineupScene.clientHeight)return;
       updateFlightPath();
       let point=anchor();
       if(flight.progress>0){
@@ -497,12 +662,6 @@ if('IntersectionObserver' in window){
   document.querySelectorAll('.reveal-on-scroll').forEach(element=>revealObserver.observe(element));
 }else document.querySelectorAll('.reveal-on-scroll').forEach(element=>element.classList.add('is-visible'));
 restoreAccount();
-$('faceitInlineForm').addEventListener('submit',e=>{e.preventDefault();let value=$('faceitInlineInput').value.trim();try{if(/^https?:/i.test(value))value=new URL(value).pathname.split('/').filter(Boolean).pop()||'';}catch{}$('savedFaceitNickname').value=value;$('faceitInlineMessage').textContent='';$('faceitLinkForm').requestSubmit();});
-$('bannerRefresh').addEventListener('click',()=>loadSteamProfile());
-/* Portal-only presentation sync; all provider data and tab logic remain unchanged. */
-const renderAccountState=setAccountState;
-setAccountState=async function(data,openSavedProfile=false){await renderAccountState(data,openSavedProfile);const active=Boolean(data&&data.authenticated);$('playerBanner').hidden=!active;$('portalWatermark').hidden=!active;$('faceitInlineConnect').hidden=!active||Boolean(activeAccountData.faceit_nickname);if(active){$('bannerName').textContent=activeAccountData.steam_persona_name||activeAccountData.username||'Player';$('bannerSteamId').textContent=activeAccountData.steam_id||'Steam ID not connected';document.querySelector('.steam-certified').hidden=!activeAccountData.steam_id;if(activeAccountData.steam_avatar_url){$('bannerAvatar').src=activeAccountData.steam_avatar_url;$('bannerAvatar').hidden=false;}else $('bannerAvatar').hidden=true;}};
-
 $('sidebarToggle').addEventListener('click',()=>{const collapsed=document.body.classList.toggle('sidebar-collapsed');$('sidebarToggle').setAttribute('aria-expanded',String(!collapsed));$('sidebarToggle').setAttribute('aria-label',collapsed?'Menüyü genişlet':'Menüyü daralt');});
 
 if(window.matchMedia('(max-width:760px)').matches){document.body.classList.add('sidebar-collapsed');$('sidebarToggle').setAttribute('aria-expanded','false');$('sidebarToggle').setAttribute('aria-label','Menüyü genişlet');}

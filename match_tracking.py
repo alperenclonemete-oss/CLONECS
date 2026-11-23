@@ -40,6 +40,13 @@ def connect_tracking(user_id, steam_id, auth, code):
         raise ValueError("Steam erişim kodu veya maç paylaşım kodu biçimi geçersiz.")
     encrypted = cipher().encrypt(auth.encode()).decode()
     with connection() as conn, db_cursor(conn) as cur:
+        if not DATABASE_URL:
+            cur.execute("BEGIN IMMEDIATE")
+        lock = " FOR UPDATE" if DATABASE_URL else ""
+        cur.execute(sql("SELECT steam_id FROM coach_users WHERE user_id=?" + lock), (user_id,))
+        owner = cur.fetchone()
+        if not owner or owner["steam_id"] != steam_id:
+            raise ValueError("Steam bağlantısı değişti. Profil ayarlarını yenile.")
         cur.execute(sql("""INSERT INTO cs2_tracking(user_id,steam_id,auth_cipher,cursor_code,status)
             VALUES(?,?,?,?,?) ON CONFLICT(user_id) DO UPDATE SET steam_id=excluded.steam_id,
             auth_cipher=excluded.auth_cipher,cursor_code=excluded.cursor_code,status=excluded.status,checked_at=0,error=''"""),

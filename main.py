@@ -5,7 +5,8 @@ import json
 import os
 import re
 import secrets
-from urllib.parse import quote, urlencode, urlsplit
+import sqlite3
+from urllib.parse import quote, unquote, urlencode, urlsplit
 from pathlib import Path
 from typing import Any
 
@@ -16,7 +17,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 load_dotenv()
 
-from account_store import authenticate_user, consume_steam_login_state, create_session, create_steam_login_state, create_user, delete_session, get_user_for_session, init_database, link_steam_account, persistent_storage_configured, save_faceit_nickname, upsert_steam_user, list_favorites, set_favorite
+from account_store import authenticate_user, consume_steam_login_state, create_session, create_steam_login_state, create_user, delete_session, get_user_for_session, init_database, link_steam_account, persistent_storage_configured, save_faceit_nickname, unlink_steam_account, upsert_steam_user, list_favorites, set_favorite
 
 BASE_DIR = Path(__file__).resolve().parent
 FACEIT_API_KEY = os.getenv("FACEIT_API_KEY", "").strip()
@@ -377,7 +378,40 @@ async def account(request: Request):
     user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
     if not user:
         return {"authenticated": False, "persistent_storage": persistent_storage_configured()}
-    return {"authenticated": True, "username": user.get("steam_persona_name") or user["username"], "faceit_nickname": user.get("faceit_nickname"), "steam_id": user.get("steam_id"), "steam_persona_name": user.get("steam_persona_name"), "steam_avatar_url": user.get("steam_avatar_url"), "persistent_storage": persistent_storage_configured()}
+    return account_payload(user)
+
+
+def account_payload(user: dict[str, Any]) -> dict[str, Any]:
+    steam_id = user.get("steam_id")
+    return {
+        "authenticated": True,
+        "account_id": user["user_id"],
+        "username": user.get("steam_persona_name") or user["username"],
+        "faceit_nickname": user.get("faceit_nickname"),
+        "steam_id": steam_id,
+        "steam_only_login": bool(steam_id and user["username"] == f"steam_{steam_id}"),
+        "steam_persona_name": user.get("steam_persona_name"),
+        "steam_avatar_url": user.get("steam_avatar_url"),
+        "persistent_storage": persistent_storage_configured(),
+    }
+
+
+def valid_local_username(value: str) -> bool:
+    return bool(re.fullmatch(r"[A-Za-z0-9_.-]{3,32}", value) and not re.fullmatch(r"steam_\d{17}", value, re.IGNORECASE))
+
+
+def faceit_nickname(value: str) -> str:
+    value = value.strip()
+    if "/" in value or value.lower().startswith(("faceit.com", "www.faceit.com")):
+        try:
+            url = urlsplit(value if "://" in value else "https://" + value)
+            match = re.fullmatch(r"/(?:[a-z]{2}(?:-[a-z]{2})?/)?players/([^/]+)/?", url.path, re.IGNORECASE)
+            value = unquote(match[1]) if url.scheme in ("https", "http") and url.netloc.lower() in ("faceit.com", "www.faceit.com") and match else ""
+        except ValueError:
+            value = ""
+    if not re.fullmatch(r"[\w .-]{2,40}", value):
+        raise HTTPException(400, "Geçerli bir FACEIT kullanıcı adı veya profil adresi gir.")
+    return value
 
 
 def set_session_cookie(response: Response, token: str) -> None:
@@ -392,8 +426,8 @@ def set_session_cookie(response: Response, token: str) -> None:
 async def register_account(payload: dict[str, Any], request: Request, response: Response):
     username = str(payload.get("username", "")).strip()
     password = str(payload.get("password", ""))
-    if not re.fullmatch(r"[A-Za-z0-9_.-]{3,32}", username):
-        raise HTTPException(status_code=400, detail="Kullanıcı adı 3-32 karakter olmalı; harf, rakam, nokta, tire ve alt çizgi kullan.")
+    if not valid_local_username(username):
+        raise HTTPException(status_code=400, detail="3–32 karakterlik, ayrılmamış bir kullanıcı adı gir. Harf, rakam, nokta, tire veya alt çizgi kullan.")
     if len(password) < 8 or len(password) > 128:
         raise HTTPException(status_code=400, detail="Parola 8-128 karakter arasında olmalı.")
     try:
@@ -403,7 +437,7 @@ async def register_account(payload: dict[str, Any], request: Request, response: 
     await asyncio.to_thread(delete_session, request.cookies.get("cs2coach_session"))
     token = await asyncio.to_thread(create_session, user["user_id"])
     set_session_cookie(response, token)
-    return {"authenticated": True, "username": username, "faceit_nickname": None, "persistent_storage": persistent_storage_configured()}
+    return account_payload(user)
 
 
 @app.post("/api/account/login")
@@ -416,7 +450,7 @@ async def login_account(payload: dict[str, Any], request: Request, response: Res
     await asyncio.to_thread(delete_session, request.cookies.get("cs2coach_session"))
     token = await asyncio.to_thread(create_session, user["user_id"])
     set_session_cookie(response, token)
-    return {"authenticated": True, "username": user.get("steam_persona_name") or user["username"], "faceit_nickname": user.get("faceit_nickname"), "steam_id": user.get("steam_id"), "steam_persona_name": user.get("steam_persona_name"), "steam_avatar_url": user.get("steam_avatar_url"), "persistent_storage": persistent_storage_configured()}
+    return account_payload(user)
 
 
 @app.post("/api/account/logout")
@@ -431,15 +465,55 @@ async def save_faceit_profile(payload: dict[str, Any], request: Request):
     user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
     if not user:
         raise HTTPException(status_code=401, detail="Önce CS2 Coach hesabına giriş yap.")
-    nickname = str(payload.get("nickname", "")).strip()
-    if not re.fullmatch(r"[\w .-]{2,40}", nickname, flags=re.UNICODE):
-        raise HTTPException(status_code=400, detail="Geçerli bir FACEIT kullanıcı adı gir.")
+    nickname = faceit_nickname(str(payload.get("nickname", "")))
     profile = await faceit_get("/players", {"nickname": nickname, "game": FACEIT_GAME_ID})
     if not profile.get("player_id"):
         raise HTTPException(status_code=404, detail="FACEIT bu kullanıcı adı için oyuncu profili döndürmedi.")
     canonical_nickname = str(profile.get("nickname") or nickname)
     await asyncio.to_thread(save_faceit_nickname, user["user_id"], canonical_nickname)
     return {"saved": True, "faceit_nickname": canonical_nickname, "ownership_verified": False, "persistent_storage": persistent_storage_configured()}
+
+
+@app.delete("/api/account/faceit")
+async def remove_faceit_profile(request: Request):
+    user = await asyncio.to_thread(get_user_for_session, request.cookies.get("cs2coach_session"))
+    if not user:
+        raise HTTPException(401, "Önce giriş yap.")
+    await asyncio.to_thread(save_faceit_nickname, user["user_id"], None)
+    return account_payload({**user, "faceit_nickname": None})
+
+
+@app.post("/api/account/steam/disconnect")
+async def disconnect_steam(payload: dict[str, Any], request: Request):
+    token = request.cookies.get("cs2coach_session")
+    user = await asyncio.to_thread(get_user_for_session, token)
+    if not user:
+        raise HTTPException(401, "Önce giriş yap.")
+    if not user.get("steam_id"):
+        raise HTTPException(409, "Steam hesabı bağlı değil.")
+    password, username = payload.get("password"), payload.get("username")
+    if not isinstance(password, str) or not 8 <= len(password) <= 128:
+        raise HTTPException(400, "Clone Lab parolan 8–128 karakter olmalı.")
+    if account_payload(user)["steam_only_login"]:
+        username = username.strip() if isinstance(username, str) else ""
+        if not valid_local_username(username):
+            raise HTTPException(400, "Clone Lab için geçerli bir kullanıcı adı belirle.")
+    else:
+        username = None
+    try:
+        await asyncio.to_thread(unlink_steam_account, user["user_id"], password, username)
+    except ValueError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    except Exception as exc:
+        if getattr(exc, "sqlstate", None) == "23505" or (
+            isinstance(exc, sqlite3.IntegrityError) and exc.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE
+        ):
+            raise HTTPException(409, "Bu kullanıcı adı zaten kullanımda.") from exc
+        raise
+    updated = await asyncio.to_thread(get_user_for_session, token)
+    if not updated:
+        raise HTTPException(401, "Oturum sona erdi. Clone Lab hesabınla tekrar giriş yap.")
+    return account_payload(updated)
 
 @app.get("/api/account/favorites")
 async def account_favorites(request: Request):

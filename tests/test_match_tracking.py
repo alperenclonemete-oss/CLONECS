@@ -9,6 +9,7 @@ os.environ['DATABASE_URL'] = ''
 os.environ['APP_DATABASE_PATH'] = str(Path(temp.name) / 'test.sqlite3')
 from cryptography.fernet import Fernet
 os.environ['MATCH_TRACKING_KEY'] = Fernet.generate_key().decode()
+import account_store as store
 from account_store import init_database, connection, db_cursor, create_user, create_session, link_steam_account
 from match_tracking import init_tracking, connect_tracking, tracking_status, disconnect_tracking, cipher, summarize_matches
 from match_worker import poll_tracking, process_one, validate_demo_url
@@ -39,6 +40,8 @@ class TrackingTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        db = cls.enterClassContext(tempfile.TemporaryDirectory())
+        cls.enterClassContext(patch.object(store, 'DB_PATH', Path(db) / 'tracking.sqlite3'))
         init_database(); init_tracking()
         cls.a = create_user('test_one', 'long_password_123')['user_id']
         cls.b = create_user('test_two', 'long_password_123')['user_id']

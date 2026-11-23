@@ -1,13 +1,20 @@
 // Steam matchmaking tracking. No Steam password or API key is requested here.
 (() => {
   const host=document.getElementById('steamTab');
-  const section=document.createElement('section');section.className='match-tracking';
-  section.innerHTML=`<div class="eyebrow">MATCH INTELLIGENCE // VALVE MATCHMAKING</div><h2>Maçlarını otomatik analiz et</h2><p>Başlangıç maçını ve Steam maç geçmişi erişimini bir kez bağla. Yeni maçlar arka planda işlenir. Eski maçların tamamı geriye dönük getirilemez.</p><p><a href="https://help.steampowered.com/en/wizard/HelpWithGameIssue/?appid=730&issueid=128" target="_blank" rel="noopener noreferrer">Steam’den maç erişim kodlarını al ↗</a></p><form id="matchTrackingForm"><label>Maç geçmişi erişim kodu<input name="auth_code" type="password" autocomplete="off" placeholder="XXXX-XXXXX-XXXX" maxlength="32" required></label><label>Başlangıç maç paylaşım kodu<input name="share_code" autocomplete="off" placeholder="CSGO-xxxxx-xxxxx-xxxxx-xxxxx-xxxxx" maxlength="64" required></label><button type="submit" class="button-cta">Otomatik takibi bağla</button></form><div class="tracking-actions"><button type="button" id="trackingRefresh">Durumu yenile</button><button type="button" id="trackingDisconnect" hidden>Takibi durdur</button></div><p id="trackingStatus" role="status" aria-live="polite"></p><div id="trackingSummary"></div><div id="trackingMatches"></div>`;
-  host.append(section);
+  const settings=document.getElementById('trackingSettings');
+  const section=document.createElement('section');section.className='settings-section match-tracking';
+  section.innerHTML=`<h2>Steam maç takibi</h2><p>Başlangıç maçını ve Steam maç geçmişi erişimini bir kez bağla. Yeni maçlar arka planda işlenir. Eski maçların tamamı geriye dönük getirilemez.</p><p><a href="https://help.steampowered.com/en/wizard/HelpWithGameIssue/?appid=730&issueid=128" target="_blank" rel="noopener noreferrer">Steam’den maç erişim kodlarını al ↗</a></p><form id="matchTrackingForm"><label>Maç geçmişi erişim kodu<input name="auth_code" type="password" autocomplete="off" placeholder="XXXX-XXXXX-XXXX" maxlength="32" required></label><label>Başlangıç maç paylaşım kodu<input name="share_code" autocomplete="off" placeholder="CSGO-xxxxx-xxxxx-xxxxx-xxxxx-xxxxx" maxlength="64" required></label><button type="submit" class="button-cta">Otomatik takibi bağla</button></form><div class="tracking-actions"><button type="button" id="trackingRefresh">Durumu yenile</button><button type="button" id="trackingDisconnect" hidden>Takibi durdur</button></div><p id="trackingStatus" role="status" aria-live="polite"></p>`;
+  settings.append(section);
+  const results=document.createElement('section');
+  results.className='match-tracking tracking-results';
+  results.hidden=true;
+  results.innerHTML='<h2>Analiz edilen maçlar</h2><p id="trackingResultStatus" role="status"></p><div id="trackingSummary"></div><div id="trackingMatches"></div>';
+  host.append(results);
   const stateNames={pending:'İşleyicinin ilk kontrolü bekleniyor',active:'Maç geçmişi takibi açık',error:'Bağlantı kontrolü gerekiyor',queued:'Analiz sırası bekleniyor',processing:'Demo işleniyor',retry:'Tekrar denenecek',failed:'Analiz tamamlanamadı'};
   let generation=0;
   function render(data){
     window.dispatchEvent(new CustomEvent('clone:steam-analysis',{detail:data}));
+    document.getElementById('trackingResultStatus').textContent=data.matches?.length?'':data.tracking?'İlk maç analizi bekleniyor.':'Henüz analiz edilen maç yok.';
     document.getElementById('trackingStatus').textContent=!data.configured?'Otomatik takip sunucusu henüz etkinleştirilmedi.':data.tracking?(stateNames[data.tracking.status]||'Bekleniyor')+(data.tracking.error?' · '+data.tracking.error:''):'Steam hesabın bağlı. Maç analizi için yukarıdaki kodları ekle.';
     document.querySelector('#matchTrackingForm button').disabled=!data.configured;
     document.getElementById('trackingDisconnect').hidden=!data.tracking;
@@ -22,11 +29,37 @@
     if(m?.status!=='available')return '<section class="mistake-review"><h4>Hata takibi</h4><p>Bu kayıtta olay analizi yok. Yeni işleyiciyle analiz edilen demolarda görünür.</p></section>';
     return `<section class="mistake-review"><h4>Hata takibi · incelenecek noktalar</h4><div class="steam-metrics">${steamMetric('Takım arkadaşı kör süresi',m.team_blind_seconds,' sn')}${steamMetric('Takas edilen ölümler',m.traded_death_percent,'%')}${steamMetric('Rakibi kör etmeyen flash',m.flashes_without_enemy_blind+' / '+m.flashes_thrown)}</div><p>${esc(m.traded_deaths)} / ${esc(m.eligible_deaths)} rakip kaynaklı ölüm, aynı roundda takım arkadaşın tarafından 5 saniye içinde takas edildi. Kör süreleri oyuncu başına çakışmalar birleştirilerek toplanır.</p><p>Rakibi kör etmeyen flash mutlaka boşa gitmiş değildir; alan kazandırmış olabilir. Smoke, HE ve molotofun boşa gidip gitmediği bu sürümde ölçülmez. Kapsam: demonun canlı round olayları, 64 tick/sn.</p></section>`;
   }
-  async function refresh(){const g=++generation;try{const data=await api('/api/cs2/tracking');if(g===generation&&!host.hidden)render(data)}catch(e){if(g===generation)document.getElementById('trackingStatus').textContent=e.message}}
+  function reset(){
+    generation++;
+    const linked=Boolean(window.activeAccountData?.steam_id);
+    section.hidden=!linked;results.hidden=!linked;
+    document.getElementById('trackingMatches').replaceChildren();
+    document.getElementById('trackingSummary').replaceChildren();
+    document.getElementById('trackingResultStatus').textContent='';
+    document.getElementById('trackingStatus').textContent='';
+    document.getElementById('matchTrackingForm').reset();
+  }
+  function showError(message){
+    document.getElementById('trackingStatus').textContent=message;
+    document.getElementById('trackingResultStatus').textContent=message;
+  }
+  async function refresh(){
+    const steamId=window.activeAccountData?.steam_id;
+    if(!steamId)return;
+    const current=++generation;
+    try{
+      const data=await api('/api/cs2/tracking');
+      if(current===generation&&steamId===window.activeAccountData?.steam_id)render(data);
+    }catch(error){if(current===generation)showError(error.message)}
+  }
   document.getElementById('matchTrackingForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,button=form.querySelector('button');button.disabled=true;const g=++generation;try{const data=await api('/api/cs2/tracking',{method:'POST',body:JSON.stringify(Object.fromEntries(new FormData(form)))});form.reset();if(g===generation)render(data)}catch(error){document.getElementById('trackingStatus').textContent=error.message}finally{button.disabled=false}});
   document.getElementById('trackingRefresh').addEventListener('click',refresh);
   document.getElementById('trackingDisconnect').addEventListener('click',async()=>{try{await api('/api/cs2/tracking',{method:'DELETE'});await refresh()}catch(e){document.getElementById('trackingStatus').textContent=e.message}});
-  new MutationObserver(()=>{if(!host.hidden)refresh();else{generation++;document.getElementById('steamPerformanceLab')?.remove();document.getElementById('trackingMatches').innerHTML='';document.getElementById('trackingSummary').innerHTML='';document.getElementById('matchTrackingForm').reset()}}).observe(host,{attributes:true,attributeFilter:['hidden']});
+  const settingsTab=document.getElementById('settingsTab');
+  const observe=new MutationObserver(()=>{if(!host.hidden||!settingsTab.hidden)refresh()});
+  for(const page of [host,settingsTab])observe.observe(page,{attributes:true,attributeFilter:['hidden']});
+  window.addEventListener('clone:account-changed',()=>{reset();if(!host.hidden||!settingsTab.hidden)refresh()});
+  window.addEventListener('clone:tracking-refresh',refresh);
   setInterval(()=>{if(!host.hidden&&!document.hidden)refresh()},30000);
-  if(!host.hidden)refresh();
+  reset();
 })();

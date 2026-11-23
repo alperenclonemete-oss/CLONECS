@@ -240,10 +240,43 @@ def delete_session(token: str | None) -> None:
             cur.execute("DELETE FROM coach_sessions WHERE token_hash=%s" if DATABASE_URL else "DELETE FROM coach_sessions WHERE token_hash=?", (token_hash,))
 
 
-def save_faceit_nickname(user_id: str, nickname: str) -> None:
+def save_faceit_nickname(user_id: str, nickname: str | None) -> None:
     with connection() as conn:
         with db_cursor(conn) as cur:
             cur.execute("UPDATE coach_users SET faceit_nickname=%s WHERE user_id=%s" if DATABASE_URL else "UPDATE coach_users SET faceit_nickname=? WHERE user_id=?", (nickname, user_id))
+
+
+def unlink_steam_account(user_id: str, password: str, new_username: str | None) -> None:
+    """Keep a password sign-in available and revoke matchmaking access together."""
+    marker = "%s" if DATABASE_URL else "?"
+    with connection() as conn, db_cursor(conn) as cur:
+        if not DATABASE_URL:
+            cur.execute("BEGIN IMMEDIATE")
+        lock = " FOR UPDATE" if DATABASE_URL else ""
+        cur.execute(f"SELECT username, steam_id, password_hash FROM coach_users WHERE user_id={marker}{lock}", (user_id,))
+        row = cur.fetchone()
+        if not row or not row["steam_id"]:
+            raise ValueError("Steam hesabı bağlı değil.")
+        steam_only = row["username"] == f'steam_{row["steam_id"]}'
+        if steam_only:
+            if not new_username:
+                raise ValueError("Clone Lab için bir kullanıcı adı ve parola belirle.")
+            encoded = hash_password(password)
+            cur.execute(
+                f"UPDATE coach_users SET username={marker}, password_hash={marker}, "
+                f"steam_id=NULL, steam_persona_name=NULL, steam_avatar_url=NULL WHERE user_id={marker}",
+                (new_username, encoded, user_id),
+            )
+        else:
+            if not verify_password(password, row["password_hash"]):
+                raise ValueError("Clone Lab parolan yanlış.")
+            cur.execute(
+                f"UPDATE coach_users SET steam_id=NULL, steam_persona_name=NULL, steam_avatar_url=NULL WHERE user_id={marker}",
+                (user_id,),
+            )
+        cur.execute(f"DELETE FROM steam_login_states WHERE user_id={marker}", (user_id,))
+        cur.execute(f"DELETE FROM cs2_tracking WHERE user_id={marker}", (user_id,))
+        cur.execute(f"DELETE FROM cs2_matches WHERE user_id={marker} AND status != 'complete'", (user_id,))
 
 def list_favorites(user_id: str) -> list[dict[str, str]]:
     with connection() as conn:
