@@ -1,0 +1,11 @@
+**
+!requirements.txt
+!requirements-worker.txt
+!account_store.py
+!match_tracking.py
+!match_worker.py
+!match_analysis.py
+!mistake_analysis.py
+!worker/
+!worker/package.json
+!worker/resolve-demo.cjs

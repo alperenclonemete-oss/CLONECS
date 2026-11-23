@@ -44,13 +44,13 @@ The *_radar_psd.png game assets are from
 https://github.com/ees-q/cs2_radar_map_files except Cache, from
 https://github.com/MurkyYT/cs2-map-icons/blob/main/images/radars/de_cache_radar_psd.png .
 Game imagery remains the property of its respective owners.
-Original LineupX *radar.png assets are retained for comparison.
+The included radar images cover the current catalog and its supported floors.
 
-57 archived standing/aiming/landing photos originated in
+48 standing/aiming/landing photos for the current catalog originated in
 https://github.com/shimupan/lineupx (MIT; LINEUPX-LICENSE.txt).
 The public Cloudinary name ddwqqjmyo is documented in its CONTRIBUTING.md;
 each CS2.json record supplies the public_id. Images are 1600px JPEGs with
-watermarks intact. 48 photos are used by the 16 retained records.
+watermarks intact. The photos for the three excluded records are available in the Git history.
 Repository licensing does not independently establish ownership of every
 contributed image; original contributor credits are retained.
 CS2-Util media were not imported because no explicit reuse license was found.
