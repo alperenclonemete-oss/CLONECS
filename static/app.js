@@ -325,18 +325,25 @@ function setAuthMode(mode){
 }
 let authReturnFocus=null;
 let authCloseTimer=null;
+let authOpenFrame=null;
+let authFocusTimer=null;
 function openAuthModal(mode='login'){
   clearTimeout(authCloseTimer);
+  cancelAnimationFrame(authOpenFrame);
+  clearTimeout(authFocusTimer);
   authReturnFocus=document.activeElement;
   $('authModal').hidden=false;
   document.body.classList.add('auth-modal-open');
   setAuthMode(mode);
-  requestAnimationFrame(()=>$('authModal').classList.add('is-open'));
-  setTimeout(()=>$(mode==='register'?'registerUsername':'loginUsername').focus(),80);
+  authOpenFrame=requestAnimationFrame(()=>$('authModal').classList.add('is-open'));
+  authFocusTimer=setTimeout(()=>$(mode==='register'?'registerUsername':'loginUsername').focus(),80);
 }
 function closeAuthModal(){
   const modal=$('authModal');
   if(!modal||modal.hidden)return;
+  cancelAnimationFrame(authOpenFrame);
+  clearTimeout(authFocusTimer);
+  clearTimeout(authCloseTimer);
   modal.classList.remove('is-open');
   document.body.classList.remove('auth-modal-open');
   authCloseTimer=setTimeout(()=>{if(modal.classList.contains('is-open'))return;modal.hidden=true;if(authReturnFocus?.focus)authReturnFocus.focus();},180);
@@ -540,25 +547,55 @@ $('newRoutine').addEventListener('click',()=>{
   $('warmupRoutine').innerHTML=warmupPlans[warmupPlanIndex].map(([time,label])=>'<li><time>'+time+'</time><span>'+esc(label)+'</span></li>').join('');
   $('routineIndex').textContent='0'+(warmupPlanIndex+1)+' / 03';
 });
-$('serverConnect').addEventListener('click',()=>{
-  const address=$('serverAddress').value.trim();
+const quickServerStorage='clone_lab_servers_guest';
+function validQuickServerAddress(address){
+  const match=/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i.exec(address);
+  return Boolean(match&&Number(match[1])>=1&&Number(match[1])<=65535);
+}
+function quickServers(){
+  try{
+    const rows=JSON.parse(localStorage.getItem(quickServerStorage)||'[]');
+    return Array.isArray(rows)?rows.filter(row=>typeof row?.address==='string'&&validQuickServerAddress(row.address)):[];
+  }catch{return []}
+}
+function showQuickServerAddresses(){
+  const list=$('quickServerAddresses');
+  list.replaceChildren(...quickServers().map(({address})=>{
+    const option=document.createElement('option');
+    option.value=address;
+    return option;
+  }));
+}
+function quickServerMessage(text,error=false){
   const message=$('serverMessage');
-  const match=address.match(/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i);
-  const port=match?Number(match[1]):0;
-  if(!match||port<1||port>65535){message.textContent='Geçerli bir sunucu adresi ve port gir (ör. sunucu:27015).';message.classList.add('is-error');$('serverAddress').focus();return;}
-  message.classList.remove('is-error');
-  message.textContent=$('serverMode').value+' sunucusu için Steam bağlantısı açılıyor…';
+  message.textContent=text;
+  message.classList.toggle('is-error',error);
+}
+function quickServerAddress(){
+  const input=$('serverAddress');
+  const address=input.value.trim();
+  if(validQuickServerAddress(address))return address;
+  quickServerMessage('Geçerli bir sunucu adresi ve port gir (ör. sunucu:27015).',true);
+  input.focus();
+  return null;
+}
+$('serverConnect').addEventListener('click',()=>{
+  const address=quickServerAddress();
+  if(!address)return;
+  quickServerMessage($('serverMode').value+' sunucusu için Steam bağlantısı açılıyor…');
   window.location.href='steam://connect/'+address;
 });
-function savedServersKey(){return `clone_lab_servers_${configKey($('profileMenuAccount').textContent||'guest')}`}
-function getSavedServers(){try{const entries=JSON.parse(localStorage.getItem(savedServersKey())||'[]');return Array.isArray(entries)?entries.filter(item=>item&&typeof item.address==='string'&&typeof item.mode==='string'):[]}catch{return []}}
-function saveServers(entries){try{localStorage.setItem(savedServersKey(),JSON.stringify(entries.slice(0,20)))}catch{}}
 $('serverSave').addEventListener('click',()=>{
-  const address=$('serverAddress').value.trim(),mode=$('serverMode').value;
-  const valid=address.match(/^(?:[a-z0-9.-]+|\[[0-9a-f:]+\]):(\d{1,5})$/i);const message=$('serverMessage');
-  if(!valid||Number(valid[1])<1||Number(valid[1])>65535){message.textContent='Kaydetmek için geçerli bir sunucu adresi ve port gir.';message.classList.add('is-error');return;}
-  const entries=getSavedServers();if(!entries.some(item=>item.address===address&&item.mode===mode))entries.unshift({address,mode});saveServers(entries);message.classList.remove('is-error');message.textContent='Sunucu Oyuncu Merkezi’ne kaydedildi.';window.renderPlayerCenter?.();
+  const address=quickServerAddress();
+  if(!address)return;
+  const rows=[{address,mode:$('serverMode').value},...quickServers().filter(row=>row.address!==address)];
+  try{
+    localStorage.setItem(quickServerStorage,JSON.stringify(rows.slice(0,20)));
+    showQuickServerAddresses();
+    quickServerMessage('Sunucu adresi bu tarayıcıya kaydedildi.');
+  }catch{quickServerMessage('Tarayıcı sunucu adresini kaydetmeye izin vermedi.',true)}
 });
+showQuickServerAddresses();
 const lineupScene=$('lineupScene');
 const lineupHand=document.querySelector('.lineup-hand');
 const lineupGrenade=document.querySelector('.lineup-grenade');

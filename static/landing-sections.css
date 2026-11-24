@@ -1,0 +1,391 @@
+#landingPage :is(.cl-section, .cl-steps, .cl-access, .cl-faq, .cl-final) {
+  padding-block: clamp(3rem, 7vw, 6.5rem);
+}
+
+#landingPage :is(.cl-section, .cl-steps, .cl-access, .cl-faq, .cl-feature-card)[id] {
+  scroll-margin-top: 7rem;
+}
+
+#landingPage .cl-section-heading {
+  display: block;
+  max-width: 45rem;
+  margin-block: 0 clamp(1.5rem, 3.5vw, 2.5rem);
+}
+
+#landingPage .cl-section-heading h2,
+#landingPage .cl-final h2 {
+  margin: .45rem 0 .65rem;
+  color: #f6f5f2;
+  font-size: clamp(2rem, 4.6vw, 3.65rem);
+  line-height: 1.03;
+  letter-spacing: -.045em;
+  text-wrap: balance;
+}
+
+#landingPage .cl-section-heading p:not(.cl-kicker),
+#landingPage .cl-final p:not(.cl-kicker) {
+  margin: 0;
+  color: #bdbac0;
+  font-size: clamp(.96rem, 1.5vw, 1.08rem);
+  line-height: 1.6;
+}
+
+#landingPage .cl-jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin: 0 0 1.35rem;
+  padding: 0;
+  list-style: none;
+}
+
+#landingPage .cl-jump-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: .45rem .7rem;
+  border: 1px solid #303034;
+  border-radius: .45rem;
+  background: #151517;
+  color: #f3f2f2;
+  font-size: .875rem;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+#landingPage .cl-jump-links a:hover {
+  border-color: #a45b37;
+  color: #ffac7d;
+}
+
+#landingPage .cl-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: .875rem;
+}
+
+#landingPage .cl-feature-card {
+  display: flex;
+  flex-direction: column;
+  grid-column: span 2;
+  min-width: 0;
+  padding: clamp(1.1rem, 2.3vw, 1.7rem);
+  border: 1px solid #2e2c30;
+  border-radius: .75rem;
+  background: #151517;
+}
+
+#landingPage .cl-feature-wide {
+  grid-column: span 3;
+  border-color: #49352d;
+  background: linear-gradient(135deg, #221a17, #151517 65%);
+}
+
+#landingPage .cl-feature-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .65rem;
+  margin-bottom: 1rem;
+}
+
+#landingPage .cl-feature-icon {
+  display: inline-grid;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  padding: .57rem;
+  border: 1px solid #69402d;
+  border-radius: .45rem;
+  background: #2e211c;
+  color: #ff9c67;
+}
+
+#landingPage .cl-feature-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#landingPage .cl-feature-meta {
+  color: #d4b49f;
+  font-size: .77rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+#landingPage :is(.cl-feature-card, .cl-steps-grid, .cl-plan-card, .cl-access-notes) h3 {
+  margin: 0 0 .55rem;
+  color: #f4f2ef;
+  font-size: clamp(1.15rem, 2vw, 1.55rem);
+  line-height: 1.16;
+  letter-spacing: -.022em;
+}
+
+#landingPage :is(.cl-feature-card, .cl-steps-grid, .cl-plan-card, .cl-access-notes) :is(p, li, dd) {
+  margin: 0;
+  color: #c0bdc3;
+  font-size: .925rem;
+  line-height: 1.57;
+  overflow-wrap: anywhere;
+}
+
+#landingPage :is(.cl-feature-card, .cl-plan-card) ul {
+  display: grid;
+  gap: .48rem;
+  margin: .85rem 0 0;
+  padding-inline-start: 1rem;
+}
+
+#landingPage :is(.cl-feature-card, .cl-plan-card) li::marker {
+  color: #ff9560;
+}
+
+#landingPage .cl-feature-card .cl-card-note {
+  margin-top: auto;
+  padding-top: 1rem;
+  color: #dbb098;
+  font-size: .8rem;
+}
+
+#landingPage .cl-steps,
+#landingPage .cl-faq {
+  border-top: 1px solid #29282c;
+}
+
+#landingPage .cl-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #2e2c30;
+  border-radius: .75rem;
+  background: #151517;
+  list-style: none;
+}
+
+#landingPage .cl-steps-grid > li {
+  min-width: 0;
+  padding: clamp(1.15rem, 2.8vw, 2rem);
+}
+
+#landingPage .cl-steps-grid > li + li {
+  border-inline-start: 1px solid #2e2c30;
+}
+
+#landingPage .cl-step-number {
+  display: inline-block;
+  margin: 0 0 .8rem;
+  color: #ffa16c;
+  font-size: .89rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+#landingPage .cl-access {
+  border-top: 1px solid #392b25;
+  background: linear-gradient(150deg, #1b1512, transparent 55%);
+}
+
+#landingPage .cl-access-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: 1rem;
+}
+
+#landingPage :is(.cl-plan-card, .cl-access-notes) {
+  min-width: 0;
+  padding: clamp(1.15rem, 3vw, 2rem);
+  border: 1px solid #2e2c30;
+  border-radius: .75rem;
+  background: #151517;
+}
+
+#landingPage .cl-plan-card {
+  border-color: #794930;
+  background: linear-gradient(140deg, #241a16, #151517 72%);
+}
+
+#landingPage .cl-plan-card .cl-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .5rem .75rem;
+  margin-block: .7rem .9rem;
+  color: #ffb591;
+  font-family: "Space Grotesk", Inter, system-ui, sans-serif;
+  font-size: clamp(1.9rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+#landingPage .cl-plan-card .cl-price span {
+  color: #c9bab1;
+  font-size: .875rem;
+  font-weight: 550;
+  letter-spacing: 0;
+}
+
+#landingPage .cl-plan-card .cl-cta {
+  margin-top: 1.15rem;
+}
+
+#landingPage .cl-access-notes dl {
+  display: grid;
+  margin: .9rem 0 0;
+}
+
+#landingPage .cl-access-notes dl div {
+  padding-block: .8rem;
+  border-top: 1px solid #333136;
+}
+
+#landingPage .cl-access-notes dt {
+  margin-bottom: .22rem;
+  color: #f1efed;
+  font-size: .92rem;
+  font-weight: 650;
+}
+
+#landingPage .cl-access-notes dl div:last-child {
+  padding-bottom: 0;
+}
+
+#landingPage .cl-faq-list {
+  border-top: 1px solid #333136;
+}
+
+#landingPage .cl-faq-list details {
+  border-bottom: 1px solid #333136;
+}
+
+#landingPage .cl-faq-list summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .75rem;
+  min-height: 3.4rem;
+  padding: .75rem .15rem;
+  color: #f1efed;
+  font-size: clamp(.93rem, 1.5vw, 1.06rem);
+  font-weight: 650;
+  line-height: 1.35;
+  cursor: pointer;
+  list-style: none;
+}
+
+#landingPage .cl-faq-list summary::-webkit-details-marker {
+  display: none;
+}
+
+#landingPage .cl-faq-list summary::after {
+  width: .66rem;
+  height: .66rem;
+  margin-inline: .35rem;
+  border: solid #ffa273;
+  border-width: 0 1.5px 1.5px 0;
+  content: "";
+  transform: translateY(-20%) rotate(45deg);
+}
+
+#landingPage .cl-faq-list [open] > summary::after {
+  transform: translateY(20%) rotate(225deg);
+}
+
+#landingPage .cl-faq-list p {
+  max-width: 65ch;
+  margin: 0;
+  padding: 0 .15rem .95rem;
+  color: #c0bdc3;
+  font-size: .95rem;
+  line-height: 1.6;
+}
+
+#landingPage .cl-final {
+  padding: clamp(1.4rem, 4vw, 3rem);
+  border: 1px solid #483027;
+  border-radius: .75rem;
+  background: linear-gradient(120deg, #2b1b15, #171517 65%);
+}
+
+#landingPage .cl-final > :is(.cl-shell, .cl-final-inner) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+#landingPage .cl-footer {
+  padding-block: 1.6rem;
+  border-top: 1px solid #29282c;
+  color: #bdbac0;
+}
+
+#landingPage .cl-footer > :is(.cl-shell, .cl-footer-inner),
+#landingPage .cl-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+#landingPage .cl-footer :is(p, ul) {
+  margin: 0;
+}
+
+#landingPage .cl-footer nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem 1.15rem;
+  padding: 0;
+  list-style: none;
+}
+
+#landingPage .cl-footer a {
+  color: #e3e0e4;
+  font-size: .875rem;
+  text-decoration: none;
+}
+
+#landingPage .cl-footer .cl-footer-brand {
+  display: inline-block;
+  margin-bottom: .4rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+#landingPage :is(.cl-footer a, .cl-faq-list summary):hover {
+  color: #ffa273;
+}
+
+@media (max-width: 860px) {
+  #landingPage .cl-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #landingPage :is(.cl-feature-card, .cl-feature-wide) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  #landingPage :is(.cl-feature-grid, .cl-steps-grid, .cl-access-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #landingPage .cl-steps-grid > li + li {
+    border-top: 1px solid #2e2c30;
+    border-inline-start: 0;
+  }
+
+  #landingPage :is(.cl-section, .cl-steps, .cl-access, .cl-faq, .cl-feature-card)[id] {
+    scroll-margin-top: 6rem;
+  }
+}

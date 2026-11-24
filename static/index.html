@@ -3,21 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CLONE LAB | CS2 oyuncu çalışma alanı</title>
-  <meta name="description" content="FACEIT ve CS2 analizi, nade lineupları, taktik tahtası, pro ayarları ve antrenmanlarını CLONE LAB’de bir araya getir.">
+  <title>Clone Lab | CS2 analiz, lineup ve antrenman</title>
+  <meta name="description" content="FACEIT ve Steam CS2 istatistiklerini incele. 10 haritada lineuplar, pro oyuncu ayarları, takım taktikleri ve antrenman programları. Ücretsiz hesap oluştur.">
   <link rel="icon" type="image/png" href="/static/clone-logo.png">
   <link rel="stylesheet" href="/static/style.css?v=6.4">
 <link rel="stylesheet" href="/static/server-browser.css?v=2">
 <link rel="stylesheet" href="/static/i18n.css?v=1">
 <link rel="manifest" href="/static/manifest.webmanifest"><meta name="theme-color" content="#ff5500"><link rel="apple-touch-icon" href="/static/pwa-icon-192.png"><link rel="stylesheet" href="/static/esports.css?v=1">
 <link rel="stylesheet" href="/static/mobile.css?v=1">
-<link rel="stylesheet" href="/static/landing.css?v=6">
+<link rel="stylesheet" href="/static/landing.css?v=7">
 <link rel="stylesheet" href="/static/workspace.css?v=2">
+<link rel="stylesheet" href="/static/landing-sections.css?v=1">
 </head>
 <body>
 <div class="wrap">
   <header class="site-header"><button id="mobileMenu" class="mobile-menu-button secondary" type="button" aria-label="Menüyü aç" aria-controls="appTabs" aria-expanded="false">☰ <span>CLONE LAB</span></button>
     <a class="brand" href="/" aria-label="Clone Lab ana sayfa"><img src="/static/clone-logo.png" alt="Clone Lab" class="site-logo"></a>
+    <nav class="cl-public-nav" aria-label="Ana sayfa menüsü"><a href="#features">Özellikler</a><a href="#how-it-works">Nasıl çalışır?</a><a href="#access">Erişim</a><a href="#faq">SSS</a></nav>
     <div class="auth-actions" id="authActions"><button class="button-ghost" type="button" data-auth-open="login">Giriş Yap</button><button class="button-cta" type="button" data-auth-open="register">Kayıt Ol <span aria-hidden="true">↗</span></button></div>
     <div id="profileWidget" class="profile-widget" hidden>
       <button id="profileMenuButton" class="profile-menu-trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="profileDropdown">
@@ -35,15 +37,139 @@
   </header>
   <main>
     <div id="landingPage">
-      <section id="guestWelcome" class="guest-welcome">
-        <div class="hero-copy"><h1>CS2 performansını<br><span class="accent">takip et.</span></h1><p class="sub">FACEIT ve Steam verilerini incele. Haritana uygun lineupları bul, takım taktiğini hazırla ve antrenmanını kaydet.</p><div class="hero-actions"><button class="button-cta button-hero" type="button" data-auth-open="register">Ücretsiz hesap oluştur</button><a class="text-link" href="#features">Platformu keşfet ↓</a></div></div>
-        <div class="hero-art landing-radar-art"><div class="radar-caption"><span>Mirage</span><span>Harita önizlemesi</span></div><img class="landing-radar" src="/static/radars/de_mirage_radar_psd.png" alt="Mirage haritasının üstten radar görünümü"><div class="landing-module-strip"><span>ANALİZ</span><span>LINEUPS</span><span>TAKTİKLER</span></div></div>
-      </section>
-      <section id="features" class="landing-features"><div class="section-heading"><div><h2>Maçtan önce ve sonra</h2></div><p></p></div>
-        <div class="landing-bento">
-          <article class="landing-feature landing-feature-wide"><h3>FACEIT ve Steam analizi</h3><p>FACEIT’te güncel ELO, maç sonuçları, K/D, ADR ve kafa vuruşu oranını gör. Steam maç takibi, erişilebilen CS2 demolarını analiz eder.</p><div class="landing-metrics"><span>Güncel <b>ELO</b></span><span>Hasar <b>ADR</b></span><span>Kafa vuruşu <b>HS%</b></span><span>Harita <b>Galibiyet</b></span></div><small>Steam demo takibi için maç erişim kodu ve başlangıç maçı gerekir. Geçmiş maçların tamamı garanti edilmez.</small></article>
-          <article class="landing-feature"><h3>Demo incelemesi</h3><p>Takım arkadaşını kör etme süresi, trade edilen ölümler ve rakibi kör etmeyen flashlar gibi inceleme sinyallerini değerlendir.</p><small>Desteklenen yeni demo analizlerinde.</small></article>
+      <section id="guestWelcome" class="cl-hero cl-shell" aria-labelledby="cl-hero-title">
+        <div class="cl-hero-copy">
+          <p class="cl-kicker"><span class="cl-kicker-mark" aria-hidden="true"></span> Counter-Strike 2 çalışma alanı</p>
+          <h1 id="cl-hero-title">Maçını incele.<br><span>Sonrakine hazırlan.</span></h1>
+          <p class="cl-hero-lead">FACEIT ve Steam verilerini gör, haritana uygun lineupları bul, bir sonraki maç için antrenman planını seç.</p>
+          <div class="cl-hero-actions">
+            <button class="cl-cta cl-cta-primary" type="button" data-auth-open="register">Ücretsiz hesap oluştur <span aria-hidden="true">↗</span></button>
+            <a class="cl-cta cl-cta-secondary" href="#features">Araçları keşfet <span aria-hidden="true">↓</span></a>
+          </div>
+          <ul class="cl-hero-facts" aria-label="Öne çıkan özellikler"><li>FACEIT &amp; Steam</li><li>10 haritada lineuplar</li><li>3 antrenman programı</li></ul>
         </div>
+
+        <section class="cl-preview" aria-label="Clone Lab arayüz önizlemesi">
+          <div class="cl-preview-bar"><span class="cl-preview-brand"><i aria-hidden="true"></i> CLONE LAB</span><span class="cl-preview-label">Arayüz örneği</span></div>
+          <div class="cl-preview-tabs" aria-label="Arayüz örnekleri">
+            <button type="button" id="preview-tab-faceit" data-preview="faceit">Maç analizi</button>
+            <button type="button" id="preview-tab-lineup" data-preview="lineup">Lineup radarı</button>
+            <button type="button" id="preview-tab-training" data-preview="training">Antrenman</button>
+          </div>
+          <div class="cl-preview-panels">
+            <section class="cl-preview-panel cl-preview-analysis" id="preview-faceit" aria-labelledby="preview-tab-faceit">
+              <div class="cl-preview-heading"><div><span>FACEIT / CS2</span><h2>Son maç performansı</h2></div><span class="cl-preview-chip">Temsili veriler</span></div>
+              <dl class="cl-preview-metrics"><div><dt>Güncel ELO</dt><dd>1.845</dd></div><div><dt>K/D</dt><dd>1,14</dd></div><div><dt>ADR</dt><dd>82,6</dd></div></dl>
+              <figure class="cl-preview-trend">
+                <figcaption>Hareketli galibiyet oranı <span>Örnek maç dizisi</span></figcaption>
+                <svg viewBox="0 0 420 96" preserveAspectRatio="none" focusable="false" aria-hidden="true">
+                  <defs><linearGradient id="cl-preview-fill" x2="0" y2="1"><stop stop-color="#ff7539" stop-opacity=".32"/><stop offset="1" stop-color="#ff7539" stop-opacity="0"/></linearGradient></defs>
+                  <path d="M1 16H419M1 43H419M1 70H419M1 95H419" fill="none" stroke="#3d3c43" stroke-dasharray="3 5"/>
+                  <path d="M1 70 L54 61 106 67 158 44 210 56 262 32 315 39 367 20 419 25 V96 H1Z" fill="url(#cl-preview-fill)"/>
+                  <path d="M1 70 L54 61 106 67 158 44 210 56 262 32 315 39 367 20 419 25" fill="none" stroke="#ff7a36" stroke-width="2" vector-effect="non-scaling-stroke"/>
+                  <g fill="#ede6de"><circle cx="106" cy="67" r="3"/><circle cx="210" cy="56" r="3"/><circle cx="315" cy="39" r="3"/><circle cx="417" cy="25" r="3"/></g>
+                </svg>
+              </figure>
+            </section>
+            <section class="cl-preview-panel cl-preview-lineup" id="preview-lineup" aria-labelledby="preview-tab-lineup" hidden>
+              <div class="cl-preview-heading"><div><span>NADE LINEUPS</span><h2>Mirage radarı</h2></div><a class="cl-preview-chip" href="#lineupFeature">Smoke animasyonu <span aria-hidden="true">↓</span></a></div>
+              <div class="cl-preview-map"><img src="/static/radars/de_mirage_radar_psd.png" alt="Mirage haritasının oyun içi radarı" width="1024" height="1024" loading="lazy" decoding="async"><span>10 harita · T / CT</span></div>
+            </section>
+            <section class="cl-preview-panel" id="preview-training" aria-labelledby="preview-tab-training" hidden>
+              <div class="cl-preview-heading"><div><span>ANTRENMAN</span><h2>Maç önü programı</h2></div><span class="cl-preview-chip">15 dakika</span></div>
+              <ol class="cl-preview-exercises"><li><span>01</span><b>İlk mermi</b><small>5 dk</small></li><li><span>02</span><b>İki lineup</b><small>5 dk</small></li><li><span>03</span><b>Maç hedefi</b><small>5 dk</small></li></ol>
+              <a class="cl-inline-link" href="#feature-training">Antrenman bölümünü incele <span aria-hidden="true">↘</span></a>
+            </section>
+          </div>
+        </section>
+      </section>
+
+      <section class="cl-shell cl-section" id="features" aria-labelledby="cl-features-title">
+        <header class="cl-section-heading"><p class="cl-kicker">Özellikler</p><h2 id="cl-features-title">Oyuncu alanında neler var?</h2><p>Maç verisinden antrenman planına, her aracın ne sunduğunu incele.</p></header>
+        <ul class="cl-jump-links" aria-label="Özelliklere git">
+          <li><a href="#feature-faceit">FACEIT</a></li>
+          <li><a href="#feature-steam">Steam / CS2</a></li>
+          <li><a href="#feature-lineups">Nade Lineups</a></li>
+          <li><a href="#feature-training">Antrenman</a></li>
+          <li><a href="#feature-tactics">Takım taktikleri</a></li>
+          <li><a href="#feature-config">Pro Config</a></li>
+          <li><a href="#feature-servers">Sunucular</a></li>
+          <li><a href="#feature-esports">E-spor</a></li>
+          <li><a href="#feature-profile">Profilim</a></li>
+        </ul>
+        <div class="cl-feature-grid">
+          <article class="cl-feature-card cl-feature-wide" id="feature-faceit">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 19h18M6 15v-4m6 4V5m6 10V8"/></svg></span><span class="cl-feature-meta">FACEIT</span></div>
+            <h3>Maçlarını ve performansını karşılaştır.</h3>
+            <p>Güncel ELO, K/D, ADR ve kafa vuruşu oranını tek bakışta gör. Son maçlardan hangi haritalarda daha iyi sonuç aldığını incele.</p>
+            <ul><li>Son maçlar, skorlar ve maç detayları</li><li>Harita bazında sonuçlar ve galibiyet grafiği</li><li>Mevcut istatistiklere göre çalışma önerileri</li></ul>
+            <p class="cl-card-note">Herkese açık FACEIT kullanıcı adı veya profil bağlantısı gerekir.</p>
+          </article>
+          <article class="cl-feature-card cl-feature-wide" id="feature-steam">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16a3 3 0 1 0 5 2m0-3 5-5m-4 8 7-5M20 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg></span><span class="cl-feature-meta">Steam / CS2</span></div>
+            <h3>Demolarından öğren.</h3>
+            <p>Görünür CS2 oyun süreni ve Steam istatistiklerini incele. İstersen erişilebilen yeni maçlar için otomatik demo takibini aç.</p>
+            <ul><li>Maç bazında K/D/A, ADR ve kafa vuruşu oranı</li><li>Desteklenen demolarda takaslar ve flash etkisi</li></ul>
+            <p class="cl-card-note">Otomatik takip için Steam maç erişim kodu ve bir başlangıç maçının paylaşım kodu gerekir.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-lineups">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h8l2 4v7a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-7l2-4zm1 0V4h6m0 0v4m-7 7h8"/></svg></span><span class="cl-feature-meta">Nade Lineups</span></div>
+            <h3>Başlangıcı ve hedefi radar üzerinde bul.</h3>
+            <p>10 haritada smoke, flash, molotof ve HE atışlarını harita, taraf ve bomba türüne göre filtrele.</p>
+            <ul><li>T/CT, başlangıç noktası ve hedef</li><li>Mevcut fotoğraflar, videolar ve atış notları</li><li>Favorileri kaydedip antrenmanda tekrar açma</li></ul>
+            <p class="cl-card-note">Atışları güncel harita sürümünde dene.</p>
+            <a class="cl-inline-link" href="#lineupFeature">Smoke animasyonu <span aria-hidden="true">↓</span></a>
+          </article>
+          <article class="cl-feature-card" id="feature-training">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0zm-8-4v4l3 2"/></svg></span><span class="cl-feature-meta">Antrenman</span></div>
+            <h3>Bir program seç, ilerlemeni kaydet.</h3>
+            <p>15 dakikalık maç önü, 20 dakikalık utility ve 30 dakikalık takım provası programlarından birini aç.</p>
+            <ul><li>Haritana uygun atış önerileri</li><li>Süre tutma ve görev işaretleme</li><li>Bir sonraki maç için kişisel çalışma notu</li></ul>
+            <p class="cl-card-note">İlerleme ve notlar bu tarayıcıda kalır.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-tactics">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 17l8-10m-5 0h5v5M7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10-12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></span><span class="cl-feature-meta">Takım taktikleri</span></div>
+            <h3>Rolleri dağıt, roundu birlikte prova et.</h3>
+            <p>NAVI, Vitality ve The MongolZ maçlarından kaynaklı örnekleri incele. Prova adımlarını kendi takımına uyarla.</p>
+            <ul><li>Harita ve taraf filtreleri</li><li>Her plan için beş oyuncu rolü</li><li>2D tahtada rota çizme ve hareketleri oynatma</li></ul>
+            <p class="cl-card-note">Prova görevleri Clone Lab uyarlamasıdır.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-config">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg></span><span class="cl-feature-meta">Pro Config</span></div>
+            <h3>Bir ayarın kaynağına kadar in.</h3>
+            <p>Takım veya oyuncu ara. Kaynağı bulunan crosshair, DPI, hassasiyet, çözünürlük ve viewmodel ayarlarını incele.</p>
+            <ul><li>Crosshair kodunu kopyalama</li><li>Mevcut CFG dosyalarını indirme</li><li>Favori oyuncu ayarlarını hesabında saklama</li></ul>
+            <p class="cl-card-note">Kaynakta eksik olan ayarlar gösterilmez.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-servers">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v5H4zm0 9h16v5H4zm3-7v1m0 8v1m8-9h2m-2 8h2"/></svg></span><span class="cl-feature-meta">Sunucular</span></div>
+            <h3>Çalışacağın modu seç ve Steam’den katıl.</h3>
+            <p>WarmupServer, CYBERSHOKE, XPLAY ve PRACC dizinlerinde aktif kaynakları tarayarak DM, aim ve retake seçeneklerine bak.</p>
+            <ul><li>Mod ve sunucu adına göre arama</li><li>Favori sunucular ve Steam bağlantısı</li></ul>
+            <p class="cl-card-note">Liste güncelliği ve katılım koşulları sağlayıcıya bağlıdır.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-esports">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6h14v14H5zm0 4h14M8 4v4m8-4v4m-8 6h3m2 0h3m-8 3h3"/></svg></span><span class="cl-feature-meta">E-spor</span></div>
+            <h3>Profesyonel sahneyi takip et.</h3>
+            <p>Turnuvaları, takımları ve kadroları incele. Yaklaşan, devam eden ve tamamlanan maçları ayır.</p>
+            <ul><li>Maç takvimi ve eşleşmeler</li><li>Kaynakta bulunan sonuçlar ve takım bilgisi</li></ul>
+            <p class="cl-card-note">İçerikler PandaScore veri bağlantısına bağlıdır.</p>
+          </article>
+          <article class="cl-feature-card" id="feature-profile">
+            <div class="cl-feature-top"><span class="cl-feature-icon"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 20v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m12-13a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg></span><span class="cl-feature-meta">Profilim</span></div>
+            <h3>Hesaplarını ve kaydettiklerini yönet.</h3>
+            <p>Steam ve FACEIT bağlantılarını tek yerden düzenle. Favori CFG’lerine, lineuplarına ve sunucularına dön.</p>
+            <ul><li>Kullanıcı adı veya Steam ile giriş</li><li>Desteklenen tarayıcılarda ana ekrana ekleme</li></ul>
+            <p class="cl-card-note">Lineup ve sunucu favorileri tarayıcıda saklanır.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cl-smoke-heading cl-shell" aria-labelledby="cl-smoke-title">
+        <p class="cl-kicker">Etkileşimli tanıtım</p>
+        <h2 id="cl-smoke-title">Bir smoke’u takip et</h2>
+        <p>Kaydırdıkça fırlatışı izle. Duman açıldığında lineup çalışma alanının adımlarını göreceksin.</p>
+      </section>
         <section id="lineupFeature" class="lineup-scroll-section" aria-label="Interactive Lineup & Smoke Guide">
           <div class="lineup-sticky" id="lineupPinned">
             <div class="lineup-scene" id="lineupScene" aria-label="Tüm ekranı kaplayan smoke lineup animasyonu">
@@ -63,9 +189,78 @@
             </div>
           </div>
         </section>
-<div class="landing-bento landing-tool-grid"><article class="landing-feature"><span class="feature-number">03 / TAKTİKLER</span><h3>Aynı takım. Aynı plan.</h3><p>2D taktik tahtasında oyuncu rotalarını ve bomba hatlarını çiz, hareketlerini oynat. Hazır çalışma planlarıyla B split ve alan kontrolünü birlikte çalış.</p><div class="landing-feature-footer">5 OYUNCU · ORTAK HEDEF</div></article><article class="landing-feature"><span class="feature-number">04 / PRO CONFIG</span><h3>Ayarlarını bilinçli seç.</h3><p>Takımları ve oyuncuları keşfet. Kaynağı bulunan hassasiyet, crosshair ve donanım ayarlarını karşılaştır; beğendiklerini kaydet.</p><div class="landing-feature-footer">KAYNAKLI OYUNCU AYARLARI</div></article><article class="landing-feature"><span class="feature-number">05 / SUNUCULAR</span><h3>Hazırsan, sunucuya.</h3><p>WarmupServer, CYBERSHOKE, XPLAY ve PRACC sunucularını keşfet. Modunu seç, favorine ekle ve Steam bağlantısıyla katıl.</p><div class="landing-feature-footer">DM · AIM · RETAKE</div></article><article class="landing-feature"><span class="feature-number">06 / ANTRENMANIM</span><h3>Gelişimi alışkanlığa çevir.</h3><p>Kişisel antrenman rutinini oluştur. Kaydettiğin atışlara dön; aim, hareket ve utility çalışmalarını aynı yerde topla.</p><div class="landing-feature-footer">KÜÇÜK TEKRARLAR · DAHA İYİ HAZIRLIK</div></article><article class="landing-feature"><span class="feature-number">07 / E-SPOR</span><h3>Profesyonel sahneyi izle.</h3><p>Maç takvimi, turnuvalar, eşleşmeler ve kadrolar için ayrılmış e-spor alanı. PandaScore veri bağlantısı etkinleştirildiğinde içerikler yüklenir.</p><div class="landing-feature-footer">VERİ BAĞLANTISI HAZIRLIK AŞAMASINDA</div></article><article class="landing-feature"><span class="feature-number">08 / OYUNCU MERKEZİ</span><h3>Her şey bıraktığın yerde.</h3><p>Kaydettiğin lineuplar, pro ayarları ve sunuculara tek yerden dön. Hesaplarını yönet; telefonunda da çalışma alanını yanında taşı.</p><div class="landing-feature-footer">MASAÜSTÜ + MOBİL</div></article></div><div class="landing-steps"><span>01 <b>Hesabını oluştur</b></span><span>02 <b>Oyununu keşfet</b></span><span>03 <b>Bir hedef seç ve çalış</b></span></div><div class="section-heading"><h2>İlk adımı <span class="accent">şimdi at.</span></h2><p>Bir sunucuya bağlan veya kısa bir ısınma rutini dene.</p></div>        <div class="feature-grid feature-grid-bottom"><article class="feature-card feature-server reveal-on-scroll"><div class="feature-card-head"><span class="feature-number">04 / QUICK CONNECT</span><span class="feature-status feature-status-preview">SERVER TOOL</span></div><h3>1-Click Server<br>Browser</h3><p>Aim, DM, Retake veya Xplay sunucu adresini gir; Steam bağlantısını tek tıkla aç. Tam sunucu kataloğunu oyuncu alanında keşfet.</p><div class="server-mock"><label for="serverMode">MOD</label><select id="serverMode"><option>Aim</option><option>Deathmatch</option><option>Retake</option><option>Xplay</option></select><label for="serverAddress">SUNUCU ADRESİ</label><div class="server-connect-row"><input id="serverAddress" type="text" inputmode="url" placeholder="IP:PORT · ör. 1.2.3.4:27015" autocomplete="off"><button id="serverConnect" type="button">Bağlan</button><button id="serverSave" type="button" aria-label="Sunucuyu kaydet">Kaydet</button></div><div id="serverMessage" class="server-message" aria-live="polite">Gerçek sunucu adresini gir; örnek IP kullanılmıyor.</div></div></article><article class="feature-card feature-warmup reveal-on-scroll"><div class="feature-card-head"><span class="feature-number">05 / PRE-MATCH</span><span class="feature-status feature-status-preview">ROUTINE BUILDER</span></div><h3>Warm-up Routines<br>& Coach Notes</h3><p>15 dakikalık maç önü rutinini oluştur. Koçluk notları mevcut FACEIT istatistiklerinden gelir; otomatik AI teşhisi değildir.</p><div class="warmup-mock"><div class="warmup-head"><span>15 MIN PRE-MATCH</span><button id="newRoutine" type="button" aria-label="Başka rutin göster">↻</button></div><ol id="warmupRoutine"><li><time>05:00</time><span>Bot aim · kısa ısınma</span></li><li><time>05:00</time><span>DM · crosshair yerleşimi</span></li><li><time>05:00</time><span>Recoil & ilk mermi kontrolü</span></li></ol><div class="warmup-foot">ROUTINE PREVIEW <span id="routineIndex">01 / 03</span></div></div></article></div>
-        <div class="landing-endcap"><span class="endcap-orb">CL</span><div><h2>Kendi verilerinle başla</h2></div><button class="button-cta" type="button" data-auth-open="register">Hesabını oluştur ↗</button></div>
+
+      <section class="cl-shell cl-section cl-steps" id="how-it-works" aria-labelledby="cl-steps-title">
+        <header class="cl-section-heading"><p class="cl-kicker">Nasıl çalışır?</p><h2 id="cl-steps-title">İlk oturumunda yapabileceklerin</h2></header>
+        <ol class="cl-steps-grid">
+          <li><span class="cl-step-number" aria-hidden="true">01</span><h3>Hesap oluştur</h3><p>Steam ile giriş yap veya Clone Lab kullanıcı adı ve parola belirle.</p></li>
+          <li><span class="cl-step-number" aria-hidden="true">02</span><h3>Oynadığın platformu bağla</h3><p>Profilim’den FACEIT veya Steam hesabını ekle. Lineup, taktik ve antrenman için ikisini bağlaman gerekmez.</p></li>
+          <li><span class="cl-step-number" aria-hidden="true">03</span><h3>Bir hedef seç ve çalış</h3><p>Son maçlarına bak. Çalışacağın haritayı seç ve maç önü programıyla başla.</p></li>
+        </ol>
       </section>
+
+      <section class="cl-shell cl-section cl-try" id="try" aria-labelledby="cl-try-title">
+        <header class="cl-section-heading"><p class="cl-kicker">Hesap açmadan dene</p><h2 id="cl-try-title">Isınma rutinine bak veya sunucuya katıl</h2></header>
+        <div class="cl-try-grid">
+          <article class="cl-try-card">
+            <h3>15 dakikalık ısınma</h3><p>Maç öncesinde deneyebileceğin üç kısa rutinden birini görüntüle.</p>
+            <ol id="warmupRoutine" aria-live="polite"><li><time>04:00</time><span>Bot aim · isabet ve kısa flick</span></li><li><time>06:00</time><span>DM · crosshair seviyesi ve ilk mermi</span></li><li><time>05:00</time><span>Recoil kontrolü · 2 favori silah</span></li></ol>
+            <div class="cl-try-actions"><button id="newRoutine" class="cl-cta cl-cta-secondary" type="button">Başka rutin göster <span aria-hidden="true">↻</span></button><span id="routineIndex">01 / 03</span></div>
+          </article>
+          <article class="cl-try-card">
+            <h3>Sunucu adresiyle katıl</h3><p>Adresini bildiğin bir topluluk sunucusunu Steam üzerinden aç.</p>
+            <div class="cl-try-server">
+              <label for="serverMode">Mod<select id="serverMode"><option>Aim</option><option>Deathmatch</option><option>Retake</option><option>Xplay</option></select></label>
+              <label for="serverAddress">Sunucu adresi<input id="serverAddress" type="text" inputmode="url" placeholder="sunucu:27015" autocomplete="off" list="quickServerAddresses"><datalist id="quickServerAddresses"></datalist></label>
+            </div>
+            <div class="cl-try-actions"><button id="serverConnect" class="cl-cta cl-cta-secondary" type="button">Steam’de aç <span aria-hidden="true">↗</span></button><button id="serverSave" class="cl-cta cl-cta-secondary" type="button">Bu cihazda kaydet</button></div>
+            <p id="serverMessage" class="server-message" role="status">Bağlanmak için Steam’in kurulu olması gerekir.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="cl-shell cl-section cl-access" id="access" aria-labelledby="cl-access-title">
+        <header class="cl-section-heading"><p class="cl-kicker">Fiyat ve erişim</p><h2 id="cl-access-title">Ücretsiz başla</h2><p>Kayıt için kredi kartı gerekmez. Clone Lab’de şu anda ücretli paket yok.</p></header>
+        <div class="cl-access-grid">
+          <article class="cl-plan-card" aria-labelledby="cl-plan-name">
+            <h3 id="cl-plan-name">Clone Lab hesabı</h3>
+            <p class="cl-price"><strong>₺0</strong><span>Mevcut erişim</span></p>
+            <ul><li>FACEIT ve Steam analiz alanları</li><li>Nade Lineups, takım taktikleri ve antrenman</li><li>Pro Config, sunucu dizini ve e-spor</li><li>Profil ve kaydedilenler</li></ul>
+            <button type="button" class="cl-cta cl-cta-primary" data-auth-open="register">Ücretsiz hesap oluştur <span aria-hidden="true">↗</span></button>
+          </article>
+          <div class="cl-access-notes">
+            <h3>Hangi araç için ne gerekiyor?</h3>
+            <dl>
+              <div><dt>FACEIT Analiz</dt><dd>Herkese açık FACEIT profili. Görünen alanlar FACEIT’in sunduğu veriye bağlıdır.</dd></div>
+              <div><dt>Steam ve maç takibi</dt><dd>Steam hesabı, görünür oyun verileri ve otomatik takip için Steam’in maç erişim ile paylaşım kodları.</dd></div>
+              <div><dt>Çalışma araçları</dt><dd>Lineup, taktik, Pro Config ve antrenmana Clone Lab hesabıyla erişirsin. Oyun profili bağlamak gerekmez.</dd></div>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section class="cl-shell cl-section cl-faq" id="faq" aria-labelledby="cl-faq-title">
+        <header class="cl-section-heading"><p class="cl-kicker">SSS</p><h2 id="cl-faq-title">Sık sorulan sorular</h2></header>
+        <div class="cl-faq-list">
+          <details><summary>FACEIT ve Steam hesaplarımı birlikte bağlamalı mıyım?</summary><p>Hayır. Yalnızca istatistiklerini görmek istediğin platformu Profilim’den bağla. İki platformun verileri kendi sekmelerinde gösterilir.</p></details>
+          <details><summary>Geçmişteki tüm CS2 maçlarım gelir mi?</summary><p>Steam Web API tüm maç arşivini sağlamaz. Otomatik takip, verdiğin başlangıç maçından itibaren erişilebilen demoları işler. Demo erişimi ve işlem durumu kapsamı etkiler.</p></details>
+          <details><summary>FACEIT ELO geçmişimi görebilir miyim?</summary><p>Güncel ELO puanın ve son maçlardan hesaplanan galibiyet grafiği gösterilir. Tarihsel ELO değerleri bu veriden çıkarılmaz.</p></details>
+          <details><summary>Lineupları nasıl çalışırım?</summary><p>Harita ve tarafı seç. Radar üzerinde başlangıç ve hedefi bul. Varsa fotoğrafı veya videoyu aç, atışı güncel oyun sürümünde dene.</p></details>
+          <details><summary>Kaydettiklerim başka cihazda görünür mü?</summary><p>Favori Pro CFG’ler hesabına bağlıdır. Lineup ve sunucu favorileri, antrenman notları ve taktik çizimleri kullandığın tarayıcıda saklanır.</p></details>
+          <details><summary>Steam parolamı Clone Lab’e girmem gerekiyor mu?</summary><p>Hayır. Steam girişi Steam’in kendi sayfasında gerçekleşir. Otomatik maç takibi için gereken kodlar Steam parolandan ayrıdır.</p></details>
+          <details><summary>Clone Lab’i telefonda kullanabilir miyim?</summary><p>Ana sayfa ve oyuncu alanı mobil tarayıcıda açılır. Desteklenen tarayıcılarda Ayarlar’dan ana ekrana ekleyebilirsin. Analiz ve güncel veriler internet bağlantısı gerektirir.</p></details>
+        </div>
+      </section>
+
+      <section class="cl-shell cl-final" aria-labelledby="cl-final-title">
+        <div class="cl-final-inner"><div><h2 id="cl-final-title">Kendi maçlarınla başla</h2><p>Bir profil bağla veya maçtan önce çalışacağın haritayı seç.</p></div><button type="button" class="cl-cta cl-cta-primary" data-auth-open="register">Ücretsiz hesap oluştur <span aria-hidden="true">↗</span></button></div>
+      </section>
+      <footer class="cl-shell cl-footer">
+        <div class="cl-footer-inner">
+          <div><a class="cl-footer-brand" href="#guestWelcome">CLONE LAB</a><p>Bağımsız CS2 analiz ve antrenman aracı.</p></div>
+          <nav aria-label="Ana sayfa alt menüsü"><a href="#features">Özellikler</a><a href="#how-it-works">Nasıl çalışır?</a><a href="#access">Erişim</a><a href="#faq">SSS</a></nav>
+        </div>
+      </footer>
     </div>    <nav id="appTabs" class="app-tabs" aria-label="Uygulama sekmeleri" hidden><a class="sidebar-logo" href="/" aria-label="CLONE LAB ana sayfa"><img src="/static/clone-logo.png" alt="CLONE LAB"></a><button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="Menüyü daralt" aria-expanded="true" aria-controls="appTabs">☰</button><div class="workspace-nav-title">CLONE LAB<span>OYUNCU ALANI</span></div>
       <button type="button" class="app-tab" data-tab="faceit" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 18V10m8 8V4m8 14v-6"/></svg>FACEIT Analiz</button>
       <button type="button" class="app-tab" data-tab="steam" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="8" r="4"/><path d="m13 11-5 6-5-2m6 4 7-7"/></svg>Steam / CS2</button><button type="button" class="app-tab" data-tab="lineups" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="14" r="7"/><path d="M10 7V3h5m0 0 3 3M8 14v8"/></svg>Nade Lineups</button><button type="button" class="app-tab" data-tab="servers" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M6 6.5h2m-2 11h2m7-11h3m-3 11h3"/></svg>Sunucular</button><button type="button" class="app-tab" data-tab="configs" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 17h16M8 4v6m8 4v6"/></svg>Pro Config</button><button type="button" class="app-tab" data-tab="training" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg>Antrenman</button><button type="button" class="app-tab" data-tab="tactics" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="5" cy="18" r="2"/><circle cx="19" cy="5" r="2"/><path d="M5 16V7h8m-3-3 3 3-3 3M10 18h9v-7"/></svg>Taktikler</button><button type="button" class="app-tab" data-tab="esports" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M7 7h10M7 12h3m4 0h3m-10 5h3m4 0h3"/></svg>E-spor</button><button type="button" class="app-tab" data-tab="settings" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3m10-10h-3M5 12H2m17.1-7.1-2.1 2.1M7 17l-2.1 2.1m14.2 0L17 17M7 7 4.9 4.9"/></svg>Ayarlar</button>
@@ -132,15 +327,16 @@
       </div>
     </section>  </main>
   <div class="auth-modal" id="authModal" hidden><button class="auth-modal-backdrop" type="button" data-auth-close aria-label="Kapat"></button><section class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="authDialogTitle"><button class="auth-close" type="button" data-auth-close aria-label="Kapat">×</button><a class="modal-logo" href="#" aria-label="Clone Lab"><img src="/static/clone-logo.png" alt="Clone Lab"></a><div class="eyebrow">PLAYER ACCOUNT <span>// PRIVATE WORKSPACE</span></div><h2 id="authDialogTitle">Oyuna devam et.</h2><p class="modal-intro">FACEIT profilini bağla, kendi analiz alanını aç.</p><div class="auth-modal-tabs" role="tablist" aria-label="Giriş veya kayıt"><button id="authLoginTab" class="auth-modal-tab is-active" type="button" role="tab" aria-selected="true" aria-controls="loginPanel" data-auth-mode="login">Giriş Yap</button><button id="authRegisterTab" class="auth-modal-tab" type="button" role="tab" aria-selected="false" aria-controls="registerPanel" data-auth-mode="register">Kayıt Ol</button></div><a href="/api/auth/steam" class="steam-login-btn"><svg class="steam-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.03 4.524 4.524s-2.03 4.524-4.524 4.524h-.105l-4.076 2.911c-.002.046-.006.09-.006.136 0 1.838-1.49 3.328-3.328 3.328-1.575 0-2.903-1.096-3.242-2.574L.272 15.151C1.564 20.26 6.162 24 11.979 24c6.627 0 12-5.373 12-12s-5.373-12-12-12z"/></svg><span>Steam ile Giriş Yap</span></a><div class="auth-or-divider"><span>veya kullanıcı adıyla devam et</span></div><div id="authLoggedOut"><div id="loginPanel" role="tabpanel" aria-labelledby="authLoginTab"><form id="loginForm" class="auth-form"><label for="loginUsername">Kullanıcı adı</label><input id="loginUsername" name="username" placeholder="Kullanıcı adın" minlength="3" maxlength="32" autocomplete="username" required><label for="loginPassword">Parola</label><input id="loginPassword" name="password" type="password" placeholder="Parolan" minlength="8" maxlength="128" autocomplete="current-password" required><button class="button-cta auth-submit" type="submit">Giriş Yap ↗</button></form></div><div id="registerPanel" role="tabpanel" aria-labelledby="authRegisterTab" hidden><form id="registerForm" class="auth-form"><label for="registerUsername">Kullanıcı adı</label><input id="registerUsername" name="username" placeholder="3–32 karakter" minlength="3" maxlength="32" autocomplete="username" required><label for="registerPassword">Parola</label><input id="registerPassword" name="password" type="password" placeholder="En az 8 karakter" minlength="8" maxlength="128" autocomplete="new-password" required><button class="button-cta auth-submit" type="submit">Hesap oluştur ↗</button></form><p class="auth-legal">Hesabınla kendi FACEIT profilini ve kaydettiğin tercihlerini görürsün.</p></div></div><div id="authMessage" class="account-message" role="status" aria-live="polite"></div><div class="modal-security">Güvenli oturum · parola sunucu tarafında korunur</div></section></div>
-  <footer>CLONE LAB kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Maç demosu incelenmeden kesin nişan, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
+  <footer class="app-footer">CLONE LAB kişisel analiz aracıdır; FACEIT ile bağlantılı resmî bir ürün değildir. Öneriler istatistik temelli başlangıç noktalarıdır. Maç demosu incelenmeden kesin nişan, pozisyon veya karar hatası iddia edilmez. API anahtarı yalnızca sunucu tarafında tutulmalıdır.</footer>
 </div>
 
+<script src="/static/landing-preview.js?v=1" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js" defer></script>
 <script src="/static/lineup-catalog.js?v=4" defer></script>
 
-<script src="/static/app.js?v=8" defer></script>
+<script src="/static/app.js?v=9" defer></script>
 <script src="/static/ui-motion.js?v=4.7" defer></script>
 <script src="/static/performance-model.js?v=1" defer></script><script src="/static/performance-lab.js?v=2" defer></script><script src="/static/tracking-ui.js?v=8" defer></script>
 <script src="/static/nade-lineups.js?v=m18" defer></script>
@@ -148,7 +344,7 @@
 <script src="/static/training.js?v=8" defer></script><script src="/static/tactics.js?v=8" defer></script>
 <script src="/static/settings-ui.js?v=8" defer></script>
 <script src="/static/i18n-extra.js?v=1"></script>
-<script src="/static/i18n.js?v=3" defer></script>
+<script src="/static/i18n.js?v=4" defer></script>
 <script src="/static/admin-link.js?v=1" defer></script>
 <script src="/static/esports.js?v=1" defer></script><script src="/static/tactical-board.js?v=2" defer></script><script src="/static/pwa.js?v=1" defer></script><script src="/static/mobile.js?v=1" defer></script></body>
 </html>
