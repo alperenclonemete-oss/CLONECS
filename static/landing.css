@@ -317,6 +317,34 @@ body:has(#landingPage:not([hidden])) .site-header .language-picker { margin-left
 #landingPage #serverMessage { margin: .7rem 0 0; font-size: .8rem; }
 #landingPage #serverMessage.is-error { color: #ffa49c; }
 
+@media (min-width: 1024px) {
+  body:has(#landingPage:not([hidden])) {
+    --cl-content-width: 1560px;
+    --cl-side-padding: clamp(28px, 4vw, 72px);
+  }
+  body:has(#landingPage:not([hidden])) .wrap {
+    width: 100%;
+    max-width: none;
+    padding-block-start: 0;
+  }
+  body:has(#landingPage:not([hidden])) .site-header {
+    margin-inline: 0;
+    padding-inline: max(var(--cl-side-padding), calc((100% - var(--cl-content-width)) / 2));
+  }
+  #landingPage .cl-shell {
+    width: min(var(--cl-content-width), calc(100% - 2 * var(--cl-side-padding)));
+  }
+  #landingPage .cl-hero::before {
+    inset: -7px calc(50% - 50vw - 7px);
+    background:
+      linear-gradient(90deg, #0a0a0d 0%, #0a0a0deb 24%, #0d0d1055 66%, #0d0d1090 100%),
+      url('/static/map-scenes/de_mirage.webp') center 49% / cover;
+    opacity: .52;
+    filter: blur(7px);
+    mask-image: linear-gradient(to bottom, transparent, #000 17%, #000 75%, transparent);
+  }
+}
+
 @media (min-width: 861px) {
   #landingPage #feature-profile { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: .55rem 2rem; }
   #landingPage #feature-profile .cl-feature-top { grid-column: 1 / -1; }
