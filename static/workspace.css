@@ -193,3 +193,42 @@
   #matches .faceit-match { grid-template-columns: minmax(0, 1fr) auto auto; }
   .faceit-match-actions { grid-column: 1 / -1; justify-content: flex-start; }
 }
+
+.map-breakdown {
+  min-width: 0;
+  margin: 16px 20px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 12px;
+  background: rgb(255 255 255 / 2%);
+}
+.map-breakdown table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.map-breakdown caption { padding: 14px 12px 10px; color: #f5efe9; font-weight: 700; text-align: left; }
+.map-breakdown th, .map-breakdown td { border-bottom: 1px solid rgb(255 255 255 / 8%); padding: 9px 12px; text-align: right; }
+.map-breakdown thead { color: #bdb3a9; font-size: .75rem; }
+.map-breakdown tbody tr:last-child > * { border-bottom: 0; }
+.map-breakdown th:first-child { text-align: left; }
+.map-breakdown tbody th { font-weight: 650; text-transform: capitalize; overflow-wrap: anywhere; }
+.map-breakdown-rate { display: flex; align-items: center; justify-content: flex-end; gap: 8px; white-space: nowrap; }
+.map-breakdown-bar { display: inline-block; width: clamp(20px, 7vw, 86px); height: 5px; background: rgb(255 255 255 / 10%); border-radius: 8px; overflow: hidden; }
+.map-breakdown-bar i { display: block; height: 100%; background: #ff934e; border-radius: inherit; }
+@media (max-width: 430px) {
+  .map-breakdown { margin-inline: 10px; }
+  .map-breakdown th, .map-breakdown td { padding-inline: 6px; }
+  .map-breakdown-rate { gap: 4px; }
+}
+
+#results .faceit-trends {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px;grid-column:1/-1}
+#results .faceit-trends > * {min-width:0;margin:0;padding:14px;border:1px solid #343438;border-radius:6px;background:#161619}
+#results .faceit-trends svg {display:block;width:100%;height:auto;max-height:none}
+#results .faceit-trends svg text {fill:#b7b7c0;font:11px system-ui}
+#results .faceit-trends svg line {stroke:#39393f}
+#results .faceit-trends .chart-line {stroke:#ff7439;stroke-width:2.4;fill:none}
+#results .faceit-trends circle {fill:#fff0dc;stroke:#64351e;stroke-width:1}
+#results .chart-dates {display:flex;justify-content:space-between;font-size:11px;color:#bebec6;font-variant-numeric:tabular-nums}
+#results .dashboard-metrics {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,110px),1fr));gap:8px}
+#results .map-breakdown {grid-column:1/-1;min-width:0}
+
+#configProfile .config-command-list {border-top:1px solid #35353b;padding-block:12px}
+#configProfile .config-command-list summary {cursor:pointer;color:#eee;font-weight:600}
+#configProfile .config-crosshair {display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+#configProfile .config-crosshair code {overflow-wrap:anywhere;min-width:0}

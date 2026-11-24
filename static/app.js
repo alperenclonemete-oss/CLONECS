@@ -11,14 +11,21 @@ async function api(path, options={}) {
 }
 function fmtDate(ts){ if(!ts) return 'Tarih bilinmiyor'; const n=Number(ts); const d=new Date(n < 1e12 ? n*1000 : n); return isNaN(d)?'Tarih bilinmiyor':d.toLocaleDateString('tr-TR'); }
 function matchLabel(m){ return m.map || m.match_type || m.game_mode || 'FACEIT maçı'; }
-function renderStatChart(points,label,suffix=''){
-  const data=(points||[]).filter(p=>p.value!==null&&p.value!==undefined&&p.value!==''&&Number.isFinite(Number(p.value))).map(p=>({...p,value:Number(p.value)}));
-  if(data.length<2)return `<div class="chart-empty"><b>${esc(label)}</b><span>Grafik için en az iki geçerli FACEIT maç verisi gerekli (${data.length} mevcut).</span></div>`;
-  const w=680,h=190,pad=28,min=Math.min(...data.map(p=>p.value)),max=Math.max(...data.map(p=>p.value)),span=max-min||1;
-  const coords=data.map((p,i)=>[pad+i*(w-pad*2)/(data.length-1),h-pad-(p.value-min)*(h-pad*2)/span]);
-  const path=coords.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  const dots=coords.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.4"><title>${esc(data[i].finished_at?fmtDate(data[i].finished_at):`FACEIT kaydı ${i+1}`)}: ${data[i].value}${suffix}</title></circle>`).join('');
-  return `<div class="chart-card"><div class="chart-head"><b>${esc(label)}</b><span>${min}${suffix} – ${max}${suffix} · ${data.length} maç</span></div><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(label)} maç grafiği"><line x1="${pad}" y1="${pad}" x2="${w-pad}" y2="${pad}"/><line x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}"/><line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}"/><path class="chart-line" d="${path}"/>${dots}</svg><div class="chart-foot">Noktalar FACEIT’in döndürdüğü sıradadır. Üzerine gelerek değeri gör.</div></div>`;
+function renderStatChart(points, label, suffix = '', percentage = false) {
+  const data = points.filter(point => Number.isFinite(point.value));
+  if (data.length < 2) return `<div class="chart-empty"><b>${esc(label)}</b><span>Grafik için iki tarihli maç gerekli · ${data.length} kayıt</span></div>`;
+  const width = 520, height = 156, left = 48, right = 14, top = 15, bottom = 24;
+  const values = data.map(point => point.value);
+  const min = percentage ? 0 : Math.max(0, Math.floor(Math.min(...values)));
+  const max = percentage ? 100 : Math.max(min + 1, Math.ceil(Math.max(...values)));
+  const format = value => value.toLocaleString('tr-TR', {maximumFractionDigits: 2}) + suffix;
+  const y = value => height - bottom - (value - min) / (max - min) * (height - top - bottom);
+  const grid = [max, (max + min) / 2, min].map(value =>
+    `<line x1="${left}" x2="${width-right}" y1="${y(value)}" y2="${y(value)}"/><text x="${left-5}" y="${y(value)+4}" text-anchor="end">${format(value)}</text>`).join('');
+  const coords = data.map((point, i) => [left + i * (width-left-right) / (data.length-1), y(point.value)]);
+  const line = coords.map(([x, yy], i) => `${i ? 'L' : 'M'}${x},${yy}`).join(' ');
+  const dots = coords.map(([x, yy], i) => `<circle cx="${x}" cy="${yy}" r="3"><title>${esc(fmtDate(data[i].finished_at))} · ${format(data[i].value)}</title></circle>`).join('');
+  return `<div class="chart-card"><div class="chart-head"><b>${esc(label)}</b><span>${data.length} maç</span></div><svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(label)} · son değer ${format(values.at(-1))}">${grid}<path class="chart-line" d="${line}"/>${dots}</svg><div class="chart-dates"><span>${fmtDate(data[0].finished_at)}</span><span>${fmtDate(data.at(-1).finished_at)}</span></div></div>`;
 }
 function readStat(row,...keys){
   const values=new Map(Object.entries(row||{}).map(([k,v])=>[k.toLowerCase().trim(),v]));
@@ -29,13 +36,29 @@ function makeWinTrend(matches){
   const ordered=(matches||[]).filter(m=>(m.won===true||m.won===false)&&m.finished_at).slice().sort((a,b)=>Number(a.finished_at)-Number(b.finished_at));
   return ordered.map((m,i)=>{const window=ordered.slice(Math.max(0,i-4),i+1);return {value:Math.round(window.filter(x=>x.won).length/window.length*100),finished_at:m.finished_at};});
 }
-function renderWinTrend(points){
-  if(points.length<2)return '<div class="chart-empty"><b>Son maç sonuç grafiği</b><span>Grafik için FACEIT tarafından sonucu bilinen en az iki maç gerekli.</span></div>';
-  const w=680,h=180,pad=28,coords=points.map((p,i)=>[pad+i*(w-pad*2)/(points.length-1),h-pad-p.value/100*(h-pad*2)]);
-  const path=coords.map((p,i)=>`${i?'L':'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ');
-  const dots=coords.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.2"><title>${esc(fmtDate(points[i].finished_at))}: ${points[i].value}% hareketli galibiyet oranı</title></circle>`).join('');
-  return `<div class="chart-card"><div class="chart-head"><b>Son maçların hareketli kazanma oranı</b><span>5 maçlık pencere · ${points.length} bilinen sonuç</span></div><svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Son maçların kazanma oranı grafiği"><line x1="${pad}" y1="${pad}" x2="${w-pad}" y2="${pad}"/><line x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}"/><line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}"/><path class="chart-line" d="${path}"/>${dots}</svg><div class="chart-foot">En eski maç solda, en yeni sağda. Bu grafik gerçek galibiyet oranını gösterir, ELO değişimini değil.</div></div>`;
+function renderMapBreakdown(maps) {
+  if (!maps.length) return '';
+  const number = new Intl.NumberFormat('tr-TR', {maximumFractionDigits: 1});
+  const rows = maps.map(({name, count, wins, rate}) => `
+    <tr>
+      <th scope="row">${esc(name.replace(/^de_/i, '').replaceAll('_', ' '))}</th>
+      <td>${count}</td>
+      <td>${wins}</td>
+      <td>${count - wins}</td>
+      <td><span class="map-breakdown-rate">
+        <span class="map-breakdown-bar" aria-hidden="true"><i style="width:${Math.max(0, Math.min(100, rate))}%"></i></span>
+        <strong>%${number.format(rate)}</strong>
+      </span></td>
+    </tr>`).join('');
+  return `<div class="map-breakdown">
+    <table>
+      <caption>Harita karşılaştırması</caption>
+      <thead><tr><th scope="col">Harita</th><th scope="col">Maç</th><th scope="col"><abbr title="Galibiyet">G</abbr></th><th scope="col"><abbr title="Mağlubiyet">M</abbr></th><th scope="col">Galibiyet %</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
 }
+
 function renderMapRadar(maps){
   if(maps.length<3)return `<div class="chart-empty"><b>Harita istatistikleri</b><span>Radar grafik için sonuç ve harita adı bilinen en az 3 farklı harita gerekli. Şu an ${maps.length} harita bulundu.</span></div>`;
   const w=680,h=370,cx=w/2,cy=185,r=118,n=maps.length,angle=i=>-Math.PI/2+i*2*Math.PI/n;
@@ -49,19 +72,33 @@ function renderMapRadar(maps){
 }
 function buildDashboard(p,matches,recentStats){
   const recent=(matches||[]).slice(0,30),known=recent.filter(m=>m.won===true||m.won===false),wins=known.filter(m=>m.won===true).length,losses=known.length-wins,rate=known.length?wins/known.length*100:null;
-  const sourceRows=(recentStats?.items||[]).slice(0,30).map(x=>x.stats||{});
+  const history = new Map(recent.filter(m => m.match_id).map(m => [m.match_id, m]));
+  const entries = (recentStats?.items || []).filter(item => !recent.length || history.has(item.match_id)).slice(0,30);
+  const sourceRows = entries.map(item => item.stats || {});
+  const dated = entries.map(item => {
+    const date = history.get(item.match_id)?.finished_at || item.finished_at;
+    const timestamp = Number(date) || Date.parse(date);
+    return {stats: item.stats, finished_at: timestamp < 1e12 ? timestamp * 1000 : timestamp};
+  }).filter(item => item.finished_at > 0).sort((a,b) => a.finished_at - b.finished_at);
+  const series = getter => dated.map(item => ({finished_at: item.finished_at, value: getter(item.stats)}));
   const mean=(...keys)=>{const vals=sourceRows.map(r=>readStat(r,...keys)).filter(v=>v!==null);return vals.length?vals.reduce((a,v)=>a+v,0)/vals.length:null;};
   const avg=(v,d=1)=>v===null?'—':Number(v).toFixed(d);
   const kills=mean('Kills','Total Kills'),deaths=mean('Deaths','Total Deaths'),assists=mean('Assists','Total Assists');
   const kd=mean('K/D Ratio','K/D','KD Ratio'),kr=mean('K/R Ratio','K/R','Kills per Round'),adr=mean('ADR','Average Damage per Round');
-  const hsValues=sourceRows.map(row=>{const direct=readStat(row,'Headshots %','Headshot %','HS %','Headshot Percentage');if(direct!==null)return direct;const k=readStat(row,'Kills','Total Kills'),h=readStat(row,'Headshots','Headshot Kills','HS Kills');return k&&h!==null?h/k*100:null;}).filter(v=>v!==null);
+  const headshotRate=row=>{const direct=readStat(row,'Headshots %','Headshot %','HS %','Headshot Percentage');if(direct!==null)return direct;const k=readStat(row,'Kills','Total Kills'),h=readStat(row,'Headshots','Headshot Kills','HS Kills');return k&&h!==null?h/k*100:null;};
+  const hsValues=sourceRows.map(headshotRate).filter(v=>v!==null);
   const hs=hsValues.length?hsValues.reduce((a,v)=>a+v,0)/hsValues.length:null;
   const kda=[kills,deaths,assists].every(v=>v!==null)?`${avg(kills,0)} / ${avg(deaths,0)} / ${avg(assists,0)}`:'—';
   const statMaps=new Map((recentStats?.items||[]).filter(x=>x.match_id&&x.map).map(x=>[String(x.match_id),x.map]));
   const mapBuckets=new Map();for(const m of (matches||[])){const name=String(m.map||statMaps.get(String(m.match_id))||'').trim();if(!name||(m.won!==true&&m.won!==false))continue;const key=name.toLowerCase();if(!mapBuckets.has(key))mapBuckets.set(key,{name,count:0,wins:0});const b=mapBuckets.get(key);b.count++;if(m.won)b.wins++;}  const mapData=[...mapBuckets.values()].sort((a,b)=>b.count-a.count).slice(0,8).map(m=>({...m,rate:m.wins/m.count*100}));
-  const cards=[['K/D/A',kda],['K/R',avg(kr,2)]];
-  const trend=renderWinTrend(makeWinTrend(recent));
-  return `<section class="card dashboard"><div class="season-head"><div><div class="eyebrow">FACEIT · CS2 · SON PERFORMANS</div><div class="season-title">Maç özeti</div></div><div class="season-summary"><div><b>${known.length}</b><span>Sonucu bilinen maç</span></div><div><b class="positive">${wins}G</b><span>Galibiyet</span></div><div><b class="negative">${losses}M</b><span>Mağlubiyet</span></div><div><b>${rate===null?'—':`%${rate.toFixed(1)}`}</b><span>Kazanma oranı</span></div></div></div><div class="performance-head"><b>Son 30 maç performansı</b><span>İstatistik alınan ${sourceRows.length} maç · ${known.length} sonucu eşleşen maç</span></div><div class="dashboard-chart">${trend}</div><div class="dashboard-metrics">${cards.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong>${esc(x[1])}</strong></div>`).join('')}</div><p class="notice elo-note">Tarihsel ELO değişimi FACEIT Data API yanıtında bulunmadığı için burada güncel ELO ve gerçek maç sonuçlarından hesaplanan hareketli galibiyet oranı gösterilir.</p>${renderMapRadar(mapData)}</section>`;
+  const cards=[['K/D/A',kda],['K/D',avg(kd,2)],['ADR',avg(adr)],['HS %',hs===null?'—':avg(hs)+'%'],['K/R',avg(kr,2)]];
+  const trend = [
+    renderStatChart(makeWinTrend(recent), 'Kazanma oranı · son 5 sonuç', '%', true),
+    renderStatChart(series(row => readStat(row, 'K/D Ratio', 'K/D', 'KD Ratio')), 'K/D'),
+    renderStatChart(series(row => readStat(row, 'ADR', 'Average Damage per Round')), 'ADR'),
+    renderStatChart(series(headshotRate), 'HS %', '%', true)
+  ].join('');
+  return `<section class="card dashboard"><div class="season-head"><div><div class="eyebrow">FACEIT · CS2 · SON PERFORMANS</div><div class="season-title">Maç özeti</div></div><div class="season-summary"><div><b>${known.length}</b><span>Sonucu bilinen maç</span></div><div><b class="positive">${wins}G</b><span>Galibiyet</span></div><div><b class="negative">${losses}M</b><span>Mağlubiyet</span></div><div><b>${rate===null?'—':`%${rate.toFixed(1)}`}</b><span>Kazanma oranı</span></div></div></div><div class="performance-head"><b>Son 30 maç performansı</b><span>İstatistik alınan ${sourceRows.length} maç · ${known.length} sonucu eşleşen maç</span></div><div class="dashboard-metrics">${cards.map(x=>`<div class="metric"><label>${esc(x[0])}</label><strong>${esc(x[1])}</strong></div>`).join('')}</div><div class="faceit-trends">${trend}</div><p class="notice elo-note">Tarihsel ELO değişimi FACEIT Data API yanıtında bulunmadığı için burada güncel ELO ve gerçek maç sonuçlarından hesaplanan hareketli galibiyet oranı gösterilir.</p>${mapData.length >= 3 ? renderMapRadar(mapData) : ''}${renderMapBreakdown(mapData)}</section>`;
 }
 function showProfile(p){
   $('profileWidgetName').textContent=activeAccountData.steam_persona_name||p.nickname||$('profileWidgetName').textContent;
@@ -114,6 +151,8 @@ async function loadProfile(nickname){
       $('matchCount').classList.remove('skeleton','skeleton-value');
       $('matches').innerHTML='<p class="error">'+esc(matchResult.reason.message)+'</p>';
     }
+    $('dashboardLoading')?.remove(); const metrics=$('results').querySelector('.metrics'); if(metrics)metrics.insertAdjacentHTML('afterend',buildDashboard(p,recentMatches,recentStats));else $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
+    window.dispatchEvent(new CustomEvent('clone:faceit-analysis',{detail:recentStats||{items:[]}}));
     if(statsResult.status==='fulfilled'){
       try{
         const report=await api('/api/coach-report',{method:'POST',body:JSON.stringify({stats:statsResult.value,matches:recentMatches,recent_stats:recentStats})});
@@ -132,8 +171,6 @@ async function loadProfile(nickname){
     if(!recentStats){
       $('coach').insertAdjacentHTML('afterbegin','<p class="error">Son maç istatistikleri FACEIT’ten alınamadı. Yaşam boyu istatistikler ve maç geçmişi ayrı olarak görüntüleniyor.</p>');
     }
-    $('dashboardLoading')?.remove(); const metrics=$('results').querySelector('.metrics'); if(metrics)metrics.insertAdjacentHTML('afterend',buildDashboard(p,recentMatches,recentStats));else $('results').insertAdjacentHTML('afterbegin',buildDashboard(p,recentMatches,recentStats));
-    window.dispatchEvent(new CustomEvent('clone:faceit-analysis',{detail:recentStats||{items:[]}}));
     $('status').textContent='Analiz tamamlandı. Bu öneriler mevcut API verileriyle sınırlıdır.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Tamamlandı';}
   } catch(e){ if(request!==faceitRequest)return; $('dashboardLoading')?.remove(); $('error').textContent=e.message; $('status').textContent='Analiz başlatılamadı.'; if($('analysisState')){$('analysisState').classList.remove('skeleton','skeleton-value');$('analysisState').textContent='Hata';} }
   finally {}
@@ -268,7 +305,7 @@ function renderConfigPlayer(name,team,displayTeam=team){
   const view=makeMetrics([['Çözünürlük',player.resolution],['En-boy / ölçek',player.aspect_ratio]]);
   const video=makeMetrics([['Yenileme hızı',player.refresh_rate?player.refresh_rate+' Hz':null],['Ölçekleme',player.scaling_mode],['Parlaklık',player.brightness]]);
   const viewmodel=makeMetrics([['FOV',player.viewmodel_fov],['X konumu',player.viewmodel_offset_x],['Y konumu',player.viewmodel_offset_y],['Z konumu',player.viewmodel_offset_z],['Preset',player.viewmodel_presetpos]]);
-  const commands=Array.isArray(player.cfg_commands)?player.cfg_commands.filter(Boolean):[];const commandSection=commands.length?configSection('CFG’DE YAYIMLANAN KOMUTLAR',`<pre class="config-cfg-commands"><code>${commands.map(esc).join('\n')}</code></pre>`):'';
+  const commands=Array.isArray(player.cfg_commands)?player.cfg_commands.filter(Boolean):[];const commandSection=commands.length?`<details class="config-command-list"><summary>CFG komutları · ${commands.length}</summary><pre class="config-cfg-commands"><code>${commands.map(esc).join('\n')}</code></pre></details>`:'';
   $('configProfile').innerHTML=`<article class="config-profile"><div class="config-profile-head">${visuals}<div class="config-player-heading"><h2>${esc(player.name)}</h2><div class="muted">${esc(displayTeam)}${player.role?' · '+esc(player.role):''}</div></div>${downloadLink}</div><div class="config-profile-actions">${favoriteButton(player.name,displayTeam)}${sourceLinks}</div>${sourceDate?`<p class="config-source">${sourceDate}</p>`:''}${configSection('AIM & MOUSE',aim?`<div class="config-metrics">${aim}</div>`:'')}${configSection('CROSSHAIR',crosshairSection)}${configSection('GÖRÜNTÜ',view?`<div class="config-metrics">${view}</div>`:'')}${configSection('VIDEO & GRAFİK',video?`<div class="config-metrics">${video}</div>`:'')}${configSection('VIEWMODEL',viewmodel?`<div class="config-metrics">${viewmodel}</div>`:'')}${commandSection}</article>`;
   $('configPlayersView').hidden=true;$('configTeamsView').hidden=true;$('configProfileView').hidden=false;
 }function renderTop30Player(name,team){const teamData=hltvTeams.find(item=>configKey(item.name)===configKey(team));const known=proConfigItems.find(item=>configKey(item.name)===configKey(name)&&configKey(item.team)===configKey(team))||proConfigItems.find(item=>configKey(item.name)===configKey(name));if(known){renderConfigPlayer(name,team,team);return}const slug=configImageSlug(name);const initials=String(name||'?').slice(0,2).toUpperCase();const download=playerConfigFiles.find(item=>configKey(item.player)===configKey(name));const downloadLink=download?.file?`<a class="cfg-download" href="${esc(download.file)}" download>CFG indir ↓</a>`:'';const links=`<div class="config-directory-links" style="margin-top:12px"><a href="https://confighub.gg/cs2/${slug}" target="_blank" rel="noopener noreferrer">Kaynak profili aç ↗</a><a href="https://cstools.io/pros/${slug}" target="_blank" rel="noopener noreferrer">CS Tools profili ↗</a></div>`;const logoUrl=teamData?`/static/team-logos/${teamData.logo||configTeamImageSlug(team)}.png`:'';const remoteLogo=hltvRankingMeta.logo_urls?.[teamData?.rank]||`https://cstools.io/teams/${configTeamImageSlug(team)}.png`;const teamImage=`<div class="config-avatar-wrap team-avatar"><span aria-hidden="true">${esc(team.slice(0,2).toUpperCase())}</span><img src="${esc(logoUrl)}" alt="${esc(team)} logosu" loading="lazy" onerror="if(!this.dataset.remote){this.dataset.remote='1';this.src='${esc(remoteLogo)}'}else{this.remove()}"></div>`;$('configProfile').innerHTML=`<article class="config-profile"><div class="config-profile-head">${teamImage}${configAvatar(playerPhotoUrl(name,teamData?.rank),`${name} profil fotoğrafı`,initials)}<div class="config-player-heading"><h2>${esc(name)}</h2><div class="muted">#${teamData?.rank||'—'} ${esc(team)}</div></div>${downloadLink}</div><div class="config-profile-actions">${favoriteButton(name,team)}${links}</div><p class="notice">Bu oyuncunun doğrulanmış ayarları henüz bulunamadı. Kaynak bağlantılarından kontrol edebilirsin.</p></article>`;$('configPlayersView').hidden=true;$('configTeamsView').hidden=true;$('configProfileView').hidden=false}
