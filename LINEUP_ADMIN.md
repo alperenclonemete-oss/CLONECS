@@ -6,7 +6,7 @@ Yetki, kullanıcı adına değil `76561199158267709` Steam hesabına bağlıdır
 1. Harita ve mevcut atışı seç veya Yeni atış'a bas.
 2. Başlangıç/Düşüş seçerek radarda iki noktayı işaretle. Çok katlı haritalarda katları ayrı seç.
 3. Taraf, bomba türü ve atış açıklamalarını düzenle.
-4. Kendi MP4/WebM videonu yükle (klip başına 32 MB).
+4. Kendi MP4/WebM videonu yükle (klip başına 32 MB). CS2 açıkken [klip kaydediciden](/static/lineup-recorder.html) CS2 penceresini seçip kısa, sessiz bir klip oluşturabilirsin. Klip cihazına iner. Stüdyo’da dosyayı seçtiğinde mevcut yükleme adımları başlar.
 5. Taslağı kaydet. Video ve değişiklikler yayınlanana kadar yöneticiye özeldir.
 6. Kaydedilmiş taslağı yayımla, ardından normal katalog sayfasını yenile.
 

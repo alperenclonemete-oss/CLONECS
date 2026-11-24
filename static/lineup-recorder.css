@@ -1,0 +1,54 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  color: #f6f4f2;
+  background: #101012;
+  --muted: #c3bdba;
+  --surface: #1a191c;
+  --line: #ffffff26;
+  --accent: #ff8b52;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; }
+.recorder { width: min(760px, calc(100% - 2rem)); margin: 2.25rem auto 3rem; }
+.recorder-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .65rem;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+a { color: var(--accent); text-underline-offset: .2em; }
+.brand { color: #f6f4f2; font-weight: 800; letter-spacing: .13em; text-decoration: none; }
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.045em; line-height: 1.1; }
+h2 { margin: 0 0 1rem; font-size: 1.2rem; }
+p { color: var(--muted); line-height: 1.55; }
+.capture-panel { padding: clamp(1rem, 3vw, 1.6rem); margin-top: 1.35rem; border: 1px solid var(--line); border-radius: .75rem; background: var(--surface); }
+.controls, .actions { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; }
+.controls label { display: grid; gap: .35rem; min-width: 0; font-weight: 600; }
+.controls label:first-child { flex: 1 1 14rem; }
+.controls label:last-child { flex: 1 1 7rem; }
+input, select, button, .button {
+  padding: .6rem .75rem;
+  min-height: 44px;
+  border-radius: .45rem;
+  border: 1px solid var(--line);
+  background: #111113;
+  color: #f6f4f2;
+  font: inherit;
+}
+input, select { width: 100%; }
+.actions { margin-top: 1rem; align-items: center; }
+button, .button { display: inline-flex; align-items: center; text-decoration: none; font-weight: 650; cursor: pointer; }
+button:disabled { opacity: .6; cursor: default; }
+.primary { background: var(--accent); color: #17100d; border-color: var(--accent); }
+:is(button, a, input, select):focus-visible { outline: 2px solid #ffd0b0; outline-offset: 3px; }
+#clip-clock { font-weight: 750; font-variant-numeric: tabular-nums; color: var(--accent); }
+#clip-status { color: #f6f4f2; margin-bottom: .4rem; }
+#clip-status[data-error] { color: #ffb2a7; }
+.note, #clip-size { margin-bottom: 0; color: var(--muted); font-size: .88rem; }
+video { display: block; width: 100%; max-height: 60vh; background: #0f0f10; border-radius: .4rem; }

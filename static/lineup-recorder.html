@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#101012">
+  <title>Lineup klip kaydı | Clone Lab</title>
+  <link rel="icon" href="/static/clone-logo.png">
+  <link rel="stylesheet" href="/static/lineup-recorder.css?v=1">
+  <script src="/static/lineup-recorder.js?v=1" defer></script>
+</head>
+<body>
+  <main class="recorder">
+    <header class="recorder-header">
+      <a href="/" class="brand">CLONE LAB</a>
+      <a href="/admin/lineups" target="_blank" rel="noopener">Lineup yönetimi <span aria-hidden="true">↗</span></a>
+    </header>
+    <section aria-labelledby="recorder-title">
+      <h1>Lineup klip kaydı</h1>
+      <p>Pencereli CS2’de antrenmanını hazırla. Kaydetmeye başlamadan önce tarayıcı senden CS2 penceresini seçmeni isteyecek.</p>
+      <div class="capture-panel">
+        <div class="controls">
+          <label for="clip-name">Klip adı<input id="clip-name" type="text" value="mirage-window-smoke" maxlength="64" autocomplete="off"></label>
+          <label for="clip-length">Klip süresi<select id="clip-length"><option value="10">10 saniye</option><option value="15" selected>15 saniye</option><option value="20">20 saniye</option><option value="30">30 saniye</option></select></label>
+        </div>
+        <div class="actions">
+          <button id="choose-game" type="button" class="primary">CS2 penceresini seç</button>
+          <button id="stop-clip" type="button" hidden>Kaydı durdur</button>
+          <output id="clip-clock" role="timer" aria-label="Kalan süre" hidden></output>
+        </div>
+        <p id="clip-status" role="status">Pencereyi seçince 5 saniye içinde oyuna dön. Ardından duruşu, nişanı, atışı ve dumanın açılmasını göster.</p>
+        <p class="note">Kayıt sessizdir. Klip tarayıcıda hazırlanır ve indirme düğmesiyle bilgisayarına kaydedilir.</p>
+      </div>
+    </section>
+    <section id="clip-result" class="capture-panel result" aria-labelledby="clip-result-title" hidden>
+      <h2 id="clip-result-title">Klibi kontrol et</h2>
+      <video id="clip-preview" controls playsinline preload="metadata" aria-label="Kaydedilen klibin önizlemesi"></video>
+      <div class="actions">
+        <a id="clip-download" class="button primary" download>Klibi indir</a>
+        <span id="clip-size"></span>
+      </div>
+      <p class="note">İndirdiğin dosyayı Lineup yönetiminde ilgili atışın video alanına ekleyebilirsin.</p>
+    </section>
+    <noscript>Video kaydı için JavaScript gerekir.</noscript>
+  </main>
+</body>
+</html>
